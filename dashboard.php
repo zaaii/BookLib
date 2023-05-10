@@ -1,22 +1,83 @@
+<?php
+include "koneksi.php";
+
+session_start();
+if (!isset($_SESSION['email'])) {
+   header('Location: auth/login.php');
+   exit;
+}
+?>
+
 <!doctype html>
 <html lang="en">
-   
-<!-- Mirrored from templates.iqonic.design/booksto/html/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Apr 2023 04:56:50 GMT -->
 <head>
       <!-- Required meta tags -->
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>Booksto - Responsive Bootstrap 4 Admin Dashboard Template</title>
+      <title>BookLib - Online Library</title>
       <!-- Favicon -->
-      <link rel="shortcut icon" href="images/favicon.ico" />
+      <link rel="shortcut icon" href="assets/assets/images/favicon.ico" />
       <!-- Bootstrap CSS -->
-      <link rel="stylesheet" href="css/bootstrap.min.css">
+      <link rel="stylesheet" href="assets/css/bootstrap.min.css">
       <!-- Typography CSS -->
-      <link rel="stylesheet" href="css/typography.css">
+      <link rel="stylesheet" href="assets/css/typography.css">
       <!-- Style CSS -->
-      <link rel="stylesheet" href="css/style.css">
+      <link rel="stylesheet" href="assets/css/style.css">
       <!-- Responsive CSS -->
-      <link rel="stylesheet" href="css/responsive.css">
+      <link rel="stylesheet" href="assets/css/responsive.css">
+            <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+            <script src="assets/js/jquery.min.js"></script>
+            <script src="assets/js/popper.min.js"></script>
+            <script src="assets/js/bootstrap.min.js"></script>
+            <!-- Appear JavaScript -->
+            <script src="assets/js/jquery.appear.js"></script>
+            <!-- Countdown JavaScript -->
+            <script src="assets/js/countdown.min.js"></script>
+            <!-- Counterup JavaScript -->
+            <script src="assets/js/waypoints.min.js"></script>
+            <script src="assets/js/jquery.counterup.min.js"></script>
+            <!-- Wow JavaScript -->
+            <script src="assets/js/wow.min.js"></script>
+            <!-- Apexcharts JavaScript -->
+            <script src="assets/js/apexcharts.js"></script>
+            <!-- Slick JavaScript -->
+            <script src="assets/js/slick.min.js"></script>
+            <!-- Select2 JavaScript -->
+            <script src="assets/js/select2.min.js"></script>
+            <!-- Owl Carousel JavaScript -->
+            <script src="assets/js/owl.carousel.min.js"></script>
+            <!-- Magnific Popup JavaScript -->
+            <script src="assets/js/jquery.magnific-popup.min.js"></script>
+            <!-- Smooth Scrollbar JavaScript -->
+            <script src="assets/js/smooth-scrollbar.js"></script>
+            <!-- lottie JavaScript -->
+            <script src="assets/js/lottie.js"></script>
+            <!-- am core JavaScript -->
+            <script src="assets/js/core.js"></script>
+            <!-- am charts JavaScript -->
+            <script src="assets/js/charts.js"></script>
+            <!-- am animated JavaScript -->
+            <script src="assets/js/animated.js"></script>
+            <!-- am kelly JavaScript -->
+            <script src="assets/js/kelly.js"></script>
+            <!-- am maps JavaScript -->
+            <script src="assets/js/maps.js"></script>
+            <!-- am worldLow JavaScript -->
+            <script src="assets/js/worldLow.js"></script>
+            <!-- Raphael-min JavaScript -->
+            <script src="assets/js/raphael-min.js"></script>
+            <!-- Morris JavaScript -->
+            <script src="assets/js/morris.js"></script>
+            <!-- Morris min JavaScript -->
+            <script src="assets/js/morris.min.js"></script>
+            <!-- Flatpicker Js -->
+            <script src="assets/js/flatpickr.js"></script>
+            <!-- Style Customizer -->
+            <script src="assets/js/style-customizer.js"></script>
+            <!-- Chart Custom JavaScript -->
+            <script src="assets/js/chart-custom.js"></script>
+            <!-- Custom JavaScript -->
+            <script src="assets/js/custom.js"></script>
    </head>
    <body>
       <!-- loader Start -->
@@ -31,7 +92,7 @@
          <div class="iq-sidebar">
             <div class="iq-sidebar-logo d-flex justify-content-between">
                <a href="index-2.html" class="header-logo">
-                  <img src="images/logo.png" class="img-fluid rounded-normal" alt="">
+                  <img src="assets/images/logo.png" class="img-fluid rounded-normal" alt="">
                   <div class="logo-title">
                      <span class="text-primary text-uppercase">Booksto</span>
                   </div>
@@ -69,7 +130,7 @@
                      </li>
                      <li>
                         <a href="#userinfo" class="iq-waves-effect" data-toggle="collapse" aria-expanded="false"><span class="ripple rippleEffect"></span><i class="las la-user-tie iq-arrow-left"></i><span>User</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
-                        <ul id="userinfo" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle" style="">
+                        <ul id="userinfo" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                            <li><a href="profile.html"><i class="las la-id-card-alt"></i>User Profile</a></li>
                            <li><a href="profile-edit.html"><i class="las la-edit"></i>User Edit</a></li>
                            <li><a href="add-user.html"><i class="las la-plus-circle"></i>User Add</a></li>
@@ -207,7 +268,7 @@
                   <div class="iq-card">
                      <div class="iq-card-body">
                         <div class="sidebarbottom-content">
-                           <div class="image"><img src="images/page-img/side-bkg.png" alt=""></div>                           
+                           <div class="image"><img src="assets/images/page-img/side-bkg.png" alt=""></div>                           
                            <button type="submit" class="btn w-100 btn-primary mt-4 view-more">Become Membership</button>
                         </div>
                      </div>
@@ -225,7 +286,7 @@
                      </div>
                      <div class="iq-navbar-logo d-flex justify-content-between">
                         <a href="index-2.html" class="header-logo">
-                           <img src="images/logo.png" class="img-fluid rounded-normal" alt="">
+                           <img src="assets/images/logo.png" class="img-fluid rounded-normal" alt="">
                            <div class="logo-title">
                               <span class="text-primary text-uppercase">Booksto</span>
                            </div>
@@ -275,7 +336,7 @@
                                     <a href="#" class="iq-sub-card" >
                                        <div class="media align-items-center">
                                           <div class="">
-                                             <img class="avatar-40 rounded" src="images/user/01.jpg" alt="">
+                                             <img class="avatar-40 rounded" src="assets/images/user/01.jpg" alt="">
                                           </div>
                                           <div class="media-body ml-3">
                                              <h6 class="mb-0 ">Emma Watson Barry</h6>
@@ -287,7 +348,7 @@
                                     <a href="#" class="iq-sub-card" >
                                        <div class="media align-items-center">
                                           <div class="">
-                                             <img class="avatar-40 rounded" src="images/user/02.jpg" alt="">
+                                             <img class="avatar-40 rounded" src="assets/images/user/02.jpg" alt="">
                                           </div>
                                           <div class="media-body ml-3">
                                              <h6 class="mb-0 ">New customer is join</h6>
@@ -299,7 +360,7 @@
                                     <a href="#" class="iq-sub-card" >
                                        <div class="media align-items-center">
                                           <div class="">
-                                             <img class="avatar-40 rounded" src="images/user/03.jpg" alt="">
+                                             <img class="avatar-40 rounded" src="assets/images/user/03.jpg" alt="">
                                           </div>
                                           <div class="media-body ml-3">
                                              <h6 class="mb-0 ">Two customer is left</h6>
@@ -311,7 +372,7 @@
                                     <a href="#" class="iq-sub-card" >
                                        <div class="media align-items-center">
                                           <div class="">
-                                             <img class="avatar-40 rounded" src="images/user/04.jpg" alt="">
+                                             <img class="avatar-40 rounded" src="assets/images/user/04.jpg" alt="">
                                           </div>
                                           <div class="media-body ml-3">
                                              <h6 class="mb-0 ">New Mail from Fenny</h6>
@@ -338,7 +399,7 @@
                                     <a href="#" class="iq-sub-card">
                                        <div class="media align-items-center">
                                           <div class="">
-                                             <img class="avatar-40 rounded" src="images/user/01.jpg" alt="">
+                                             <img class="avatar-40 rounded" src="assets/images/user/01.jpg" alt="">
                                           </div>
                                           <div class="media-body ml-3">
                                              <h6 class="mb-0 ">Barry Emma Watson</h6>
@@ -349,7 +410,7 @@
                                     <a href="#" class="iq-sub-card">
                                        <div class="media align-items-center">
                                           <div class="">
-                                             <img class="avatar-40 rounded" src="images/user/02.jpg" alt="">
+                                             <img class="avatar-40 rounded" src="assets/images/user/02.jpg" alt="">
                                           </div>
                                           <div class="media-body ml-3">
                                              <h6 class="mb-0 ">Lorem Ipsum Watson</h6>
@@ -360,7 +421,7 @@
                                     <a href="#" class="iq-sub-card">
                                        <div class="media align-items-center">
                                           <div class="">
-                                             <img class="avatar-40 rounded" src="images/user/03.jpg" alt="">
+                                             <img class="avatar-40 rounded" src="assets/images/user/03.jpg" alt="">
                                           </div>
                                           <div class="media-body ml-3">
                                              <h6 class="mb-0 ">Why do we use it?</h6>
@@ -371,7 +432,7 @@
                                     <a href="#" class="iq-sub-card">
                                        <div class="media align-items-center">
                                           <div class="">
-                                             <img class="avatar-40 rounded" src="images/user/04.jpg" alt="">
+                                             <img class="avatar-40 rounded" src="assets/images/user/04.jpg" alt="">
                                           </div>
                                           <div class="media-body ml-3">
                                              <h6 class="mb-0 ">Variations Passages</h6>
@@ -382,7 +443,7 @@
                                     <a href="#" class="iq-sub-card">
                                        <div class="media align-items-center">
                                           <div class="">
-                                             <img class="avatar-40 rounded" src="images/user/05.jpg" alt="">
+                                             <img class="avatar-40 rounded" src="assets/images/user/05.jpg" alt="">
                                           </div>
                                           <div class="media-body ml-3">
                                              <h6 class="mb-0 ">Lorem Ipsum generators</h6>
@@ -408,7 +469,7 @@
                                     <a href="#" class="iq-sub-card">
                                        <div class="media align-items-center">
                                           <div class="">
-                                             <img class="rounded" src="images/cart/01.jpg" alt="">
+                                             <img class="rounded" src="assets/images/cart/01.jpg" alt="">
                                           </div>
                                           <div class="media-body ml-3">
                                              <h6 class="mb-0 ">Night People book</h6>
@@ -420,7 +481,7 @@
                                     <a href="#" class="iq-sub-card">
                                        <div class="media align-items-center">
                                           <div class="">
-                                             <img class="rounded" src="images/cart/02.jpg" alt="">
+                                             <img class="rounded" src="assets/images/cart/02.jpg" alt="">
                                           </div>
                                           <div class="media-body ml-3">
                                              <h6 class="mb-0 ">The Sin Eater Book</h6>
@@ -432,7 +493,7 @@
                                     <a href="#" class="iq-sub-card">
                                        <div class="media align-items-center">
                                           <div class="">
-                                             <img class="rounded" src="images/cart/03.jpg" alt="">
+                                             <img class="rounded" src="assets/images/cart/03.jpg" alt="">
                                           </div>
                                           <div class="media-body ml-3">
                                              <h6 class="mb-0 ">the Orange Tree</h6>
@@ -444,7 +505,7 @@
                                     <a href="#" class="iq-sub-card">
                                        <div class="media align-items-center">
                                           <div class="">
-                                             <img class="rounded" src="images/cart/04.jpg" alt="">
+                                             <img class="rounded" src="assets/images/cart/04.jpg" alt="">
                                           </div>
                                           <div class="media-body ml-3">
                                              <h6 class="mb-0 ">Harsh Reality book</h6>
@@ -463,7 +524,7 @@
                         </li>
                         <li class="line-height pt-3">
                            <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
-                              <img src="images/user/1.jpg" class="img-fluid rounded-circle mr-3" alt="user">
+                              <img src="assets/images/user/1.jpg" class="img-fluid rounded-circle mr-3" alt="user">
                               <div class="caption">
                                  <h6 class="mb-1 line-height">Barry Tech</h6>
                                  <p class="mb-0 text-primary">$20.32</p>
@@ -543,47 +604,47 @@
                            <ul id="newrealease-slider" class="list-inline p-0 m-0 d-flex align-items-center">
                               <li class="item">
                                  <a href="javascript:void(0);">
-                                    <img src="images/new_realeases/01.jpg" class="img-fluid w-100 rounded" alt="">
+                                    <img src="assets/images/new_realeases/01.jpg" class="img-fluid w-100 rounded" alt="">
                                  </a>
                               </li>
                               <li class="item">
                                  <a href="javascript:void(0);">
-                                    <img src="images/new_realeases/02.jpg" class="img-fluid w-100 rounded" alt="">
+                                    <img src="assets/images/new_realeases/02.jpg" class="img-fluid w-100 rounded" alt="">
                                  </a>
                               </li>
                               <li class="item">
                                  <a href="javascript:void(0);">
-                                    <img src="images/new_realeases/03.jpg" class="img-fluid w-100 rounded" alt="">
+                                    <img src="assets/images/new_realeases/03.jpg" class="img-fluid w-100 rounded" alt="">
                                  </a>
                               </li>
                               <li class="item">
                                  <a href="javascript:void(0);">
-                                    <img src="images/new_realeases/04.jpg" class="img-fluid w-100 rounded" alt="">
+                                    <img src="assets/images/new_realeases/04.jpg" class="img-fluid w-100 rounded" alt="">
                                  </a>
                               </li>
                               <li class="item">
                                  <a href="javascript:void(0);">
-                                    <img src="images/new_realeases/05.jpg" class="img-fluid w-100 rounded" alt="">
+                                    <img src="assets/images/new_realeases/05.jpg" class="img-fluid w-100 rounded" alt="">
                                  </a>
                               </li>
                               <li class="item">
                                  <a href="javascript:void(0);">
-                                    <img src="images/new_realeases/06.jpg" class="img-fluid w-100 rounded" alt="">
+                                    <img src="assets/images/new_realeases/06.jpg" class="img-fluid w-100 rounded" alt="">
                                  </a>
                               </li>
                               <li class="item">
                                  <a href="javascript:void(0);">
-                                    <img src="images/new_realeases/07.jpg" class="img-fluid w-100 rounded" alt="">
+                                    <img src="assets/images/new_realeases/07.jpg" class="img-fluid w-100 rounded" alt="">
                                  </a>
                               </li>
                               <li class="item">
                                  <a href="javascript:void(0);">
-                                    <img src="images/new_realeases/08.jpg" class="img-fluid w-100 rounded" alt="">
+                                    <img src="assets/images/new_realeases/08.jpg" class="img-fluid w-100 rounded" alt="">
                                  </a>
                               </li>
                               <li class="item">
                                  <a href="javascript:void(0);">
-                                    <img src="images/new_realeases/09.jpg" class="img-fluid w-100 rounded" alt="">
+                                    <img src="assets/images/new_realeases/09.jpg" class="img-fluid w-100 rounded" alt="">
                                  </a>                              
                               </li>
                            </ul>
@@ -607,7 +668,7 @@
                                     <div class="iq-card-body p-0">
                                        <div class="d-flex align-items-center">
                                           <div class="col-6 p-0 position-relative image-overlap-shadow">
-                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="images/browse-books/01.jpg" alt=""></a>
+                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="assets/images/browse-books/01.jpg" alt=""></a>
                                              <div class="view-book">
                                                 <a href="book-page.html" class="btn btn-sm btn-white">View Book</a>
                                              </div>
@@ -644,7 +705,7 @@
                                     <div class="iq-card-body p-0">
                                        <div class="d-flex align-items-center">
                                           <div class="col-6 p-0 position-relative image-overlap-shadow">
-                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="images/browse-books/02.jpg" alt=""></a>
+                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="assets/images/browse-books/02.jpg" alt=""></a>
                                              <div class="view-book">
                                                 <a href="book-page.html" class="btn btn-sm btn-white">View Book</a>
                                              </div>
@@ -680,7 +741,7 @@
                                     <div class="iq-card-body p-0">
                                        <div class="d-flex align-items-center">
                                           <div class="col-6 p-0 position-relative image-overlap-shadow">
-                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="images/browse-books/03.jpg" alt=""></a>
+                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="assets/images/browse-books/03.jpg" alt=""></a>
                                              <div class="view-book">
                                                 <a href="book-page.html" class="btn btn-sm btn-white">View Book</a>
                                              </div>
@@ -717,7 +778,7 @@
                                     <div class="iq-card-body p-0">
                                        <div class="d-flex align-items-center">
                                           <div class="col-6 p-0 position-relative image-overlap-shadow">
-                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="images/browse-books/04.jpg" alt=""></a>
+                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="assets/images/browse-books/04.jpg" alt=""></a>
                                              <div class="view-book">
                                                 <a href="book-page.html" class="btn btn-sm btn-white">View Book</a>
                                              </div>
@@ -754,7 +815,7 @@
                                     <div class="iq-card-body p-0">
                                        <div class="d-flex align-items-center">
                                           <div class="col-6 p-0 position-relative image-overlap-shadow">
-                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="images/browse-books/05.jpg" alt=""></a>
+                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="assets/images/browse-books/05.jpg" alt=""></a>
                                              <div class="view-book">
                                                 <a href="book-page.html" class="btn btn-sm btn-white">View Book</a>
                                              </div>
@@ -791,7 +852,7 @@
                                     <div class="iq-card-body p-0">
                                        <div class="d-flex align-items-center">
                                           <div class="col-6 p-0 position-relative image-overlap-shadow">
-                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="images/browse-books/06.jpg" alt=""></a>
+                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="assets/images/browse-books/06.jpg" alt=""></a>
                                              <div class="view-book">
                                                 <a href="book-page.html" class="btn btn-sm btn-white">View Book</a>
                                              </div>
@@ -828,7 +889,7 @@
                                     <div class="iq-card-body p-0">
                                        <div class="d-flex align-items-center">
                                           <div class="col-6 p-0 position-relative image-overlap-shadow">
-                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="images/browse-books/07.jpg" alt=""></a>
+                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="assets/images/browse-books/07.jpg" alt=""></a>
                                              <div class="view-book">
                                                 <a href="book-page.html" class="btn btn-sm btn-white">View Book</a>
                                              </div>
@@ -865,7 +926,7 @@
                                     <div class="iq-card-body p-0">
                                        <div class="d-flex align-items-center">
                                           <div class="col-6 p-0 position-relative image-overlap-shadow">
-                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="images/browse-books/08.jpg" alt=""></a>
+                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="assets/images/browse-books/08.jpg" alt=""></a>
                                              <div class="view-book">
                                                 <a href="book-page.html" class="btn btn-sm btn-white">View Book</a>
                                              </div>
@@ -902,7 +963,7 @@
                                     <div class="iq-card-body p-0">
                                        <div class="d-flex align-items-center">
                                           <div class="col-6 p-0 position-relative image-overlap-shadow">
-                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="images/browse-books/09.jpg" alt=""></a>
+                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="assets/images/browse-books/09.jpg" alt=""></a>
                                              <div class="view-book">
                                                 <a href="book-page.html" class="btn btn-sm btn-white">View Book</a>
                                              </div>
@@ -939,7 +1000,7 @@
                                     <div class="iq-card-body p-0">
                                        <div class="d-flex align-items-center">
                                           <div class="col-6 p-0 position-relative image-overlap-shadow">
-                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="images/browse-books/10.jpg" alt=""></a>
+                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="assets/images/browse-books/10.jpg" alt=""></a>
                                              <div class="view-book">
                                                 <a href="book-page.html" class="btn btn-sm btn-white">View Book</a>
                                              </div>
@@ -976,7 +1037,7 @@
                                     <div class="iq-card-body p-0">
                                        <div class="d-flex align-items-center">
                                           <div class="col-6 p-0 position-relative image-overlap-shadow">
-                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="images/browse-books/11.jpg" alt=""></a>
+                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="assets/images/browse-books/11.jpg" alt=""></a>
                                              <div class="view-book">
                                                 <a href="book-page.html" class="btn btn-sm btn-white">View Book</a>
                                              </div>
@@ -1012,7 +1073,7 @@
                                     <div class="iq-card-body p-0">
                                        <div class="d-flex align-items-center">
                                           <div class="col-6 p-0 position-relative image-overlap-shadow">
-                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="images/browse-books/12.jpg" alt=""></a>
+                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="assets/images/browse-books/12.jpg" alt=""></a>
                                              <div class="view-book">
                                                 <a href="book-page.html" class="btn btn-sm btn-white">View Book</a>
                                              </div>
@@ -1072,7 +1133,7 @@
                         <div class="iq-card-body">
                            <div class="row align-items-center">
                               <div class="col-sm-5 pr-0">
-                                 <a href="javascript:void();"><img class="img-fluid rounded w-100" src="images/page-img/featured-book.png" alt=""></a>
+                                 <a href="javascript:void();"><img class="img-fluid rounded w-100" src="assets/images/page-img/featured-book.png" alt=""></a>
                               </div>
                               <div class="col-sm-7 mt-3 mt-sm-0">
                                  <h4 class="mb-2">Casey Christie night book into find...</h4>
@@ -1118,7 +1179,7 @@
                            <ul class="list-inline row mb-0 align-items-center iq-scrollable-block">
                               <li class="col-sm-6 d-flex mb-3 align-items-center">
                                  <div class="icon iq-icon-box mr-3">
-                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="images/user/01.jpg" alt=""></a>
+                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="assets/images/user/01.jpg" alt=""></a>
                                  </div>
                                  <div class="mt-1">
                                     <h6>Brandon Guidelines</h6>
@@ -1127,7 +1188,7 @@
                               </li>
                               <li class="col-sm-6 d-flex mb-3 align-items-center">
                                  <div class="icon iq-icon-box mr-3">
-                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="images/user/02.jpg" alt=""></a>
+                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="assets/images/user/02.jpg" alt=""></a>
                                  </div>
                                  <div class="mt-1">
                                     <h6>Hugh Millie-Yate</h6>
@@ -1136,7 +1197,7 @@
                               </li>
                               <li class="col-sm-6 d-flex mb-3 align-items-center">
                                  <div class="icon iq-icon-box mr-3">
-                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="images/user/03.jpg" alt=""></a>
+                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="assets/images/user/03.jpg" alt=""></a>
                                  </div>
                                  <div class="mt-1">
                                     <h6>Nathaneal Down</h6>
@@ -1145,7 +1206,7 @@
                               </li>
                               <li class="col-sm-6 d-flex mb-3 align-items-center">
                                  <div class="icon iq-icon-box mr-3">
-                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="images/user/04.jpg" alt=""></a>
+                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="assets/images/user/04.jpg" alt=""></a>
                                  </div>
                                  <div class="mt-1">
                                     <h6>Thomas R. Toe</h6>
@@ -1154,7 +1215,7 @@
                               </li>
                               <li class="col-sm-6 d-flex mb-3 align-items-center">
                                  <div class="icon iq-icon-box mr-3">
-                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="images/user/05.jpg" alt=""></a>
+                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="assets/images/user/05.jpg" alt=""></a>
                                  </div>
                                  <div class="mt-1">
                                     <h6>Druid Wensleydale</h6>
@@ -1163,7 +1224,7 @@
                               </li>
                               <li class="col-sm-6 d-flex mb-3 align-items-center">
                                  <div class="icon iq-icon-box mr-3">
-                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="images/user/06.jpg" alt=""></a>
+                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="assets/images/user/06.jpg" alt=""></a>
                                  </div>
                                  <div class="mt-1">
                                     <h6>Natalya Undgrowth</h6>
@@ -1172,7 +1233,7 @@
                               </li>
                               <li class="col-sm-6 d-flex mb-3 align-items-center">
                                  <div class="icon iq-icon-box mr-3">
-                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="images/user/07.jpg" alt=""></a>
+                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="assets/images/user/07.jpg" alt=""></a>
                                  </div>
                                  <div class="mt-1">
                                     <h6>Desmond Eagle</h6>
@@ -1181,7 +1242,7 @@
                               </li>
                               <li class="col-sm-6 d-flex mb-3 align-items-center">
                                  <div class="icon iq-icon-box mr-3">
-                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="images/user/08.jpg" alt=""></a>
+                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="assets/images/user/08.jpg" alt=""></a>
                                  </div>
                                  <div class="mt-1">
                                     <h6>Lurch Schpellchek</h6>
@@ -1190,7 +1251,7 @@
                               </li>
                               <li class="col-sm-6 d-flex mb-3 align-items-center">
                                  <div class="icon iq-icon-box mr-3">
-                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="images/user/09.jpg" alt=""></a>
+                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="assets/images/user/09.jpg" alt=""></a>
                                  </div>
                                  <div class="mt-1">
                                     <h6>Natalya Undgrowth</h6>
@@ -1199,7 +1260,7 @@
                               </li>
                               <li class="col-sm-6 d-flex mb-3 align-items-center">
                                  <div class="icon iq-icon-box mr-3">
-                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="images/user/10.jpg" alt=""></a>
+                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="assets/images/user/10.jpg" alt=""></a>
                                  </div>
                                  <div class="mt-1">
                                     <h6>Natalya Undgrowth</h6>
@@ -1208,7 +1269,7 @@
                               </li>
                               <li class="col-sm-6 d-flex mb-3 align-items-center">
                                  <div class="icon iq-icon-box mr-3">
-                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="images/user/11.jpg" alt=""></a>
+                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="assets/images/user/11.jpg" alt=""></a>
                                  </div>
                                  <div class="mt-1">
                                     <h6>Natalya Undgrowth</h6>
@@ -1217,7 +1278,7 @@
                               </li>
                               <li class="col-sm-6 d-flex mb-3 align-items-center">
                                  <div class="icon iq-icon-box mr-3">
-                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="images/user/01.jpg" alt=""></a>
+                                    <a href="javascript:void();"><img class="img-fluid avatar-60 rounded-circle" src="assets/images/user/01.jpg" alt=""></a>
                                  </div>
                                  <div class="mt-1">
                                     <h6>Natalya Undgrowth</h6>
@@ -1244,7 +1305,7 @@
                                  <div class="d-flex align-items-center">
                                     <div class="col-5 p-0 position-relative">
                                        <a href="javascript:void();">
-                                          <img src="images/favorite/01.jpg" class="img-fluid rounded w-100" alt="">
+                                          <img src="assets/images/favorite/01.jpg" class="img-fluid rounded w-100" alt="">
                                        </a>                                
                                     </div>
                                     <div class="col-7">
@@ -1267,7 +1328,7 @@
                                  <div class="d-flex align-items-center">
                                     <div class="col-5 p-0 position-relative">
                                        <a href="javascript:void();">
-                                          <img src="images/favorite/02.jpg" class="img-fluid rounded w-100" alt="">
+                                          <img src="assets/images/favorite/02.jpg" class="img-fluid rounded w-100" alt="">
                                        </a>                                
                                     </div>
                                     <div class="col-7">
@@ -1290,7 +1351,7 @@
                                  <div class="d-flex align-items-center">
                                     <div class="col-5 p-0 position-relative">
                                        <a href="javascript:void();">
-                                          <img src="images/favorite/03.jpg" class="img-fluid rounded w-100" alt="">
+                                          <img src="assets/images/favorite/03.jpg" class="img-fluid rounded w-100" alt="">
                                        </a>                                
                                     </div>
                                     <div class="col-7">
@@ -1313,7 +1374,7 @@
                                  <div class="d-flex align-items-center">
                                     <div class="col-5 p-0 position-relative">
                                        <a href="javascript:void();">
-                                          <img src="images/favorite/04.jpg" class="img-fluid rounded w-100" alt="">
+                                          <img src="assets/images/favorite/04.jpg" class="img-fluid rounded w-100" alt="">
                                        </a>                                
                                     </div>
                                     <div class="col-7">
@@ -1358,95 +1419,5 @@
          </div>
       </footer>
       <!-- Footer END -->
-      <!-- color-customizer -->
-      <div class="iq-colorbox color-fix">
-         <div class="buy-button"> <a class="color-full" href="#"><i class="fa fa-spinner fa-spin"></i></a> </div>
-         <div id="right-sidebar-scrollbar" class="iq-colorbox-inner">
-            <div class="clearfix color-picker">
-               <h3 class="iq-font-black">Booksto Awesome Color</h3>
-               <p>This color combo available inside whole template. You can change on your wish, Even you can create your own with limitless possibilities! </p>
-               <ul class="iq-colorselect clearfix">
-                  <li class="color-1 iq-colormark" data-style="color-1"></li>
-                  <li class="color-2" data-style="iq-color-2"></li>
-                  <li class="color-3" data-style="iq-color-3"></li>
-                  <li class="color-4" data-style="iq-color-4"></li>
-                  <li class="color-5" data-style="iq-color-5"></li>
-                  <li class="color-6" data-style="iq-color-6"></li>
-                  <li class="color-7" data-style="iq-color-7"></li>
-                  <li class="color-8" data-style="iq-color-8"></li>
-                  <li class="color-9" data-style="iq-color-9"></li>
-                  <li class="color-10" data-style="iq-color-10"></li>
-                  <li class="color-11" data-style="iq-color-11"></li>
-                  <li class="color-12" data-style="iq-color-12"></li>
-                  <li class="color-13" data-style="iq-color-13"></li>
-                  <li class="color-14" data-style="iq-color-14"></li>
-                  <li class="color-15" data-style="iq-color-15"></li>
-                  <li class="color-16" data-style="iq-color-16"></li>
-                  <li class="color-17" data-style="iq-color-17"></li>
-                  <li class="color-18" data-style="iq-color-18"></li>
-                  <li class="color-19" data-style="iq-color-19"></li>
-                  <li class="color-20" data-style="iq-color-20"></li>
-               </ul>
-               <a target="_blank" class="btn btn-primary d-block mt-3" href="#">Purchase Now</a>
-            </div>
-         </div>
-      </div>
-      <!-- color-customizer END -->
-      <!-- Optional JavaScript -->
-      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-      <script src="js/jquery.min.js"></script>
-      <script src="js/popper.min.js"></script>
-      <script src="js/bootstrap.min.js"></script>
-      <!-- Appear JavaScript -->
-      <script src="js/jquery.appear.js"></script>
-      <!-- Countdown JavaScript -->
-      <script src="js/countdown.min.js"></script>
-      <!-- Counterup JavaScript -->
-      <script src="js/waypoints.min.js"></script>
-      <script src="js/jquery.counterup.min.js"></script>
-      <!-- Wow JavaScript -->
-      <script src="js/wow.min.js"></script>
-      <!-- Apexcharts JavaScript -->
-      <script src="js/apexcharts.js"></script>
-      <!-- Slick JavaScript -->
-      <script src="js/slick.min.js"></script>
-      <!-- Select2 JavaScript -->
-      <script src="js/select2.min.js"></script>
-      <!-- Owl Carousel JavaScript -->
-      <script src="js/owl.carousel.min.js"></script>
-      <!-- Magnific Popup JavaScript -->
-      <script src="js/jquery.magnific-popup.min.js"></script>
-      <!-- Smooth Scrollbar JavaScript -->
-      <script src="js/smooth-scrollbar.js"></script>
-      <!-- lottie JavaScript -->
-      <script src="js/lottie.js"></script>
-      <!-- am core JavaScript -->
-      <script src="js/core.js"></script>
-      <!-- am charts JavaScript -->
-      <script src="js/charts.js"></script>
-      <!-- am animated JavaScript -->
-      <script src="js/animated.js"></script>
-      <!-- am kelly JavaScript -->
-      <script src="js/kelly.js"></script>
-      <!-- am maps JavaScript -->
-      <script src="js/maps.js"></script>
-      <!-- am worldLow JavaScript -->
-      <script src="js/worldLow.js"></script>
-      <!-- Raphael-min JavaScript -->
-      <script src="js/raphael-min.js"></script>
-      <!-- Morris JavaScript -->
-      <script src="js/morris.js"></script>
-      <!-- Morris min JavaScript -->
-      <script src="js/morris.min.js"></script>
-      <!-- Flatpicker Js -->
-      <script src="js/flatpickr.js"></script>
-      <!-- Style Customizer -->
-      <script src="js/style-customizer.js"></script>
-      <!-- Chart Custom JavaScript -->
-      <script src="js/chart-custom.js"></script>
-      <!-- Custom JavaScript -->
-      <script src="js/custom.js"></script>
    </body>
-
-<!-- Mirrored from templates.iqonic.design/booksto/html/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Apr 2023 04:57:59 GMT -->
 </html>
