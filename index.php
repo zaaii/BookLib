@@ -1,12 +1,17 @@
 <?php
 require("model.php");
 $bukus = getData("buku");
+
+//cek apakah user sudah login
+session_start();
+if (!isset($_SESSION["login"])) {
+    header("Location: login.php");
+    exit;
+}
+
 ?>
 <!doctype html>
 <html lang="en">
-
-<!-- Mirrored from templates.iqonic.design/booksto/html/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Apr 2023 04:56:50 GMT -->
-
 <head>
    <!-- Required meta tags -->
    <meta charset="utf-8">
@@ -342,7 +347,7 @@ $bukus = getData("buku");
                                     </div>
                                  </a>
                                  <div class="d-inline-block w-100 text-center p-3">
-                                    <a class="bg-primary iq-sign-btn" href="sign-in.html" role="button">Sign out<i class="ri-login-box-line ml-2"></i></a>
+                                    <a class="bg-primary iq-sign-btn" href="logout.php" role="button">LogOut<i class="ri-login-box-line ml-2"></i></a>
                                  </div>
                               </div>
                            </div>

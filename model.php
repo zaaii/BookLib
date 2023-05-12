@@ -118,3 +118,86 @@ function deleteDataBuku($id_buku)
 
     return mysqli_affected_rows($koneksi);
 }
+
+/*
+    Fungsi Auth Register
+*/
+
+function register($data)
+{
+    global $koneksi;
+
+    $full_name = htmlspecialchars($data["full_name"]);
+    $email = htmlspecialchars($data["email"]);
+    $password = mysqli_real_escape_string($koneksi, $data["password"]);
+
+    // Enkripsi password
+    $password = password_hash($password, PASSWORD_DEFAULT);
+
+    // Tambahkan user baru ke database
+    $query = "INSERT INTO users VALUES('', '$full_name', '$email', '$password', '', '', '', 'member')";
+    $result = mysqli_query($koneksi, $query);
+
+    return mysqli_affected_rows($koneksi);
+}
+
+/*
+    Fungsi Auth Login
+*/
+
+function login($data)
+{
+    global $koneksi;
+
+    $email = $data["email"];
+    $password = $data["password"];
+
+    // Cek apakah email ada di database
+    $result = mysqli_query($koneksi, "SELECT * FROM users WHERE email = '$email'");
+
+    if (mysqli_num_rows($result) === 1) {
+        // Cek password
+        $row = mysqli_fetch_assoc($result);
+        if (password_verify($password, $row["password"])) {
+            // Set session
+            $_SESSION["login"] = true;
+            $_SESSION["id"] = $row["id"];
+            $_SESSION["full_name"] = $row["full_name"];
+            $_SESSION["email"] = $row["email"];
+            $_SESSION["password"] = $row["password"];
+            $_SESSION["gender"] = $row["gender"];
+            $_SESSION["birth_date"] = $row["birth_date"];
+            $_SESSION["user_photo"] = $row["user_photo"];
+            $_SESSION["role"] = $row["role"];
+
+            // Cek apakah remember me dicentang
+            if (isset($data["remember"])) {
+                // Buat cookie
+                setcookie("id", $row["id"], time() + 60);
+                setcookie("key", hash("sha256", $row["email"]), time() + 60);
+            }
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/*
+    Fungsi Auth Logout
+*/
+
+function logout()
+{
+    // Hapus session
+    $_SESSION = [];
+    session_destroy();
+
+    // Hapus cookie
+    setcookie("id", "", time() - 60);
+    setcookie("key", "", time() - 60);
+
+    header("Location: index.php");
+    exit;
+}
