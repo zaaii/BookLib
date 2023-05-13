@@ -18,6 +18,15 @@ if (isset($_POST["submit"])) {
         if (password_verify($password, $row["password"])) {
             //set session
             $_SESSION["login"] = true;
+            $_SESSION["login"] = true;
+            $_SESSION["id"] = $row["id"];
+            $_SESSION["full_name"] = $row["full_name"];
+            $_SESSION["email"] = $row["email"];
+            $_SESSION["password"] = $row["password"];
+            $_SESSION["gender"] = $row["gender"];
+            $_SESSION["birth_date"] = $row["birth_date"];
+            $_SESSION["user_photo"] = $row["user_photo"];
+            $_SESSION["role"] = $row["role"];
             header("Location: index.php");
             exit;
         } else {

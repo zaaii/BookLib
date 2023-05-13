@@ -119,6 +119,59 @@ function deleteDataBuku($id_buku)
     return mysqli_affected_rows($koneksi);
 }
 
+/* 
+    Fungsi Pencarian
+*/
+
+function getDataCari($query)
+{
+    global $koneksi;
+    $result = mysqli_query($koneksi, $query);
+    $rows = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $rows[] = $row;
+    }
+    return $rows;
+}
+
+function cariDataBuku($keyword)
+{
+    // Query cari data
+    $query = "SELECT * FROM buku WHERE
+                judul_buku LIKE '%$keyword%' OR
+                penulis LIKE '%$keyword%' OR
+                penerbit LIKE '%$keyword%' OR
+                tahun_terbit LIKE '%$keyword%'
+            ";
+    return getDataCari($query);
+}
+
+/*
+    Fungsi Auth
+*/
+
+// Fungsi cek apakah user sudah login
+function is_login()
+{
+    if (isset($_SESSION["user"])) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// Fungsi cek apakah user sudah login
+function is_admin()
+{
+    if (isset($_SESSION["user"])) {
+        if ($_SESSION["user"]["role"] == "admin") {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 /*
     Fungsi Auth Register
 */
