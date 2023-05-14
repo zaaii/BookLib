@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 12 Bulan Mei 2023 pada 19.19
+-- Waktu pembuatan: 14 Bulan Mei 2023 pada 14.37
 -- Versi server: 10.4.22-MariaDB
 -- Versi PHP: 8.1.2
 
@@ -48,6 +48,19 @@ INSERT INTO `buku` (`id_buku`, `judul_buku`, `penulis`, `penerbit`, `tahun_terbi
 (3, 'Everything Is F*cked: A self About Hope', 'Mark Manson', 'HarperCollins', 2019, 0x332e6a7067, 0x73656c662e706466, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas auctor neque ut leo tempor, vitae malesuada quam ultricies. Curabitur pharetra nisi vel orci porta, at pharetra nibh posuere. Suspendisse potenti. Mauris id tincidunt mauris, nec cursus tellus. In sit amet interdum nunc. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin non justo eget massa dignissim malesuada nec nec justo. Sed eu tellus ac turpis pellentesque rhoncus. Cras varius dolor vel tortor elementum, sit amet hendrerit metus vulputate.'),
 (4, 'The Things You Can See Only When You Slow Down: How to Be Calm and Mindful in a Fast-Paced World', 'Haemin Sunim', 'Penguin selfs', 2017, 0x342e6a7067, 0x73656c662e706466, 'Deskripsi Buku 4'),
 (5, 'Why We Sleep: Unlocking the Power of Sleep and Dreams', 'Matthew Walker, PhD', 'Scribner', 2017, 0x352e6a7067, 0x73656c662e706466, 'Deskripsi Buku 5'),
+(6, 'dsfsdfsd', 'fdsfsdf', 'sdfsdfs', 234234, 0x32303233303531303137353235313236342e6a7067, 0x323737322d41727469636c6520546578742d373236302d312d31302d32303231303833302e706466, 'werwerwer');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `favorit`
+--
+
+CREATE TABLE `favorit` (
+  `id` int(11) NOT NULL,
+  `id_buku` int(11) DEFAULT NULL,
+  `id_user` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -71,7 +84,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `gender`, `birth_date`, `user_photo`, `role`) VALUES
-(0, 'admin perpus', 'admin@admin.com', '$2y$10$4tGII67QvDZKtYpaPNkmd.2YkaL7T2ITVW5XvS0BDZSbFyjPk3to.', '', '0000-00-00', '', 'member');
+(0, 'admin perpus', 'admin@admin.com', '$2y$10$4tGII67QvDZKtYpaPNkmd.2YkaL7T2ITVW5XvS0BDZSbFyjPk3to.', '', '0000-00-00', '', 'admin');
 
 --
 -- Indexes for dumped tables
@@ -82,6 +95,14 @@ INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `gender`, `birth_da
 --
 ALTER TABLE `buku`
   ADD PRIMARY KEY (`id_buku`);
+
+--
+-- Indeks untuk tabel `favorit`
+--
+ALTER TABLE `favorit`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_buku` (`id_buku`),
+  ADD KEY `id_user` (`id_user`);
 
 --
 -- Indeks untuk tabel `users`
@@ -98,6 +119,23 @@ ALTER TABLE `users`
 --
 ALTER TABLE `buku`
   MODIFY `id_buku` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT untuk tabel `favorit`
+--
+ALTER TABLE `favorit`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+--
+
+--
+-- Ketidakleluasaan untuk tabel `favorit`
+--
+ALTER TABLE `favorit`
+  ADD CONSTRAINT `favorit_ibfk_1` FOREIGN KEY (`id_buku`) REFERENCES `buku` (`id_buku`),
+  ADD CONSTRAINT `favorit_ibfk_2` FOREIGN KEY (`id_user`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

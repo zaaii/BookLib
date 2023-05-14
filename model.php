@@ -147,34 +147,23 @@ function cariDataBuku($keyword)
 }
 
 /*
-    Fungsi Auth
+    Fungsi Favorite
 */
-
-// Fungsi cek apakah user sudah login
-function is_login()
+function addFavorite($id_buku, $id_user)
 {
-    if (isset($_SESSION["user"])) {
-        return true;
-    } else {
-        return false;
-    }
-}
+    global $koneksi;
 
-// Fungsi cek apakah user sudah login
-function is_admin()
-{
-    if (isset($_SESSION["user"])) {
-        if ($_SESSION["user"]["role"] == "admin") {
-            return true;
-        }
-    }
+    $query = "INSERT INTO favorit VALUES ('', '$id_buku', '$id_user')";
+    mysqli_query($koneksi, $query);
 
-    return false;
+    return mysqli_affected_rows($koneksi);
 }
 
 /*
-    Fungsi Auth Register
+    Fungsi Auth
 */
+
+// Fungsi Register
 
 function register($data)
 {
@@ -194,9 +183,7 @@ function register($data)
     return mysqli_affected_rows($koneksi);
 }
 
-/*
-    Fungsi Auth Login
-*/
+// Fungsi Login
 
 function login($data)
 {
@@ -237,9 +224,7 @@ function login($data)
     return false;
 }
 
-/*
-    Fungsi Auth Logout
-*/
+// Fungsi Logout
 
 function logout()
 {
