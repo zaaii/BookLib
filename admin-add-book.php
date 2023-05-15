@@ -419,7 +419,7 @@ if (isset($_POST["ubah"])) {
                            <div class="form-group">
                               <label>Book Image:</label>
                               <div class="custom-file">
-                                 <input type="file" class="custom-file-input" accept="image/png, image/jpeg" name="gambar_buku" id="gambar_buku">
+                                 <input type="file" class="custom-file-input" accept="image/png, image/jpeg, image/webp" name="gambar_buku" id="gambar_buku">
                                  <label class="custom-file-label">Choose file</label>
                               </div>
                            </div>
@@ -469,7 +469,7 @@ if (isset($_POST["ubah"])) {
                         <label>Book Image:</label>
                         <span><?= $buku["gambar_buku"] ?></span>
                         <div class="custom-file">
-                           <input type="file" name="gambar_buku" id="gambar_buku" class="custom-file-input" accept="image/png, image/jpeg">
+                           <input type="file" name="gambar_buku" id="gambar_buku" class="custom-file-input" accept="image/png, image/jpeg, image/webp">
                            <label class="custom-file-label">Choose file</label>
                         </div>
                      </div>

@@ -9,7 +9,6 @@ if (isset($_GET['keyword'])) {
    $bukus = getData("buku");
    }
 
-
 //cek apakah user sudah login
 if (!isset($_SESSION["login"])) {
     header("Location: login.php");
@@ -185,7 +184,7 @@ if (!isset($_SESSION["login"])) {
                                  <div class="iq-card-body p-0">
                                     <div class="d-flex align-items-center">
                                        <div class="col-6 p-0 position-relative image-overlap-shadow">
-                                          <a href="javascript:void();"><img class="img-fluid rounded w-100" src="resources/cover/<?= $buku["gambar_buku"] ?>" alt=""></a>
+                                          <a href="javascript:void();"><img class="img-fluid rounded w-100" height="100px" width="100px" src="resources/cover/<?= $buku["gambar_buku"]?>"  alt=""></a>
                                           <div class="view-book">
                                              <input type="hidden" name="id_buku" value="<?= $buku["id_buku"] ?>">
                                              <a href="book-page.php?id_buku=<?= $buku["id_buku"]; ?>" class="btn btn-sm btn-white">View Book</a>
