@@ -150,7 +150,6 @@ function cariDataBuku($keyword)
     Fungsi Menambahkan buku ke favorit
 */
 
-
 function isFavorite($id_user, $id_buku) {
     global $koneksi;
     $query = "SELECT * FROM favorit WHERE id_user = $id_user AND id_buku = $id_buku";
@@ -172,8 +171,10 @@ function addFavorite($id_user, $id_buku) {
 }
 
 /*
-    Fungsi Auth Register
+    Fungsi Auth
 */
+
+// Fungsi Register
 
 function register($data)
 {
@@ -193,9 +194,7 @@ function register($data)
     return mysqli_affected_rows($koneksi);
 }
 
-/*
-    Fungsi Auth Login
-*/
+// Fungsi Login
 
 function login($data)
 {
@@ -236,9 +235,7 @@ function login($data)
     return false;
 }
 
-/*
-    Fungsi Auth Logout
-*/
+// Fungsi Logout
 
 function logout()
 {
