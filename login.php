@@ -18,8 +18,7 @@ if (isset($_POST["submit"])) {
         if (password_verify($password, $row["password"])) {
             //set session
             $_SESSION["login"] = true;
-            $_SESSION["login"] = true;
-            $_SESSION["id"] = $row["id"];
+            $_SESSION["id_user"] = $row["id_user"];
             $_SESSION["full_name"] = $row["full_name"];
             $_SESSION["email"] = $row["email"];
             $_SESSION["password"] = $row["password"];
