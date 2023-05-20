@@ -8,15 +8,26 @@ if (isset($_GET['keyword'])) {
    } else {
    $bukus = getData("buku");
    }
-
-
+   
+      if (isset($_POST['id_user'], $_POST['id_buku'])) {
+          $id_user = $_POST['id_user'];
+          $id_buku = $_POST['id_buku'];
+  
+          // Perform database operations to add/remove favorites based on the current status
+          if (isFavorite($id_user, $id_buku)) {
+              removeFavorite($id_user, $id_buku);
+              http_response_code(200);
+          } else {
+              addFavorite($id_user, $id_buku);
+              http_response_code(200);
+          }
+      } 
+      
 //cek apakah user sudah login
 if (!isset($_SESSION["login"])) {
     header("Location: login.php");
     exit;
 }
-
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -149,7 +160,7 @@ if (!isset($_SESSION["login"])) {
                                     </div>
                                  </a>
                                  <div class="d-inline-block w-100 text-center p-3">
-                                    <a class="bg-primary iq-sign-btn" href="logout.php" role="button">LogOut<i class="ri-login-box-line ml-2"></i></a>
+                                    <a class="bg-primary iq-sign-btn" href="logout.php" role="button">Sign Out<i class="ri-login-box-line ml-2"></i></a>
                                  </div>
                               </div>
                            </div>
@@ -185,7 +196,7 @@ if (!isset($_SESSION["login"])) {
                                  <div class="iq-card-body p-0">
                                     <div class="d-flex align-items-center">
                                        <div class="col-6 p-0 position-relative image-overlap-shadow">
-                                          <a href="javascript:void();"><img class="img-fluid rounded w-100" src="resources/cover/<?= $buku["gambar_buku"] ?>" alt=""></a>
+                                          <a href="javascript:void();"><img class="img-fluid rounded w-100" src="resources/cover/<?= $buku["gambar_buku"] ?>" alt="<?= $buku["judul_buku"] ?>"></a>
                                           <div class="view-book">
                                              <input type="hidden" name="id_buku" value="<?= $buku["id_buku"] ?>">
                                              <a href="book-page.php?id_buku=<?= $buku["id_buku"]; ?>" class="btn btn-sm btn-white">View Book</a>
@@ -196,6 +207,9 @@ if (!isset($_SESSION["login"])) {
                                              <h6 class="mb-1"><?= $buku["judul_buku"] ?></h6>
                                              <p class="font-size-13 line-height mb-1"><?= $buku["penulis"] ?></p>
                                           </div>
+                                          <div class="iq-product-action">
+                                             <a type="button" class="addFavorite" name="<?= $buku["id_buku"] ?>"><i class="ri-heart-line"></i></a>
+                                       </div> 
                                        </div>
                                     </div>
                                  </div>
@@ -222,12 +236,6 @@ if (!isset($_SESSION["login"])) {
    <footer class="iq-footer">
       <div class="container-fluid">
          <div class="row">
-            <div class="col-lg-6">
-               <ul class="list-inline mb-0">
-                  <li class="list-inline-item"><a href="privacy-policy.html">Privacy Policy</a></li>
-                  <li class="list-inline-item"><a href="terms-of-service.html">Terms of Use</a></li>
-               </ul>
-            </div>
             <div class="col-lg-6 text-right">
                Copyright 2023 <a href="#">BookLib</a> All Rights Reserved.
             </div>
@@ -236,6 +244,8 @@ if (!isset($_SESSION["login"])) {
    </footer>
    <!-- Footer END -->
    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
    <script src="js/jquery.min.js"></script>
    <script src="js/popper.min.js"></script>
    <script src="js/bootstrap.min.js"></script>
@@ -288,8 +298,51 @@ if (!isset($_SESSION["login"])) {
    <script src="js/chart-custom.js"></script>
    <!-- Custom JavaScript -->
    <script src="js/custom.js"></script>
+   <script>
+      const buttons = document.querySelectorAll(".addFavorite .ri-heart-line");
+
+      buttons.forEach(button =>{
+         button.onclick = ()=>{
+            const id_buku = button.parentNode.getAttribute("name");
+            const id_user = <?php echo $_SESSION["id_user"]; ?>;
+
+         let xhr = new XMLHttpRequest();
+         xhr.open('POST', 'index.php', true);
+         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+         xhr.onload = ()=>{
+            if(xhr.readyState === XMLHttpRequest.DONE){
+               if(xhr.status === 200){
+                  button.classList.remove("ri-heart-line");
+                  button.classList.toggle("ri-heart-fill");
+                  button.classList.toggle("text-danger");
+
+                  if(button.classList.contains("ri-heart-fill")){
+                     alert("Buku berhasil ditambahkan ke Reading List!");
+                     document.cookie = `addedBook_${id_buku}=true; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
+                     location.reload();
+                  } else{
+                     button.classList.add("ri-heart-line");
+                     alert("Buku berhasil dihapus dari Reading List!");
+                     document.cookie = `addedBook_${id_buku}=true; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+                     location.reload();
+                  }
+               } else {
+                  alert("Error: " + xhr.status);
+               }
+            }
+         }
+         const params = `id_user=${id_user}&id_buku=${id_buku}`;
+         xhr.send(params);
+      }
+            // Check if the book is already added by reading the cookie
+            const id_buku = button.parentNode.getAttribute("name");
+    const addedBookCookie = `addedBook_${id_buku}=true`;
+    if (document.cookie.includes(addedBookCookie)) {
+        button.classList.remove("ri-heart-line");
+        button.classList.add("ri-heart-fill", "text-danger");
+    }
+      });
+</script>
 </body>
-
-<!-- Mirrored from templates.iqonic.design/booksto/html/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Apr 2023 04:57:59 GMT -->
-
 </html>

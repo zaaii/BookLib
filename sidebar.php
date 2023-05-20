@@ -23,7 +23,7 @@
                     <ul id="book" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                         <li><a href="category.html"><i class="ri-function-line"></i>Book Category</a></li>
                         <li><a href="book-page.php"><i class="ri-book-line"></i>Book Page</a></li>
-                        <li><a href="wishlist.html"><i class="ri-heart-line"></i>Favorite</a></li>
+                        <li><a href="readingList.php"><i class="ri-heart-line"></i>Reading List</a></li>
                     </ul>
                 </li>
                 <li>

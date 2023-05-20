@@ -147,16 +147,27 @@ function cariDataBuku($keyword)
 }
 
 /*
-    Fungsi Favorite
+    Fungsi Menambahkan buku ke favorit
 */
-function addFavorite($id_buku, $id_user)
-{
+
+function isFavorite($id_user, $id_buku) {
     global $koneksi;
+    $query = "SELECT * FROM favorit WHERE id_user = $id_user AND id_buku = $id_buku";
+    $result = mysqli_query($koneksi, $query);
+    return mysqli_num_rows($result) > 0;
+}
 
-    $query = "INSERT INTO favorit VALUES ('', '$id_buku', '$id_user')";
-    mysqli_query($koneksi, $query);
+function removeFavorite($id_user, $id_buku) {
+    global $koneksi;
+    $query = "DELETE FROM favorit WHERE id_user = $id_user AND id_buku = $id_buku";
+    $result = mysqli_query($koneksi, $query);
+}
 
-    return mysqli_affected_rows($koneksi);
+function addFavorite($id_user, $id_buku) {
+    global $koneksi;
+    // Perform the necessary database operations to add the book to favorites for the given user
+    $query = "INSERT INTO favorit VALUES ('', '$id_user', '$id_buku')";
+    $result = mysqli_query($koneksi, $query);
 }
 
 /*
@@ -201,7 +212,7 @@ function login($data)
         if (password_verify($password, $row["password"])) {
             // Set session
             $_SESSION["login"] = true;
-            $_SESSION["id"] = $row["id"];
+            $_SESSION["id_user"] = $row["id_user"];
             $_SESSION["full_name"] = $row["full_name"];
             $_SESSION["email"] = $row["email"];
             $_SESSION["password"] = $row["password"];
@@ -213,7 +224,7 @@ function login($data)
             // Cek apakah remember me dicentang
             if (isset($data["remember"])) {
                 // Buat cookie
-                setcookie("id", $row["id"], time() + 60);
+                setcookie("id_user", $row["id_user"], time() + 60);
                 setcookie("key", hash("sha256", $row["email"]), time() + 60);
             }
 
@@ -233,7 +244,7 @@ function logout()
     session_destroy();
 
     // Hapus cookie
-    setcookie("id", "", time() - 60);
+    setcookie("id_user", "", time() - 60);
     setcookie("key", "", time() - 60);
 
     header("Location: index.php");
