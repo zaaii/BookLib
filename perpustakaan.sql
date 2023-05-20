@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 15 Bulan Mei 2023 pada 06.02
+-- Waktu pembuatan: 20 Bulan Mei 2023 pada 16.36
 -- Versi server: 10.4.22-MariaDB
 -- Versi PHP: 8.1.2
 
@@ -58,8 +58,8 @@ INSERT INTO `buku` (`id_buku`, `judul_buku`, `penulis`, `penerbit`, `tahun_terbi
 
 CREATE TABLE `favorit` (
   `id` int(11) NOT NULL,
-  `id_buku` int(11) DEFAULT NULL,
-  `id_user` int(11) DEFAULT NULL
+  `id_user` int(11) NOT NULL,
+  `id_buku` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -69,7 +69,7 @@ CREATE TABLE `favorit` (
 --
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
   `full_name` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
@@ -83,7 +83,7 @@ CREATE TABLE `users` (
 -- Dumping data untuk tabel `users`
 --
 
-INSERT INTO `users` (`id`, `full_name`, `email`, `password`, `gender`, `birth_date`, `user_photo`, `role`) VALUES
+INSERT INTO `users` (`id_user`, `full_name`, `email`, `password`, `gender`, `birth_date`, `user_photo`, `role`) VALUES
 (0, 'admin perpus', 'admin@admin.com', '$2y$10$4tGII67QvDZKtYpaPNkmd.2YkaL7T2ITVW5XvS0BDZSbFyjPk3to.', '', '0000-00-00', '', 'admin');
 
 --
@@ -101,14 +101,14 @@ ALTER TABLE `buku`
 --
 ALTER TABLE `favorit`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_buku` (`id_buku`),
-  ADD KEY `id_user` (`id_user`);
+  ADD KEY `id_user` (`id_user`) USING BTREE,
+  ADD KEY `id_buku` (`id_buku`) USING BTREE;
 
 --
 -- Indeks untuk tabel `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id_user`);
 
 --
 -- AUTO_INCREMENT untuk tabel yang dibuang
@@ -124,7 +124,7 @@ ALTER TABLE `buku`
 -- AUTO_INCREMENT untuk tabel `favorit`
 --
 ALTER TABLE `favorit`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
@@ -134,8 +134,8 @@ ALTER TABLE `favorit`
 -- Ketidakleluasaan untuk tabel `favorit`
 --
 ALTER TABLE `favorit`
-  ADD CONSTRAINT `favorit_ibfk_1` FOREIGN KEY (`id_buku`) REFERENCES `buku` (`id_buku`),
-  ADD CONSTRAINT `favorit_ibfk_2` FOREIGN KEY (`id_user`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `favorit_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`),
+  ADD CONSTRAINT `favorit_ibfk_2` FOREIGN KEY (`id_buku`) REFERENCES `buku` (`id_buku`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
