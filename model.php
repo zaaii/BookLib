@@ -147,21 +147,6 @@ function cariDataBuku($keyword)
 }
 
 /*
-<<<<<<< HEAD
-<<<<<<< HEAD
-    Fungsi Favorite
-*/
-function addFavorite($id_buku, $id_user)
-{
-    global $koneksi;
-
-    $query = "INSERT INTO favorit VALUES ('', '$id_buku', '$id_user')";
-    mysqli_query($koneksi, $query);
-
-    return mysqli_affected_rows($koneksi);
-=======
-=======
->>>>>>> 5ada137662c3bdc9a119252cbdd1f72263f710a2
     Fungsi Menambahkan buku ke favorit
 */
 
@@ -183,10 +168,6 @@ function addFavorite($id_user, $id_buku) {
     // Perform the necessary database operations to add the book to favorites for the given user
     $query = "INSERT INTO favorit VALUES ('', '$id_user', '$id_buku')";
     $result = mysqli_query($koneksi, $query);
-<<<<<<< HEAD
->>>>>>> 5bd9f4d4e78a83facf217b01d87cbe01247b317a
-=======
->>>>>>> 5ada137662c3bdc9a119252cbdd1f72263f710a2
 }
 
 /*
