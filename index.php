@@ -80,7 +80,7 @@ if (!isset($_SESSION["login"])) {
                   <h5 class="mb-0">Home</h5>
                   <nav aria-label="breadcrumb">
                      <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
+                        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Home Page</li>
                      </ul>
                   </nav>

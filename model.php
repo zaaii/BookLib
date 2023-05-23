@@ -250,3 +250,14 @@ function logout()
     header("Location: index.php");
     exit;
 }
+
+// Fungsi Delete User
+function deleteUser($id){
+    global $koneksi;
+
+    // Query Delete User
+    $query = "DELETE FROM users WHERE id_user = $id";
+    $result = mysqli_query($koneksi, $query);
+
+    return $result;
+}

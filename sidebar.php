@@ -30,7 +30,7 @@
                     <a href="#admin" class="iq-waves-effect" data-toggle="collapse" aria-expanded="false"><span class="ripple rippleEffect"></span><i class="las la-home iq-arrow-left"></i><span>Admin</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
                     <ul id="admin" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                         <li><a href="admin-books.php"><i class="ri-file-pdf-line"></i>Books</a></li>
-                        <li><a href="user-list.html"><i class="las la-th-list"></i>User List</a></li>
+                        <li><a href="user-list.php"><i class="las la-th-list"></i>User List</a></li>
                     </ul>
                 </li>
             </ul>
