@@ -28,6 +28,14 @@ if (!isset($_SESSION["login"])) {
     header("Location: login.php");
     exit;
 }
+
+// Check if sesion user still exists
+if (isSessionStillAlive($_SESSION) == false) {
+   // jika session is already not exist in database delete existing session
+   $_SESSION = [];
+   header("Location:login.php");
+}
+
 ?>
 <!doctype html>
 <html lang="en">

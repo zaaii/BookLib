@@ -261,3 +261,23 @@ function deleteUser($id){
 
     return $result;
 }
+
+// Fungsi Check apakah User yang adap ada sesion masih ada di database
+function isSessionStillAlive($session){
+
+    // Mengambil Informasi Dari Session Aktif
+    $id = $session['id_user'];
+    $email = $session['email'];
+
+    // Mengambil Informasi user dari database
+    global $koneksi;
+    $query = "SELECT * FROM users WHERE id_user = '$id' AND email = '$email'";
+    $result = mysqli_query($koneksi, $query);
+    $result = mysqli_fetch_assoc($result);
+
+    if($id == $result['id_user'] && $email == $result['email']) {
+        return true;
+    } else {
+        return false;
+    }
+}
