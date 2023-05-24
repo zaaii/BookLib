@@ -15,7 +15,9 @@ if (isSessionStillAlive($_SESSION) == false) {
    // jika session is already not exist in database delete existing session
    $_SESSION = [];
    header("Location:login.php");
-}?>
+}
+
+?>
 
 <!doctype html>
 <html lang="en">
