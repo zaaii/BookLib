@@ -250,3 +250,26 @@ function logout()
     header("Location: index.php");
     exit;
 }
+
+/* 
+    Fungsi Edit Profil
+*/
+
+function editProfil()
+{
+    global $koneksi;
+
+    $id_user = $_SESSION["id_user"];
+    $full_name = htmlspecialchars($_POST["full_name"]);
+    $email = htmlspecialchars($_POST["email"]);
+    $gender = 
+
+
+    // Query update data
+    $query = "UPDATE users SET 
+                full_name = '$full_name',
+                email = '$email',
+            WHERE id_user = $id_user";
+    
+    mysqli_query($koneksi, $query);
+}
