@@ -281,3 +281,12 @@ function isSessionStillAlive($session){
         return false;
     }
 }
+
+function checkRole($session)
+{
+    $role = $session['role'];
+    if ($role != 'admin') {
+        return header("Location:index.php");
+    }
+    return true;
+}

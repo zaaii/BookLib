@@ -44,6 +44,9 @@ if (isSessionStillAlive($_SESSION) == false) {
 // Mengambil data user
    $user = getData("users");
 
+// Check Role user
+checkRole($_SESSION);
+
 ?>
       <!-- Required meta tags -->
       <meta charset="utf-8">
