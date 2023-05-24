@@ -28,6 +28,14 @@ if (!isset($_SESSION["login"])) {
     header("Location: login.php");
     exit;
 }
+
+// Check if sesion user still exists
+if (isSessionStillAlive($_SESSION) == false) {
+   // jika session is already not exist in database delete existing session
+   $_SESSION = [];
+   header("Location:login.php");
+}
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -80,7 +88,7 @@ if (!isset($_SESSION["login"])) {
                   <h5 class="mb-0">Home</h5>
                   <nav aria-label="breadcrumb">
                      <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
+                        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Home Page</li>
                      </ul>
                   </nav>
