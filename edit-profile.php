@@ -2,6 +2,26 @@
 session_start();
 require("model.php");
 
+// cek apakah tombol submit edit profil sudah ditekan atau belum dan update value saat sudah berhasil edit
+
+if (isset($_POST["submit"])) {
+   if (editProfil($_POST) > 0) {
+      
+      echo "
+         <script>
+            alert('Data berhasil diubah!');
+            document.location.href = 'profile.php';
+         </script>
+      ";
+   } else {
+      echo "
+         <script>
+            alert('Data gagal diubah!');
+            document.location.href = 'profile.php';
+         </script>
+      ";
+   }
+}
 //cek apakah user sudah login
 if (!isset($_SESSION["login"])) {
    header("Location: login.php");
@@ -112,7 +132,7 @@ if (!isset($_SESSION["login"])) {
                   </li>
                   <li class="line-height pt-3">
                      <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
-                        <img src="images/user/1.jpg" class="img-fluid rounded-circle mr-3" alt="user">
+                        <img src="resources/profile/<?= $_SESSION['user_photo'] ?>" class="img-fluid rounded-circle mr-3" alt="user">
                         <div class="caption">
                            <h6 class="mb-1 line-height"><?= $_SESSION['full_name']; ?>
                            </h6>
@@ -186,14 +206,15 @@ if (!isset($_SESSION["login"])) {
                                  </div>
                               </div>
                               <div class="iq-card-body">
-                                 <form>
+                                 <form method="POST" enctype="multipart/form-data">
+                                 <input type="hidden" name="id_user" value="<?= $_SESSION['id_user']; ?>">
                                     <div class="form-group row align-items-center">
                                        <div class="col-md-12">
                                           <div class="profile-img-edit">
-                                             <img class="profile-pic" src="images/user/11.png" alt="profile-pic">
+                                             <img class="profile-pic" src="resources/profile/<?= $_SESSION['user_photo'] ?>" alt="<?= $_SESSION['full_name'] ?>">
                                              <div class="p-image">
                                                 <i class="ri-pencil-line upload-button"></i>
-                                                <input class="file-upload" type="file" accept="image/*"/>
+                                                <input class="file-upload" type="file" name="user_photo" accept="image/*"/>
                                              </div>
                                           </div>
                                        </div>
@@ -201,30 +222,30 @@ if (!isset($_SESSION["login"])) {
                                     <div class=" row align-items-center">
                                        <div class="form-group col-sm-6">
                                           <label for="fname">Full Name:</label>
-                                          <input type="text" class="form-control" id="fname" value="<?= $_SESSION['full_name'] ?>">
+                                          <input type="text" class="form-control" id="fname" name="full_name"><?= isset($_POST['full_name']) ? $_POST['full_name'] : $_SESSION['full_name'] ?>
                                        </div>
                                        <div class="form-group col-sm-6">
                                           <label for="email">Email :</label>
-                                          <input type="text" class="form-control" id="email" value="<?= $_SESSION['email'] ?>">
+                                          <input type="text" class="form-control" id="email" name="email" value="<?= isset($_POST['email']) ? $_POST['email'] : $_SESSION['email'] ?>">
                                        </div>
                                        <div class="form-group col-sm-6">
                                           <label class="d-block">Gender:</label>
                                           <div class="custom-control custom-radio custom-control-inline">
-                                             <input type="radio" id="male" name="male" class="custom-control-input" checked="">
+                                             <input type="radio" name="gender" id="male" value="male" class="custom-control-input" <?= ($_SESSION['gender'] == 'male') ? 'checked' : '' ?>>
                                              <label class="custom-control-label" for="male"> Male </label>
                                           </div>
                                           <div class="custom-control custom-radio custom-control-inline">
-                                             <input type="radio" id="female" name="female" class="custom-control-input">
+                                             <input type="radio" name="gender" id="female" value="female" class="custom-control-input" <?= ($_SESSION['gender'] == 'female') ? 'checked' : '' ?>>
                                              <label class="custom-control-label" for="female"> Female </label>
                                           </div>
                                        </div>
                                        <div class="form-group col-sm-6">
                                           <label for="dob">Date Of Birth:</label>
-                                          <input type="date" class="form-control" id="dob" value="<?= $_SESSION['birth_date'] ?>">
+                                          <input type="date" class="form-control" name="birth_date" id="dob" value="<?= isset($_POST['birth_date']) ? $_POST['birth_date'] : $_SESSION['birth_date'] ?>">
                                        </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                                    <button type="reset" class="btn iq-bg-danger">Cancel</button>
+                                    <button type="submit" name="submit" class="btn btn-primary mr-2">Submit</button>
+                                    <button type="reset" class="btn iq-bg-danger">Reset</button>
                                  </form>
                               </div>
                            </div>

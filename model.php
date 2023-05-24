@@ -255,21 +255,32 @@ function logout()
     Fungsi Edit Profil
 */
 
-function editProfil()
+function editProfil($data)
 {
     global $koneksi;
 
     $id_user = $_SESSION["id_user"];
-    $full_name = htmlspecialchars($_POST["full_name"]);
-    $email = htmlspecialchars($_POST["email"]);
-    $gender = 
+    $full_name = htmlspecialchars($data["full_name"]);
+    $email = htmlspecialchars($data["email"]);
+    $gender = isset($data["gender"]) ? $data["gender"] : "";
+    $user_photo = isset($_FILES["user_photo"]["name"]) ? $_FILES["user_photo"]["name"] : "";
+    $birth_date = htmlspecialchars($data["birth_date"]);
 
+    if (!empty($user_photo)) {
+        $target_dir = "resources/profile/"; // Directory where you want to store the uploaded photos
+        $target_file = $target_dir . basename($_FILES["user_photo"]["name"]);
+        move_uploaded_file($_FILES["user_photo"]["tmp_name"], $target_file);
+    }
 
     // Query update data
     $query = "UPDATE users SET 
                 full_name = '$full_name',
                 email = '$email',
+                gender = '$gender',
+                user_photo = '$user_photo',
+                birth_date = '$birth_date'
             WHERE id_user = $id_user";
     
     mysqli_query($koneksi, $query);
+    return mysqli_affected_rows($koneksi);
 }
