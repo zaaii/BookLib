@@ -9,7 +9,8 @@ if (isset($_GET['keyword'])) {
    $bukus = getData("buku");
    }
 
-$readlists = getData("favorit");
+$current_user = $_SESSION['id_user'];
+$readlists = getFavorit($current_user);
 
 
 //cek apakah user sudah login
@@ -184,7 +185,7 @@ if (!isset($_SESSION["login"])) {
                                     <div class="col-sm-3 col-lg-2">
                                        <div class="row align-items-center">
                                           <div class="col-sm-3">
-                                             <a type="button" id="removeFavorite" name="<?= $buku["id_buku"] ?>" class="badge badge-danger"><i class="ri-close-fill"></i></a>
+                                          <a type="button" id="removeFavorite" name="<?= $buku["id_buku"] ?>" class="badge badge-danger"><i class="ri-close-fill"></i></a>
                                           </div>
                                           <div class="col-sm-9 mb-2">
                                              <span class="checkout-product-img">
@@ -232,12 +233,6 @@ if (!isset($_SESSION["login"])) {
       <footer class="iq-footer">
          <div class="container-fluid">
             <div class="row">
-               <div class="col-lg-6">
-                  <ul class="list-inline mb-0">
-                     <li class="list-inline-item"><a href="privacy-policy.html">Privacy Policy</a></li>
-                     <li class="list-inline-item"><a href="terms-of-service.html">Terms of Use</a></li>
-                  </ul>
-               </div>
                <div class="col-lg-6 text-right">
                   Copyright 2023 <a href="#">BookLib</a> All Rights Reserved.
                </div>
@@ -315,7 +310,7 @@ if (!isset($_SESSION["login"])) {
                   if(xhr.readyState === XMLHttpRequest.DONE){
                      if(xhr.status === 200){
                         alert("Buku telah dihapus dari Reading List!");
-                        document.cookie = `addedBook_${id_buku}=true; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+                        document.cookie = `addedBook_${id_buku}_user_${id_user}=true; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
                         location.reload();
                      } else {
                         alert("Terjadi kesalahan!");

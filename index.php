@@ -326,12 +326,12 @@ if (isSessionStillAlive($_SESSION) == false) {
 
                      if (button.classList.contains("ri-heart-fill")) {
                         alert("Buku berhasil ditambahkan ke Reading List!");
-                        document.cookie = `addedBook_${id_buku}=true; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
+                        document.cookie = `addedBook_${id_buku}_user_${id_user}=true; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
                         location.reload();
                      } else {
                         button.classList.add("ri-heart-line");
                         alert("Buku berhasil dihapus dari Reading List!");
-                        document.cookie = `addedBook_${id_buku}=true; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+                        document.cookie = `addedBook_${id_buku}_user_${id_user}=true; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
                         location.reload();
                      }
                   } else {
@@ -344,7 +344,8 @@ if (isSessionStillAlive($_SESSION) == false) {
          }
          // Check if the book is already added by reading the cookie
          const id_buku = button.parentNode.getAttribute("name");
-         const addedBookCookie = `addedBook_${id_buku}=true`;
+         const id_user = <?php echo $_SESSION["id_user"]; ?>;
+         const addedBookCookie = `addedBook_${id_buku}_user_${id_user}=true`;
          if (document.cookie.includes(addedBookCookie)) {
             button.classList.remove("ri-heart-line");
             button.classList.add("ri-heart-fill", "text-danger");

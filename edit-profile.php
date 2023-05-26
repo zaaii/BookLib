@@ -2,22 +2,28 @@
 session_start();
 require("model.php");
 
-// cek apakah tombol submit edit profil sudah ditekan atau belum dan update value saat sudah berhasil edit
-
 if (isset($_POST["submit"])) {
-   if (editProfil($_POST) > 0) {
-      
+   $result = editProfil($_POST);
+
+   if ($result > 0) {
+      session_reset();
+      $_SESSION["full_name"] = $_POST["full_name"];
+      $_SESSION["email"] = $_POST["email"];
+      $_SESSION["gender"] = $_POST["gender"];
+      $_SESSION["birth_date"] = $_POST["birth_date"];
+
+      if (!empty($_FILES["user_photo"]["name"])) {
+         $_SESSION["user_photo"] = $_FILES["user_photo"]["name"];
+      }
       echo "
          <script>
             alert('Data berhasil diubah!');
-            document.location.href = 'profile.php';
          </script>
       ";
    } else {
       echo "
          <script>
             alert('Data gagal diubah!');
-            document.location.href = 'profile.php';
          </script>
       ";
    }
@@ -211,7 +217,7 @@ if (!isset($_SESSION["login"])) {
                                     <div class="form-group row align-items-center">
                                        <div class="col-md-12">
                                           <div class="profile-img-edit">
-                                             <img class="profile-pic" src="resources/profile/<?= $_SESSION['user_photo'] ?>" alt="<?= $_SESSION['full_name'] ?>">
+                                             <img class="profile-pic" src="resources/profile/<?= $_SESSION["user_photo"] ?>" alt="<?= $_SESSION['full_name'] ?>">
                                              <div class="p-image">
                                                 <i class="ri-pencil-line upload-button"></i>
                                                 <input class="file-upload" type="file" name="user_photo" accept="image/*"/>
@@ -222,7 +228,7 @@ if (!isset($_SESSION["login"])) {
                                     <div class=" row align-items-center">
                                        <div class="form-group col-sm-6">
                                           <label for="fname">Full Name:</label>
-                                          <input type="text" class="form-control" id="fname" name="full_name"><?= isset($_POST['full_name']) ? $_POST['full_name'] : $_SESSION['full_name'] ?>
+                                          <input type="text" class="form-control" value="<?= isset($_POST['full_name']) ? $_POST['full_name'] : $_SESSION['full_name'] ?>" id="fname" name="full_name">
                                        </div>
                                        <div class="form-group col-sm-6">
                                           <label for="email">Email :</label>
@@ -271,96 +277,6 @@ if (!isset($_SESSION["login"])) {
                                     <div class="form-group">
                                        <label for="vpass">Verify Password:</label>
                                        <input type="Password" class="form-control" id="vpass" value="">
-                                    </div>
-                                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                                    <button type="reset" class="btn iq-bg-danger">Cancel</button>
-                                 </form>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="tab-pane fade" id="emailandsms" role="tabpanel">
-                           <div class="iq-card">
-                              <div class="iq-card-header d-flex justify-content-between">
-                                 <div class="iq-header-title">
-                                    <h4 class="card-title">Email and SMS</h4>
-                                 </div>
-                              </div>
-                              <div class="iq-card-body">
-                                 <form>
-                                    <div class="form-group row align-items-center">
-                                       <label class="col-8 col-md-3" for="emailnotification">Email Notification:</label>
-                                       <div class="col-4 col-md-9 custom-control custom-switch">
-                                          <input type="checkbox" class="custom-control-input" id="emailnotification" checked="">
-                                          <label class="custom-control-label" for="emailnotification"></label>
-                                       </div>
-                                    </div>
-                                    <div class="form-group row align-items-center">
-                                       <label class="col-8 col-md-3" for="smsnotification">SMS Notification:</label>
-                                       <div class="col-4 col-md-9 custom-control custom-switch">
-                                          <input type="checkbox" class="custom-control-input" id="smsnotification" checked="">
-                                          <label class="custom-control-label" for="smsnotification"></label>
-                                       </div>
-                                    </div>
-                                    <div class="form-group row align-items-center">
-                                       <label class="col-md-3" for="npass">When To Email</label>
-                                       <div class="col-md-9">
-                                          <div class="custom-control custom-checkbox">
-                                             <input type="checkbox" class="custom-control-input" id="email01">
-                                             <label class="custom-control-label" for="email01">You have new notifications.</label>
-                                          </div>
-                                          <div class="custom-control custom-checkbox">
-                                             <input type="checkbox" class="custom-control-input" id="email02">
-                                             <label class="custom-control-label" for="email02">You're sent a direct message</label>
-                                          </div>
-                                          <div class="custom-control custom-checkbox">
-                                             <input type="checkbox" class="custom-control-input" id="email03" checked="">
-                                             <label class="custom-control-label" for="email03">Someone adds you as a connection</label>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div class="form-group row align-items-center">
-                                       <label class="col-md-3" for="npass">When To Escalate Emails</label>
-                                       <div class="col-md-9">
-                                          <div class="custom-control custom-checkbox">
-                                             <input type="checkbox" class="custom-control-input" id="email04">
-                                             <label class="custom-control-label" for="email04"> Upon new order.</label>
-                                          </div>
-                                          <div class="custom-control custom-checkbox">
-                                             <input type="checkbox" class="custom-control-input" id="email05">
-                                             <label class="custom-control-label" for="email05"> New membership approval</label>
-                                          </div>
-                                          <div class="custom-control custom-checkbox">
-                                             <input type="checkbox" class="custom-control-input" id="email06" checked="">
-                                             <label class="custom-control-label" for="email06"> Member registration</label>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                                    <button type="reset" class="btn iq-bg-danger">Cancel</button>
-                                 </form>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="tab-pane fade" id="manage-contact" role="tabpanel">
-                           <div class="iq-card">
-                              <div class="iq-card-header d-flex justify-content-between">
-                                 <div class="iq-header-title">
-                                    <h4 class="card-title">Manage Contact</h4>
-                                 </div>
-                              </div>
-                              <div class="iq-card-body">
-                                 <form>
-                                    <div class="form-group">
-                                       <label for="cno">Contact Number:</label>
-                                       <input type="text" class="form-control" id="cno" value="001 2536 123 458">
-                                    </div>
-                                    <div class="form-group">
-                                       <label for="email">Email:</label>
-                                       <input type="text" class="form-control" id="email" value="Barryjone@demo.com">
-                                    </div>
-                                    <div class="form-group">
-                                       <label for="url">Url:</label>
-                                       <input type="text" class="form-control" id="url" value="https://getbootstrap.com/">
                                     </div>
                                     <button type="submit" class="btn btn-primary mr-2">Submit</button>
                                     <button type="reset" class="btn iq-bg-danger">Cancel</button>
@@ -434,6 +350,4 @@ if (!isset($_SESSION["login"])) {
 <!-- Custom JavaScript -->
 <script src="js/custom.js"></script>
 </body>
-
-<!-- Mirrored from templates.iqonic.design/booksto/html/profile-edit.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Apr 2023 04:58:42 GMT -->
 </html>

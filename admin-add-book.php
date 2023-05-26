@@ -58,9 +58,6 @@ if (isset($_POST["ubah"])) {
 ?>
 <!doctype html>
 <html lang="en">
-
-<!-- Mirrored from templates.iqonic.design/booksto/html/admin-add-book.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Apr 2023 04:59:25 GMT -->
-
 <head>
    <!-- Required meta tags -->
    <meta charset="utf-8">
