@@ -23,6 +23,8 @@ if (isset($_POST['id_user'], $_POST['id_buku'])) {
    }
 }
 
+$user = getData("users");
+
 //cek apakah user sudah login
 if (!isset($_SESSION["login"])) {
    header("Location: login.php");
@@ -126,10 +128,10 @@ if (isSessionStillAlive($_SESSION) == false) {
                                  <div class="bg-primary p-3">
                                     <h5 class="mb-0 text-white">All Notifications<small class="badge  badge-light float-right pt-1">4</small></h5>
                                  </div>
-                                 <a href="#" class="iq-sub-card">
+                                 <a class="iq-sub-card">
                                     <div class="media align-items-center">
                                        <div class="">
-                                          <img class="avatar-40 rounded" src="images/user/01.jpg" alt="">
+                                          <img class="avatar-40 rounded" src="resources/profile/<?= $user[0]["user_photo"] ?>" alt="">
                                        </div>
                                        <div class="media-body ml-3">
                                           <h6 class="mb-0 ">System</h6>

@@ -81,34 +81,16 @@ if (!isset($_SESSION["login"])) {
                </div>
             </div>
             <div class="navbar-breadcrumb">
-               <h5 class="mb-0">Home</h5>
+               <h5 class="mb-0">Edit Profile</h5>
                <nav aria-label="breadcrumb">
                   <ul class="breadcrumb">
-                     <li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
-                     <li class="breadcrumb-item active" aria-current="page">Home Page</li>
+                     <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                     <li class="breadcrumb-item active" aria-current="page">Edit Profile</li>
                   </ul>
                </nav>
             </div>
-            <div class="iq-search-bar">
-               <form action="" class="searchbox" id="searchForm" method="get">
-                  <input type="text" name="keyword" class="text search-input" placeholder="Search Here...">
-                  <a class="search-link" href="#"><i class="ri-search-line"></i></a>
-               </form>
-            </div>
-            <button class="navbar-toggler" type="submit" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-label="Toggle navigation">
-               <i class="ri-menu-3-line"></i>
-            </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                <ul class="navbar-nav ml-auto navbar-list">
-                  <li class="nav-item nav-icon search-content">
-                     <a href="#" class="search-toggle iq-waves-effect text-gray rounded">
-                        <i class="ri-search-line"></i>
-                     </a>
-                     <form action="" class="search-box p-0" id="searchForm" method="get">
-                        <input type="text" name="keyword" class="text search-input" placeholder="Type here to search...">
-                        <a class="search-link" href="#"><i class="ri-search-line"></i></a>
-                     </form>
-                  </li>
                   <li class="nav-item nav-icon">
                      <a href="#" class="search-toggle iq-waves-effect text-gray rounded">
                         <i class="ri-notification-2-line"></i>
@@ -118,20 +100,20 @@ if (!isset($_SESSION["login"])) {
                         <div class="iq-card shadow-none m-0">
                            <div class="iq-card-body p-0">
                               <div class="bg-primary p-3">
-                                 <h5 class="mb-0 text-white">All Notifications<small class="badge  badge-light float-right pt-1">4</small></h5>
+                                 <h5 class="mb-0 text-white">All Notifications<small class="badge  badge-light float-right pt-1">1</small></h5>
                               </div>
-                              <a href="#" class="iq-sub-card">
-                                 <div class="media align-items-center">
-                                    <div class="">
-                                       <img class="avatar-40 rounded" src="images/user/01.jpg" alt="">
+                              <a class="iq-sub-card">
+                                    <div class="media align-items-center">
+                                       <div class="">
+                                          <img class="avatar-40 rounded" src="resources/profile/<?= $user[0]["user_photo"] ?>" alt="">
+                                       </div>
+                                       <div class="media-body ml-3">
+                                          <h6 class="mb-0 ">System</h6>
+                                          <small class="float-right font-size-12">Just Now</small>
+                                          <p class="mb-0">Welcome to BookLib</p>
+                                       </div>
                                     </div>
-                                    <div class="media-body ml-3">
-                                       <h6 class="mb-0 ">System</h6>
-                                       <small class="float-right font-size-12">Just Now</small>
-                                       <p class="mb-0">Welcome to BookLib</p>
-                                    </div>
-                                 </div>
-                              </a>
+                                 </a>
                            </div>
                         </div>
                      </div>
@@ -267,16 +249,11 @@ if (!isset($_SESSION["login"])) {
                                  <form>
                                     <div class="form-group">
                                        <label for="cpass">Current Password:</label>
-                                       <a href="javascripe:void();" class="float-right">Forgot Password</a>
                                        <input type="Password" class="form-control" id="cpass" value="">
                                     </div>
                                     <div class="form-group">
                                        <label for="npass">New Password:</label>
                                        <input type="Password" class="form-control" id="npass" value="">
-                                    </div>
-                                    <div class="form-group">
-                                       <label for="vpass">Verify Password:</label>
-                                       <input type="Password" class="form-control" id="vpass" value="">
                                     </div>
                                     <button type="submit" class="btn btn-primary mr-2">Submit</button>
                                     <button type="reset" class="btn iq-bg-danger">Cancel</button>
@@ -297,7 +274,7 @@ if (!isset($_SESSION["login"])) {
       <div class="container-fluid">
          <div class="row">
             <div class="col-lg-6 text-right">
-               Copyright 2020 <a href="#">Booksto</a> All Rights Reserved.
+               Copyright 2023 <a href="#">BookLib</a> All Rights Reserved.
             </div>
          </div>
       </div>
