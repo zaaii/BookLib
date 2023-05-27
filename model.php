@@ -150,6 +150,17 @@ function cariDataBuku($keyword)
     Fungsi Menambahkan buku ke favorit
 */
 
+function getFavorit($id_user) {
+    global $koneksi;
+    $query = "SELECT * FROM favorit WHERE id_user = $id_user";
+    $result = mysqli_query($koneksi, $query);
+    $rows = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $rows[] = $row;
+    }
+    return $rows;
+}
+
 function isFavorite($id_user, $id_buku) {
     global $koneksi;
     $query = "SELECT * FROM favorit WHERE id_user = $id_user AND id_buku = $id_buku";
@@ -180,6 +191,7 @@ function register($data)
 {
     global $koneksi;
 
+    $id_user = uniqid();
     $full_name = htmlspecialchars($data["full_name"]);
     $email = htmlspecialchars($data["email"]);
     $password = mysqli_real_escape_string($koneksi, $data["password"]);
@@ -188,7 +200,7 @@ function register($data)
     $password = password_hash($password, PASSWORD_DEFAULT);
 
     // Tambahkan user baru ke database
-    $query = "INSERT INTO users VALUES('', '$full_name', '$email', '$password', '', '', '', 'member')";
+    $query = "INSERT INTO users VALUES('$id_user', '$full_name', '$email', '$password', '', '', '', 'member')";
     $result = mysqli_query($koneksi, $query);
 
     return mysqli_affected_rows($koneksi);
@@ -280,4 +292,39 @@ function isSessionStillAlive($session){
     } else {
         return false;
     }
+}
+
+
+/* 
+    Fungsi Edit Profil
+*/
+
+function editProfil($data)
+{
+    global $koneksi;
+
+    $id_user = $_SESSION["id_user"];
+    $full_name = htmlspecialchars($data["full_name"]);
+    $email = htmlspecialchars($data["email"]);
+    $gender = isset($data["gender"]) ? $data["gender"] : "";
+    $user_photo = isset($_FILES["user_photo"]["name"]) ? $_FILES["user_photo"]["name"] : "";
+    $birth_date = htmlspecialchars($data["birth_date"]);
+
+    if (!empty($user_photo)) {
+        $target_dir = "resources/profile/"; // Directory where you want to store the uploaded photos
+        $target_file = $target_dir . basename($_FILES["user_photo"]["name"]);
+        move_uploaded_file($_FILES["user_photo"]["tmp_name"], $target_file);
+    }
+
+    // Query update data
+    $query = "UPDATE users SET 
+                full_name = '$full_name',
+                email = '$email',
+                gender = '$gender',
+                user_photo = '$user_photo',
+                birth_date = '$birth_date'
+            WHERE id_user = $id_user";
+    
+    mysqli_query($koneksi, $query);
+    return mysqli_affected_rows($koneksi);
 }
