@@ -199,6 +199,15 @@ function register($data)
     // Enkripsi password
     $password = password_hash($password, PASSWORD_DEFAULT);
 
+    //check email already exist
+    $result = mysqli_query($koneksi, "SELECT email FROM users WHERE email = '$email'");
+    if (mysqli_fetch_assoc($result)) {
+        echo "<script>
+                alert('Email sudah terdaftar!');
+            </script>";
+        return false;
+    }
+
     // Tambahkan user baru ke database
     $query = "INSERT INTO users VALUES('$id_user', '$full_name', '$email', '$password', '', '', '', 'member')";
     $result = mysqli_query($koneksi, $query);

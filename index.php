@@ -126,7 +126,7 @@ if (isSessionStillAlive($_SESSION) == false) {
                            <div class="iq-card shadow-none m-0">
                               <div class="iq-card-body p-0">
                                  <div class="bg-primary p-3">
-                                    <h5 class="mb-0 text-white">All Notifications<small class="badge  badge-light float-right pt-1">4</small></h5>
+                                    <h5 class="mb-0 text-white">All Notifications<small class="badge  badge-light float-right pt-1">1</small></h5>
                                  </div>
                                  <a class="iq-sub-card">
                                     <div class="media align-items-center">
