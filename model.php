@@ -294,7 +294,6 @@ function isSessionStillAlive($session){
     }
 }
 
-
 /* 
     Fungsi Edit Profil
 */
@@ -327,4 +326,13 @@ function editProfil($data)
     
     mysqli_query($koneksi, $query);
     return mysqli_affected_rows($koneksi);
+}
+
+function checkRole($session)
+{
+    $role = $session['role'];
+    if ($role != 'admin') {
+        return header("Location:index.php");
+    }
+    return true;
 }
