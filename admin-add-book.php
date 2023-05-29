@@ -56,6 +56,8 @@ if (isset($_POST["ubah"])) {
    }
 }
 
+// Check Role user
+checkRole($_SESSION);
 
 ?>
 <!doctype html>

@@ -18,6 +18,10 @@ if (isSessionStillAlive($_SESSION) == false) {
 $user = getData("users");
 // Mengambil data buku di database
 $bukus = getData("buku");
+
+// Check Role user
+checkRole($_SESSION);
+
 ?>
 
 <!doctype html>
