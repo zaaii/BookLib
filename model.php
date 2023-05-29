@@ -337,3 +337,31 @@ function editProfil($data)
     mysqli_query($koneksi, $query);
     return mysqli_affected_rows($koneksi);
 }
+
+//change password
+function changePassword($data) {
+    global $koneksi;
+
+    $id_user = $_SESSION["id_user"];
+    $password = mysqli_real_escape_string($koneksi, $data["cpass"]);
+    $new_password = mysqli_real_escape_string($koneksi, $data["npass"]);
+
+    // Cek password
+    $result = mysqli_query($koneksi, "SELECT * FROM users WHERE id_user = '$id_user'");
+    $row = mysqli_fetch_assoc($result);
+    if (!password_verify($password, $row["password"])) {
+        echo "<script>
+                alert('Password lama salah!');
+            </script>";
+        return false;
+    }
+
+    // Enkripsi password
+    $new_password = password_hash($new_password, PASSWORD_DEFAULT);
+
+    // Query update data
+    $query = "UPDATE users SET password = '$new_password' WHERE id_user = $id_user";
+    mysqli_query($koneksi, $query);
+
+    return mysqli_affected_rows($koneksi);
+}
