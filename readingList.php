@@ -9,7 +9,9 @@ if (isset($_GET['keyword'])) {
    $bukus = getData("buku");
    }
 
-$readlists = getData("favorit");
+$current_user = $_SESSION['id_user'];
+$readlists = getFavorit($current_user);
+$user = getData("users");
 
 
 //cek apakah user sudah login
@@ -76,26 +78,11 @@ if (!isset($_SESSION["login"])) {
                         </ul>
                      </nav>
                   </div>
-                  <div class="iq-search-bar">
-                     <form action="#" class="searchbox" id="searchForm" method="get">
-                        <input type="text" class="text search-input" name="keyword" placeholder="Search Here...">
-                        <a class="search-link" href="#"><i class="ri-search-line"></i></a>
-                     </form>
-                  </div>
                   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"  aria-label="Toggle navigation">
                   <i class="ri-menu-3-line"></i>
                   </button>
                   <div class="collapse navbar-collapse" id="navbarSupportedContent">
                      <ul class="navbar-nav ml-auto navbar-list">
-                       <li class="nav-item nav-icon search-content">
-                           <a href="#" class="search-toggle iq-waves-effect text-gray rounded">
-                              <i class="ri-search-line"></i>
-                           </a>
-                           <form action="" class="search-box p-0" id="searchForm" method="get">
-                              <input type="text" name="keyword" class="text search-input" placeholder="Type here to search...">
-                              <a class="search-link" href="#"><i class="ri-search-line"></i></a>
-                           </form>
-                        </li>
                         <li class="nav-item nav-icon">
                            <a href="#" class="search-toggle iq-waves-effect text-gray rounded">
                            <i class="ri-notification-2-line"></i>
@@ -107,10 +94,10 @@ if (!isset($_SESSION["login"])) {
                                  <div class="bg-primary p-3">
                                     <h5 class="mb-0 text-white">All Notifications</h5>
                                  </div>
-                                 <a href="#" class="iq-sub-card">
+                                 <a class="iq-sub-card">
                                     <div class="media align-items-center">
                                        <div class="">
-                                          <img class="avatar-40 rounded" src="images/user/01.jpg" alt="">
+                                          <img class="avatar-40 rounded" src="resources/profile/<?= $user[0]["user_photo"] ?>" alt="">
                                        </div>
                                        <div class="media-body ml-3">
                                           <h6 class="mb-0 ">System</h6>
@@ -125,7 +112,7 @@ if (!isset($_SESSION["login"])) {
                         </li>
                         <li class="line-height pt-3">
                            <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
-                              <img src="images/user/1.jpg" class="img-fluid rounded-circle mr-3" alt="user">
+                              <img src="resources/profile/<?= $_SESSION["user_photo"] ?>" class="img-fluid rounded-circle mr-3" alt="user">
                               <div class="caption">
                                  <h6 class="mb-1 line-height"><?= $_SESSION['full_name'] ?></h6>
                                  <p class="mb-0 text-primary"><?= $_SESSION['role'] ?></p>
@@ -138,7 +125,7 @@ if (!isset($_SESSION["login"])) {
                                        <h5 class="mb-0 text-white line-height">Hello <?= $_SESSION['full_name'] ?></h5>
                                        <span class="text-white font-size-12"><?= $_SESSION['email'] ?></span>
                                     </div>
-                                    <a href="profile-edit.html" class="iq-sub-card iq-bg-primary-hover">
+                                    <a href="edit-profile.php" class="iq-sub-card iq-bg-primary-hover">
                                        <div class="media align-items-center">
                                           <div class="rounded iq-card-icon iq-bg-primary">
                                              <i class="ri-profile-line"></i>
@@ -184,7 +171,7 @@ if (!isset($_SESSION["login"])) {
                                     <div class="col-sm-3 col-lg-2">
                                        <div class="row align-items-center">
                                           <div class="col-sm-3">
-                                             <a type="button" id="removeFavorite" name="<?= $buku["id_buku"] ?>" class="badge badge-danger"><i class="ri-close-fill"></i></a>
+                                          <a type="button" id="removeFavorite" name="<?= $buku["id_buku"] ?>" class="badge badge-danger"><i class="ri-close-fill"></i></a>
                                           </div>
                                           <div class="col-sm-9 mb-2">
                                              <span class="checkout-product-img">
@@ -232,12 +219,6 @@ if (!isset($_SESSION["login"])) {
       <footer class="iq-footer">
          <div class="container-fluid">
             <div class="row">
-               <div class="col-lg-6">
-                  <ul class="list-inline mb-0">
-                     <li class="list-inline-item"><a href="privacy-policy.html">Privacy Policy</a></li>
-                     <li class="list-inline-item"><a href="terms-of-service.html">Terms of Use</a></li>
-                  </ul>
-               </div>
                <div class="col-lg-6 text-right">
                   Copyright 2023 <a href="#">BookLib</a> All Rights Reserved.
                </div>
@@ -315,7 +296,7 @@ if (!isset($_SESSION["login"])) {
                   if(xhr.readyState === XMLHttpRequest.DONE){
                      if(xhr.status === 200){
                         alert("Buku telah dihapus dari Reading List!");
-                        document.cookie = `addedBook_${id_buku}=true; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+                        document.cookie = `addedBook_${id_buku}_user_${id_user}=true; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
                         location.reload();
                      } else {
                         alert("Terjadi kesalahan!");
