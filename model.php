@@ -119,6 +119,19 @@ function deleteDataBuku($id_buku)
     return mysqli_affected_rows($koneksi);
 }
 
+/*
+    Fungsi Favorite
+*/
+function addFavorite($id_buku, $id_user)
+{
+    global $koneksi;
+
+    $query = "INSERT INTO favorit VALUES ('', '$id_buku', '$id_user')";
+    mysqli_query($koneksi, $query);
+
+    return mysqli_affected_rows($koneksi);
+}
+
 /* 
     Fungsi Pencarian
 */

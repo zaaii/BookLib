@@ -14,7 +14,6 @@
             </div>
         </div>
     </div>
-
 <div id="sidebar-scrollbar">
 <nav class="iq-sidebar-menu">
 <ul id="iq-sidebar-toggle" class="iq-menu">

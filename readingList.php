@@ -9,9 +9,12 @@ if (isset($_GET['keyword'])) {
    $bukus = getData("buku");
    }
 
+
 $current_user = $_SESSION['id_user'];
 $readlists = getFavorit($current_user);
 $user = getData("users");
+
+$readlists = getData("favorit");
 
 
 //cek apakah user sudah login
@@ -78,6 +81,7 @@ if (!isset($_SESSION["login"])) {
                         </ul>
                      </nav>
                   </div>
+
                   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"  aria-label="Toggle navigation">
                   <i class="ri-menu-3-line"></i>
                   </button>
@@ -94,6 +98,7 @@ if (!isset($_SESSION["login"])) {
                                  <div class="bg-primary p-3">
                                     <h5 class="mb-0 text-white">All Notifications</h5>
                                  </div>
+
                                  <a class="iq-sub-card">
                                     <div class="media align-items-center">
                                        <div class="">
