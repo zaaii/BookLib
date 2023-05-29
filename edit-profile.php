@@ -28,6 +28,25 @@ if (isset($_POST["submit"])) {
       ";
    }
 }
+
+//change password
+if (isset($_POST["changepass"])) {
+   $result = changePassword($_POST);
+
+   if ($result > 0) {
+      echo "
+         <script>
+            alert('Password berhasil diubah!');
+         </script>
+      ";
+   } else {
+      echo "
+         <script>
+            alert('Password gagal diubah!');
+         </script>
+      ";
+   }
+}
 //cek apakah user sudah login
 if (!isset($_SESSION["login"])) {
    header("Location: login.php");
@@ -246,16 +265,16 @@ if (!isset($_SESSION["login"])) {
                                  </div>
                               </div>
                               <div class="iq-card-body">
-                                 <form>
+                                 <form method="POST">
                                     <div class="form-group">
                                        <label for="cpass">Current Password:</label>
-                                       <input type="Password" class="form-control" id="cpass" value="">
+                                       <input type="Password" class="form-control" id="cpass" name="cpass" value="">
                                     </div>
                                     <div class="form-group">
                                        <label for="npass">New Password:</label>
-                                       <input type="Password" class="form-control" id="npass" value="">
+                                       <input type="Password" class="form-control" id="npass" name="npass" value="">
                                     </div>
-                                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                    <button type="submit" name="changepass" class="btn btn-primary mr-2">Submit</button>
                                     <button type="reset" class="btn iq-bg-danger">Cancel</button>
                                  </form>
                               </div>

@@ -199,6 +199,15 @@ function register($data)
     // Enkripsi password
     $password = password_hash($password, PASSWORD_DEFAULT);
 
+    //check email already exist
+    $result = mysqli_query($koneksi, "SELECT email FROM users WHERE email = '$email'");
+    if (mysqli_fetch_assoc($result)) {
+        echo "<script>
+                alert('Email sudah terdaftar!');
+            </script>";
+        return false;
+    }
+
     // Tambahkan user baru ke database
     $query = "INSERT INTO users VALUES('$id_user', '$full_name', '$email', '$password', '', '', '', 'member')";
     $result = mysqli_query($koneksi, $query);
@@ -325,6 +334,34 @@ function editProfil($data)
             WHERE id_user = $id_user";
     
     mysqli_query($koneksi, $query);
+    return mysqli_affected_rows($koneksi);
+}
+
+//change password
+function changePassword($data) {
+    global $koneksi;
+
+    $id_user = $_SESSION["id_user"];
+    $password = mysqli_real_escape_string($koneksi, $data["cpass"]);
+    $new_password = mysqli_real_escape_string($koneksi, $data["npass"]);
+
+    // Cek password
+    $result = mysqli_query($koneksi, "SELECT * FROM users WHERE id_user = '$id_user'");
+    $row = mysqli_fetch_assoc($result);
+    if (!password_verify($password, $row["password"])) {
+        echo "<script>
+                alert('Password lama salah!');
+            </script>";
+        return false;
+    }
+
+    // Enkripsi password
+    $new_password = password_hash($new_password, PASSWORD_DEFAULT);
+
+    // Query update data
+    $query = "UPDATE users SET password = '$new_password' WHERE id_user = $id_user";
+    mysqli_query($koneksi, $query);
+
     return mysqli_affected_rows($koneksi);
 }
 
