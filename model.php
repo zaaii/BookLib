@@ -160,39 +160,51 @@ function cariDataBuku($keyword)
 }
 
 /*
-    Fungsi Auth
+    Fungsi Menambahkan buku ke favorit
 */
 
-// Fungsi cek apakah user sudah login
-function is_login()
-{
-    if (isset($_SESSION["user"])) {
-        return true;
-    } else {
-        return false;
+function getFavorit($id_user) {
+    global $koneksi;
+    $query = "SELECT * FROM favorit WHERE id_user = $id_user";
+    $result = mysqli_query($koneksi, $query);
+    $rows = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $rows[] = $row;
     }
+    return $rows;
 }
 
-// Fungsi cek apakah user sudah login
-function is_admin()
-{
-    if (isset($_SESSION["user"])) {
-        if ($_SESSION["user"]["role"] == "admin") {
-            return true;
-        }
-    }
+function isFavorite($id_user, $id_buku) {
+    global $koneksi;
+    $query = "SELECT * FROM favorit WHERE id_user = $id_user AND id_buku = $id_buku";
+    $result = mysqli_query($koneksi, $query);
+    return mysqli_num_rows($result) > 0;
+}
 
-    return false;
+function removeFavorite($id_user, $id_buku) {
+    global $koneksi;
+    $query = "DELETE FROM favorit WHERE id_user = $id_user AND id_buku = $id_buku";
+    $result = mysqli_query($koneksi, $query);
+}
+
+function addFavorite($id_user, $id_buku) {
+    global $koneksi;
+    // Perform the necessary database operations to add the book to favorites for the given user
+    $query = "INSERT INTO favorit VALUES ('', '$id_user', '$id_buku')";
+    $result = mysqli_query($koneksi, $query);
 }
 
 /*
-    Fungsi Auth Register
+    Fungsi Auth
 */
+
+// Fungsi Register
 
 function register($data)
 {
     global $koneksi;
 
+    $id_user = uniqid();
     $full_name = htmlspecialchars($data["full_name"]);
     $email = htmlspecialchars($data["email"]);
     $password = mysqli_real_escape_string($koneksi, $data["password"]);
@@ -200,16 +212,23 @@ function register($data)
     // Enkripsi password
     $password = password_hash($password, PASSWORD_DEFAULT);
 
+    //check email already exist
+    $result = mysqli_query($koneksi, "SELECT email FROM users WHERE email = '$email'");
+    if (mysqli_fetch_assoc($result)) {
+        echo "<script>
+                alert('Email sudah terdaftar!');
+            </script>";
+        return false;
+    }
+
     // Tambahkan user baru ke database
-    $query = "INSERT INTO users VALUES('', '$full_name', '$email', '$password', '', '', '', 'member')";
+    $query = "INSERT INTO users VALUES('$id_user', '$full_name', '$email', '$password', '', '', '', 'member')";
     $result = mysqli_query($koneksi, $query);
 
     return mysqli_affected_rows($koneksi);
 }
 
-/*
-    Fungsi Auth Login
-*/
+// Fungsi Login
 
 function login($data)
 {
@@ -227,7 +246,7 @@ function login($data)
         if (password_verify($password, $row["password"])) {
             // Set session
             $_SESSION["login"] = true;
-            $_SESSION["id"] = $row["id"];
+            $_SESSION["id_user"] = $row["id_user"];
             $_SESSION["full_name"] = $row["full_name"];
             $_SESSION["email"] = $row["email"];
             $_SESSION["password"] = $row["password"];
@@ -239,7 +258,7 @@ function login($data)
             // Cek apakah remember me dicentang
             if (isset($data["remember"])) {
                 // Buat cookie
-                setcookie("id", $row["id"], time() + 60);
+                setcookie("id_user", $row["id_user"], time() + 60);
                 setcookie("key", hash("sha256", $row["email"]), time() + 60);
             }
 
@@ -250,9 +269,7 @@ function login($data)
     return false;
 }
 
-/*
-    Fungsi Auth Logout
-*/
+// Fungsi Logout
 
 function logout()
 {
@@ -261,9 +278,111 @@ function logout()
     session_destroy();
 
     // Hapus cookie
-    setcookie("id", "", time() - 60);
+    setcookie("id_user", "", time() - 60);
     setcookie("key", "", time() - 60);
 
     header("Location: index.php");
     exit;
+}
+
+// Fungsi Delete User
+function deleteUser($id){
+    global $koneksi;
+
+    // Query Delete User
+    $query = "DELETE FROM users WHERE id_user = $id";
+    $result = mysqli_query($koneksi, $query);
+
+    return $result;
+}
+
+// Fungsi Check apakah User yang adap ada sesion masih ada di database
+function isSessionStillAlive($session){
+
+    // Mengambil Informasi Dari Session Aktif
+    $id = $session['id_user'];
+    $email = $session['email'];
+
+    // Mengambil Informasi user dari database
+    global $koneksi;
+    $query = "SELECT * FROM users WHERE id_user = '$id' AND email = '$email'";
+    $result = mysqli_query($koneksi, $query);
+    $result = mysqli_fetch_assoc($result);
+
+    if($id == $result['id_user'] && $email == $result['email']) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/* 
+    Fungsi Edit Profil
+*/
+
+function editProfil($data)
+{
+    global $koneksi;
+
+    $id_user = $_SESSION["id_user"];
+    $full_name = htmlspecialchars($data["full_name"]);
+    $email = htmlspecialchars($data["email"]);
+    $gender = isset($data["gender"]) ? $data["gender"] : "";
+    $user_photo = isset($_FILES["user_photo"]["name"]) ? $_FILES["user_photo"]["name"] : "";
+    $birth_date = htmlspecialchars($data["birth_date"]);
+
+    if (!empty($user_photo)) {
+        $target_dir = "resources/profile/"; // Directory where you want to store the uploaded photos
+        $target_file = $target_dir . basename($_FILES["user_photo"]["name"]);
+        move_uploaded_file($_FILES["user_photo"]["tmp_name"], $target_file);
+    }
+
+    // Query update data
+    $query = "UPDATE users SET 
+                full_name = '$full_name',
+                email = '$email',
+                gender = '$gender',
+                user_photo = '$user_photo',
+                birth_date = '$birth_date'
+            WHERE id_user = $id_user";
+    
+    mysqli_query($koneksi, $query);
+    return mysqli_affected_rows($koneksi);
+}
+
+//change password
+function changePassword($data) {
+    global $koneksi;
+
+    $id_user = $_SESSION["id_user"];
+    $password = mysqli_real_escape_string($koneksi, $data["cpass"]);
+    $new_password = mysqli_real_escape_string($koneksi, $data["npass"]);
+
+    // Cek password
+    $result = mysqli_query($koneksi, "SELECT * FROM users WHERE id_user = '$id_user'");
+    $row = mysqli_fetch_assoc($result);
+    if (!password_verify($password, $row["password"])) {
+        echo "<script>
+                alert('Password lama salah!');
+            </script>";
+        return false;
+    }
+
+    // Enkripsi password
+    $new_password = password_hash($new_password, PASSWORD_DEFAULT);
+
+    // Query update data
+    $query = "UPDATE users SET password = '$new_password' WHERE id_user = $id_user";
+    mysqli_query($koneksi, $query);
+
+    return mysqli_affected_rows($koneksi);
+}
+
+function checkRole($session)
+{
+    $role = $session['role'];
+    if ($role != 'admin') {
+        return header("Location:index.php");
+    }
+    return true;
 }

@@ -1,27 +1,45 @@
 <?php
-session_start();
-require("model.php");
+// Mulai Session
+   session_start();
+   require("model.php");
+   
+   // Check login
+   if (!isset($_SESSION["login"])) {
+      header("Location: login.php");
+      exit;
+  }
+  
+// Check parameter get hapus
+  if(isset($_GET["hapus"])) {
+      $id_user = $_GET["hapus"];
+      $result = deleteUser($id_user);
+      if ($result === true) {
+         echo "
+      <script>
+      alert('Data berhasil Dihapus');
+      document.location.href = 'user-list.php';
+      </script>
+      ";
+      } else { echo "
+         <script>
+         alert('Data Gagal Dihapus');
+         document.location.href = 'user-list.php';
+         </script>
+         ";}
+      }
 
-if (isset($_GET['keyword'])) {
-   $cari = $_GET['keyword'];
-   $bukus = cariDataBuku($cari);
-   } else {
-   $bukus = getData("buku");
-   }
-
-
-$current_user = $_SESSION['id_user'];
-$readlists = getFavorit($current_user);
-$user = getData("users");
-
-$readlists = getData("favorit");
-
-
-//cek apakah user sudah login
-if (!isset($_SESSION["login"])) {
-    header("Location: login.php");
-    exit;
+// Check if sesion user still exists
+if (isSessionStillAlive($_SESSION) == false) {
+   // jika session is already not exist in database delete existing session
+   $_SESSION = [];
+   header("Location:login.php");
 }
+
+// Mengambil data user
+   $user = getData("users");
+
+// Check Role user
+checkRole($_SESSION);
 
 ?>
 <!doctype html>
@@ -51,10 +69,9 @@ if (!isset($_SESSION["login"])) {
       <!-- loader END -->
       <!-- Wrapper Start -->
       <div class="wrapper">
-         <!-- Sidebar  -->
-         <?php require("sidebar.php")?>
-      <!-- Top Nav Bar -->
-         </div>
+      <!-- Sidebar  -->
+      <?php require("sidebar.php")?>
+      </div>
          <!-- TOP Nav Bar -->
          <div class="iq-top-navbar">
             <div class="iq-navbar-custom">
@@ -67,21 +84,20 @@ if (!isset($_SESSION["login"])) {
                         <a href="index.php" class="header-logo">
                            <img src="images/logo.png" class="img-fluid rounded-normal" alt="">
                            <div class="logo-title">
-                              <span class="text-primary text-uppercase">BookLib</span>
+                              <span class="text-primary text-uppercase">BOOKLIB</span>
                            </div>
                         </a>
                      </div>
                   </div>
                   <div class="navbar-breadcrumb">
-                     <h5 class="mb-0">Reading List</h5>
+                     <h5 class="mb-0">User List</h5>
                      <nav aria-label="breadcrumb">
                         <ul class="breadcrumb">
-                           <li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
-                           <li class="breadcrumb-item active" aria-current="page">Reading List</li>
+                           <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                           <li class="breadcrumb-item active" aria-current="page">User List</li>
                         </ul>
                      </nav>
                   </div>
-
                   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"  aria-label="Toggle navigation">
                   <i class="ri-menu-3-line"></i>
                   </button>
@@ -89,17 +105,16 @@ if (!isset($_SESSION["login"])) {
                      <ul class="navbar-nav ml-auto navbar-list">
                         <li class="nav-item nav-icon">
                            <a href="#" class="search-toggle iq-waves-effect text-gray rounded">
-                           <i class="ri-notification-2-line"></i>
+                           <i class="ri-notification-2-fill"></i>
                            <span class="bg-primary dots"></span>
                            </a>
                            <div class="iq-sub-dropdown">
-                           <div class="iq-card shadow-none m-0">
-                              <div class="iq-card-body p-0">
-                                 <div class="bg-primary p-3">
-                                    <h5 class="mb-0 text-white">All Notifications</h5>
-                                 </div>
-
-                                 <a class="iq-sub-card">
+                        <div class="iq-card shadow-none m-0">
+                           <div class="iq-card-body p-0">
+                              <div class="bg-primary p-3">
+                                 <h5 class="mb-0 text-white">All Notifications<small class="badge  badge-light float-right pt-1">1</small></h5>
+                              </div>
+                              <a class="iq-sub-card">
                                     <div class="media align-items-center">
                                        <div class="">
                                           <img class="avatar-40 rounded" src="resources/profile/<?= $user[0]["user_photo"] ?>" alt="">
@@ -111,15 +126,15 @@ if (!isset($_SESSION["login"])) {
                                        </div>
                                     </div>
                                  </a>
-                              </div>
                            </div>
                         </div>
+                     </div>
                         </li>
                         <li class="line-height pt-3">
                            <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
-                              <img src="resources/profile/<?= $_SESSION["user_photo"] ?>" class="img-fluid rounded-circle mr-3" alt="user">
+                              <img src="resources/profile/<?= $_SESSION['user_photo'] ?>" class="img-fluid rounded-circle mr-3" alt="user">
                               <div class="caption">
-                                 <h6 class="mb-1 line-height"><?= $_SESSION['full_name'] ?></h6>
+                                 <h6 class="mb-1 line-height"><?= $_SESSION['full_name']; ?></h6>
                                  <p class="mb-0 text-primary"><?= $_SESSION['role'] ?></p>
                               </div>
                            </a>
@@ -127,8 +142,8 @@ if (!isset($_SESSION["login"])) {
                               <div class="iq-card shadow-none m-0">
                                  <div class="iq-card-body p-0 ">
                                     <div class="bg-primary p-3">
-                                       <h5 class="mb-0 text-white line-height">Hello <?= $_SESSION['full_name'] ?></h5>
-                                       <span class="text-white font-size-12"><?= $_SESSION['email'] ?></span>
+                                       <h5 class="mb-0 text-white line-height">Hello <?= $_SESSION['full_name']; ?></h5>
+                                       <span class="text-white font-size-12"><?= $_SESSION['role'] ?></span>
                                     </div>
                                     <a href="edit-profile.php" class="iq-sub-card iq-bg-primary-hover">
                                        <div class="media align-items-center">
@@ -154,76 +169,89 @@ if (!isset($_SESSION["login"])) {
             </div>
          </div>
          <!-- TOP Nav Bar END -->
-         <!-- Page Content  -->
-         <div id="content-page" class="content-page">
-            <div class="container-fluid checkout-content">
-               <div class="row">
-                  <div class="col-sm-12">
-                     <div class="iq-card">
-                        <div class="iq-card-header d-flex justify-content-between iq-border-bottom mb-0">
-                           <div class="iq-header-title">
-                              <h4 class="card-title">Reading List</h4>
-                           </div>
+         
+      <!-- Page Content  -->
+   <div id="content-page" class="content-page">
+      <div class="container-fluid">
+         <div class="row">
+            <div class="col-sm-12">
+                  <div class="iq-card">
+                     <div class="iq-card-header d-flex justify-content-between">
+                        <div class="iq-header-title">
+                           <h4 class="card-title">User List</h4>
                         </div>
-                        <div class="iq-card-body">
-                           <ul class="list-inline p-0 m-0">
-                           <?php if(!empty($readlists)): ?>
-                           <?php foreach ($readlists as $readlist) : ?>
-                              <?php foreach ($bukus as $buku) : ?>
-                                 <?php if($readlist["id_buku"] == $buku["id_buku"]) : ?>
-                              <li class="checkout-product">
-                                 <div class="row align-items-center">
-                                    <div class="col-sm-3 col-lg-2">
-                                       <div class="row align-items-center">
-                                          <div class="col-sm-3">
-                                          <a type="button" id="removeFavorite" name="<?= $buku["id_buku"] ?>" class="badge badge-danger"><i class="ri-close-fill"></i></a>
-                                          </div>
-                                          <div class="col-sm-9 mb-2">
-                                             <span class="checkout-product-img">
-                                             <a href="javascript:void();"><img class="img-fluid rounded" src="resources/cover/<?= $buku["gambar_buku"] ?>" alt=""></a>
-                                             </span>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div class="col-sm-3 col-lg-4">
-                                       <div class="checkout-product-details">
-                                          <h5><?= $buku["judul_buku"] ?></h5>
-                                          <p class="text-success"><?= $buku["penulis"] ?></p>
-                                       </div>
-                                    </div>
-                                    <div class="col-sm-6 col-lg-6">
-                                       <div class="row">
-                                          <div class="col-sm-8">
-                                          </div>
-                                          <div class="col-sm-4">
-                                             <a href="book-page.php?id_buku=<?= $buku["id_buku"]; ?>"><button type="submit" class="btn btn-primary view-more">Read</button></a>
-                                          </div>
-                                       </div>
-                                    </div>
+                     </div>
+                     <div class="iq-card-body">
+                        <div class="table-responsive">
+                           <div class="row justify-content-between">
+                              <div class="col-sm-12 col-md-6">
+                                 <div id="user_list_datatable_info" class="dataTables_filter">
                                  </div>
-                              </li>
-                              <?php endif ?>
-                              <?php endforeach ?>
-                              <?php endforeach ?>
-                           </ul>
-                           <?php else : ?>
-                              <div class="alert alert-danger" role="alert">
-                                 Data Buku Tidak Ditemukan!
                               </div>
-                              <?php endif ?>
+                              <div class="col-sm-12 col-md-6">
+                                 <div class="user-list-files d-flex float-right">
+                                    <a class="iq-bg-primary" href="javascript:void(window.print());" >
+                                       Print
+                                     </a>
+                                   </div>
+                              </div>
                            </div>
+                           <table id="user-list-table" class="table table-striped table-bordered mt-4 table-hover" role="grid" aria-describedby="user-list-page-info">
+                             <thead>
+                                 <tr>
+                                    <th>Profile</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Gender</th>
+                                    <th>Birth date</th>
+                                    <th>Join Date</th>
+                                    <th>Action</th>
+                                 </tr>
+                             </thead>
+                             <tbody>
+                           <?php
+// loop untuk menampilkan tabel user
+                           foreach ($user as $key => $value) {
+                           ?>
+                                 <tr>
+                                    <td class="text-center"><img class="rounded img-fluid avatar-40" src="resources/profile/<?= $value['user_photo'] ?>" alt="profile"></td>
+                                    <td><?php echo $value["full_name"];?></td>
+                                    <td><?php echo $value["email"];?></td>
+                                    <td><span class="badge iq-bg-primary"><?php echo $value["gender"];?></span></td>
+                                    <td><?php echo $value["birth_date"];?></td>
+                                    <td>2019/12/01</td>
+                                    <td>
+                                       <div class="flex align-items-center list-user-action">
+                                          <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="user-list.php?hapus=<?php echo $value["id_user"];?>"><i class="ri-delete-bin-line"></i></a>
+                                       </div>
+                                    </td>
+                                 </tr>   
+                           <?php
+                           }
+// End of Loop 
+                           ?>                           
+                             </tbody>
+
+                           </table>
                         </div>
                      </div>
                   </div>
-               </div>
             </div>
          </div>
       </div>
-      <!-- Wrapper END -->
-      <!-- Footer -->
+   </div>
+   </div>
+   <!-- Wrapper END -->
+     <!-- Footer -->
       <footer class="iq-footer">
          <div class="container-fluid">
             <div class="row">
+               <div class="col-lg-6">
+                  <ul class="list-inline mb-0">
+                     <li class="list-inline-item"><a href="privacy-policy.html">Privacy Policy</a></li>
+                     <li class="list-inline-item"><a href="terms-of-service.html">Terms of Use</a></li>
+                  </ul>
+               </div>
                <div class="col-lg-6 text-right">
                   Copyright 2023 <a href="#">BookLib</a> All Rights Reserved.
                </div>
@@ -231,7 +259,7 @@ if (!isset($_SESSION["login"])) {
          </div>
       </footer>
       <!-- Footer END -->
-      <!-- Optional JavaScript -->
+    <!-- Optional JavaScript -->
       <!-- jQuery first, then Popper.js, then Bootstrap JS -->
       <script src="js/jquery.min.js"></script>
       <script src="js/popper.min.js"></script>
@@ -271,47 +299,13 @@ if (!isset($_SESSION["login"])) {
       <script src="js/maps.js"></script>
       <!-- am worldLow JavaScript -->
       <script src="js/worldLow.js"></script>
-      <!-- Raphael-min JavaScript -->
-      <script src="js/raphael-min.js"></script>
-      <!-- Morris JavaScript -->
-      <script src="js/morris.js"></script>
-      <!-- Morris min JavaScript -->
-      <script src="js/morris.min.js"></script>
-      <!-- Flatpicker Js -->
-      <script src="js/flatpickr.js"></script>
       <!-- Style Customizer -->
       <script src="js/style-customizer.js"></script>
       <!-- Chart Custom JavaScript -->
       <script src="js/chart-custom.js"></script>
       <!-- Custom JavaScript -->
       <script src="js/custom.js"></script>
-      <script>
-         const buttons = document.querySelectorAll('#removeFavorite .ri-close-fill');
-
-         buttons.forEach(button => {
-            button.onclick = ()=> {
-               const id_buku = button.parentNode.getAttribute('name');
-               const id_user = <?= $_SESSION["id_user"] ?>;
-
-               let xhr = new XMLHttpRequest();
-               xhr.open('POST', 'index.php', true);
-               xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-               xhr.onload = ()=>{
-                  if(xhr.readyState === XMLHttpRequest.DONE){
-                     if(xhr.status === 200){
-                        alert("Buku telah dihapus dari Reading List!");
-                        document.cookie = `addedBook_${id_buku}_user_${id_user}=true; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
-                        location.reload();
-                     } else {
-                        alert("Terjadi kesalahan!");
-                     }
-                  }
-               }
-               const params = `id_user=${id_user}&id_buku=${id_buku}`
-               xhr.send(params);
-            }
-         })
-      </script>
    </body>
+
+<!-- Mirrored from templates.iqonic.design/booksto/html/user-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Apr 2023 04:58:42 GMT -->
 </html>
