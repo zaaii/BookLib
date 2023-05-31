@@ -169,9 +169,6 @@ if (isSessionStillAlive($_SESSION) == false) {
                                        <h6 class="mb-0 ">Edit Profile</h6>
                                        <p class="mb-0 font-size-12">Modify your personal details.</p>
                                     </div>
-                                 </a>
-                                 <div class="d-inline-block w-100 text-center p-3">
-                                    <a class="bg-primary iq-sign-btn" href="logout.php" role="button">Sign Out<i class="ri-login-box-line ml-2"></i></a>
                                  </div>
                               </a>
                               <div class="d-inline-block w-100 text-center p-3">
@@ -213,16 +210,6 @@ if (isSessionStillAlive($_SESSION) == false) {
                                                 <input type="hidden" name="id_buku" value="<?= $buku["id_buku"] ?>">
                                                 <a href="book-page.php?id_buku=<?= $buku["id_buku"]; ?>" class="btn btn-sm btn-white">View Book</a>
                                              </div>
-
-                           <div class="col-sm-6 col-md-4 col-lg-3">
-                              <div class="iq-card iq-card-block iq-card-stretch iq-card-height browse-bookcontent">
-                                 <div class="iq-card-body p-0">
-                                    <div class="d-flex align-items-center">
-                                       <div class="col-6 p-0 position-relative image-overlap-shadow">
-                                          <a href="javascript:void();"><img class="img-fluid rounded w-100" src="resources/cover/<?= $buku["gambar_buku"] ?>" alt="<?= $buku["judul_buku"] ?>"></a>
-                                          <div class="view-book">
-                                             <input type="hidden" name="id_buku" value="<?= $buku["id_buku"] ?>">
-                                             <a href="book-page.php?id_buku=<?= $buku["id_buku"]; ?>" class="btn btn-sm btn-white">View Book</a>
                                           </div>
                                           <div class="col-6">
                                              <div class="mb-2">
@@ -233,9 +220,6 @@ if (isSessionStillAlive($_SESSION) == false) {
                                                 <a type="button" class="addFavorite" name="<?= $buku["id_buku"] ?>"><i class="ri-heart-line"></i></a>
                                              </div>
                                           </div>
-                                          <div class="iq-product-action">
-                                          <a href="javascript:void();"class="ml-2"><i class="ri-heart-fill text-danger"></i></a>
-                                       </div> 
                                        </div>
                                     </div>
                                  </div>
