@@ -2,13 +2,10 @@
 session_start();
 require("model.php");
 
-$id_buku = !empty($_GET['id_buku']) ? $_GET['id_buku'] : '';
-$user = getData("users");
-
 //cek apakah user sudah login
 if (!isset($_SESSION["login"])) {
-    header("Location: login.php");
-    exit;
+   header("Location: login.php");
+   exit;
 }
 
 // Check if sesion user still exists
@@ -18,25 +15,37 @@ if (isSessionStillAlive($_SESSION) == false) {
    header("Location:login.php");
 }
 
+$user = getData("users");
+// Mengambil data buku di database
+$categories = getData("category");
+
+// Check Role user
+checkRole($_SESSION);
+
 ?>
 
 <!doctype html>
 <html lang="en">
+
+<!-- Mirrored from templates.iqonic.design/booksto/html/admin-category.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Apr 2023 04:58:39 GMT -->
+
 <head>
    <!-- Required meta tags -->
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-   <title>BookLib - Online Book Library</title>
+   <title>Booksto - Responsive Bootstrap 4 Admin Dashboard Template</title>
    <!-- Favicon -->
    <link rel="shortcut icon" href="images/favicon.ico" />
    <!-- Bootstrap CSS -->
    <link rel="stylesheet" href="css/bootstrap.min.css">
+   <link rel="stylesheet" href="css/dataTables.bootstrap4.min.css">
    <!-- Typography CSS -->
    <link rel="stylesheet" href="css/typography.css">
    <!-- Style CSS -->
    <link rel="stylesheet" href="css/style.css">
    <!-- Responsive CSS -->
    <link rel="stylesheet" href="css/responsive.css">
+
 </head>
 
 <body>
@@ -53,54 +62,54 @@ if (isSessionStillAlive($_SESSION) == false) {
    </div>
    <!-- TOP Nav Bar -->
    <?php require("navbar.php") ?>
+
    <!-- TOP Nav Bar END -->
    <!-- Page Content  -->
-   <?php if (!empty($id_buku)) : ?>
-      <?php $buku = getData("buku WHERE id_buku = $id_buku")[0]; ?>
    <div id="content-page" class="content-page">
       <div class="container-fluid">
          <div class="row">
             <div class="col-sm-12">
-               <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
-                  <div class="iq-card-header d-flex justify-content-between align-items-center">
-                     <h4 class="card-title mb-0">Books Description</h4>
+               <div class="iq-card">
+                  <div class="iq-card-header d-flex justify-content-between">
+                     <div class="iq-header-title">
+                        <h4 class="card-title">Category Lists</h4>
+                     </div>
+                     <div class="iq-card-header-toolbar d-flex align-items-center">
+                        <a href="admin-add-category.php" class="btn btn-primary">Add New Category</a>
+                     </div>
                   </div>
-                  <div class="iq-card-body pb-0">
-                     <div class="description-contens align-items-top row">
-                        <div class="col-md-3">
-                           <div class="iq-card-transparent iq-card-block iq-card-stretch iq-card-height">
-                              <div class="iq-card-body p-0">
-                                 <div class="row align-items-center">
-                                    <div class="col-12">
-                                       <ul id="description-slider" class="list-inline p-0 m-0  d-flex align-items-center">
-                                          <li>
-                                             <a href="javascript:void(0);">
-                                                <img src="resources/cover/<?= $buku["gambar_buku"]?>" class="img-fluid w-100 rounded" alt="">
-                                             </a>
-                                          </li>
-                                       </ul>
+                  <div class="iq-card-body">
+                     <div class="table-responsive">
+                        <table class="data-tables table table-striped table-bordered" style="width:100%">
+                           <thead>
+                              <tr>
+                                 <th width="5%">No</th>
+                                 <th width="20%">Category Name</th>
+                                 <th width="65%">Category Description</th>
+                                 <th width="10%">Action</th>
+                              </tr>
+                           </thead>
+                           <?php $i = 1; ?>
+                           <?php foreach ($categories as $category) : ?>
+                           <tbody>
+                              <tr>
+                                 <td><?= $i; ?></td>
+                                 <td><?= $category["category_name"] ?></td>
+                                 <td>
+                                    <p class="mb-0"><?= $category["category_description"] ?></p>
+                                 </td>
+                                 <td>
+                                    <div class="flex align-items-center list-user-action">
+                                       <input type="hidden" name="id_category" value="<?= $category["id_category"] ?>">
+                                       <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" href="admin-add-category.php?id_category=<?= $category["id_category"]; ?>"><i class="ri-pencil-line"></i></a>
+                                             <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="Delete" href="delete-category.php?id_category=<?= $category["id_category"]; ?>"><i class="ri-delete-bin-line"></i></a>
                                     </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="col-md-6">
-                           <div class="iq-card-transparent iq-card-block iq-card-stretch iq-card-height">
-                              <div class="iq-card-body p-0">
-                                 <h3 class="mb-3"><?= $buku["judul_buku"] ?></h3>
-                                 <span class="text-dark mb-4 pb-4 iq-border-bottom d-block"><?= $buku["deskripsi_buku"] ?></span>
-                                 <div class="text-primary mb-4">Author: <span class="text-body"><?= $buku["penulis"] ?></span></div>
-                                 <div class="text-primary mb-4">Publisher: <span class="text-body"><?= $buku["penerbit"] ?></span></div>
-                                 <div class="text-primary mb-4">Year: <span class="text-body"><?= $buku["tahun_terbit"] ?></span></div>
-                                 <div class="mb-4 d-flex align-items-center">
-                                    <input type="hidden" name="id_buku" value="<?= $buku["id_buku"] ?>">
-                                    <a href="book-pdf.php?id_buku=<?= $buku["id_buku"]; ?>" class="btn btn-primary view-more mr-2">Read</a>
-                                 </div>
-                                 <div class="mb-3">
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
+                                 </td>
+                              </tr>
+                           </tbody>
+                           <?php $i++; ?>
+                           <?php endforeach ?>
+                        </table>
                      </div>
                   </div>
                </div>
@@ -109,7 +118,6 @@ if (isSessionStillAlive($_SESSION) == false) {
       </div>
    </div>
    </div>
-   <?php endif; ?>
    <!-- Wrapper END -->
    <!-- Footer -->
    <?php require("footer.php") ?>
@@ -119,6 +127,8 @@ if (isSessionStillAlive($_SESSION) == false) {
    <script src="js/jquery.min.js"></script>
    <script src="js/popper.min.js"></script>
    <script src="js/bootstrap.min.js"></script>
+   <script src="js/jquery.dataTables.min.js"></script>
+   <script src="js/dataTables.bootstrap4.min.js"></script>
    <!-- Appear JavaScript -->
    <script src="js/jquery.appear.js"></script>
    <!-- Countdown JavaScript -->
@@ -169,4 +179,5 @@ if (isSessionStillAlive($_SESSION) == false) {
    <!-- Custom JavaScript -->
    <script src="js/custom.js"></script>
 </body>
+
 </html>

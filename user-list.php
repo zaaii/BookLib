@@ -1,11 +1,33 @@
 <?php
+// Mulai Session
 session_start();
 require("model.php");
 
-//cek apakah user sudah login
+// Check login
 if (!isset($_SESSION["login"])) {
-    header("Location: login.php");
-    exit;
+   header("Location: login.php");
+   exit;
+}
+
+// Check parameter get hapus
+if (isset($_GET["hapus"])) {
+   $id_user = $_GET["hapus"];
+   $result = deleteUser($id_user);
+   if ($result === true) {
+      echo "
+      <script>
+      alert('Data berhasil Dihapus');
+      document.location.href = 'user-list.php';
+      </script>
+      ";
+   } else {
+      echo "
+         <script>
+         alert('Data Gagal Dihapus');
+         document.location.href = 'user-list.php';
+         </script>
+         ";
+   }
 }
 
 // Check if sesion user still exists
@@ -15,17 +37,16 @@ if (isSessionStillAlive($_SESSION) == false) {
    header("Location:login.php");
 }
 
+// Mengambil data user
 $user = getData("users");
-// Mengambil data buku di database
-$bukus = getData("buku");
 
 // Check Role user
 checkRole($_SESSION);
 
 ?>
-
 <!doctype html>
 <html lang="en">
+
 <head>
    <!-- Required meta tags -->
    <meta charset="utf-8">
@@ -35,14 +56,12 @@ checkRole($_SESSION);
    <link rel="shortcut icon" href="images/favicon.ico" />
    <!-- Bootstrap CSS -->
    <link rel="stylesheet" href="css/bootstrap.min.css">
-   <link rel="stylesheet" href="css/dataTables.bootstrap4.min.css">
    <!-- Typography CSS -->
    <link rel="stylesheet" href="css/typography.css">
    <!-- Style CSS -->
    <link rel="stylesheet" href="css/style.css">
    <!-- Responsive CSS -->
    <link rel="stylesheet" href="css/responsive.css">
-
 </head>
 
 <body>
@@ -60,6 +79,7 @@ checkRole($_SESSION);
    <!-- TOP Nav Bar -->
    <?php require("navbar.php") ?>
    <!-- TOP Nav Bar END -->
+
    <!-- Page Content  -->
    <div id="content-page" class="content-page">
       <div class="container-fluid">
@@ -68,55 +88,60 @@ checkRole($_SESSION);
                <div class="iq-card">
                   <div class="iq-card-header d-flex justify-content-between">
                      <div class="iq-header-title">
-                        <h4 class="card-title">Book Lists</h4>
-                     </div>
-                     <div class="iq-card-header-toolbar d-flex align-items-center">
-                        <a href="admin-add-book.php" class="btn btn-primary">Add New book</a>
+                        <h4 class="card-title">User List</h4>
                      </div>
                   </div>
                   <div class="iq-card-body">
                      <div class="table-responsive">
-                        <table class="data-tables table table-striped table-bordered" style="width:100%">
+                        <div class="row justify-content-between">
+                           <div class="col-sm-12 col-md-6">
+                              <div id="user_list_datatable_info" class="dataTables_filter">
+                              </div>
+                           </div>
+                           <div class="col-sm-12 col-md-6">
+                              <div class="user-list-files d-flex float-right">
+                                 <a class="iq-bg-primary" href="javascript:void(window.print());">
+                                    Print
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                        <table id="user-list-table" class="table table-striped table-bordered mt-4 table-hover" role="grid" aria-describedby="user-list-page-info">
                            <thead>
                               <tr>
-                                 <th style="width: 3%;">No</th>
-                                 <th style="width: 12%;">Book Image</th>
-                                 <th style="width: 15%;">Book Name</th>
-                                 <th style="width: 15%;">Book Author</th>
-                                 <th style="width: 15%;">Book Publisher</th>
-                                 <th style="width: 18%;">Book Description</th>
-                                 <th style="width: 7%;">Book Year</th>
-                                 <th style="width: 7%;">Book pdf</th>
-                                 <th style="width: 15%;">Action</th>
+                                 <th>Profile</th>
+                                 <th>Name</th>
+                                 <th>Email</th>
+                                 <th>Gender</th>
+                                 <th>Birth date</th>
+                                 <th>Join Date</th>
+                                 <th>Action</th>
                               </tr>
                            </thead>
-                           <?php $i = 1; ?>
-                           <?php foreach ($bukus as $buku) : ?>
-                              <tbody>
+                           <tbody>
+                              <?php
+                              // loop untuk menampilkan tabel user
+                              foreach ($user as $key => $value) {
+                              ?>
                                  <tr>
-                                    <td><?= $i; ?></td>
-                                    <td><img class="img-fluid rounded" src="resources/cover/<?= $buku["gambar_buku"] ?>" alt=""></td>
-                                    <td><?= $buku["judul_buku"] ?></td>
-                                    <td><?= $buku["penulis"] ?></td>
-                                    <td><?= $buku["penerbit"] ?></td>
+                                    <td class="text-center"><img class="rounded img-fluid avatar-40" src="resources/profile/<?= $value['user_photo'] ?>" alt="profile"></td>
+                                    <td><?php echo $value["full_name"]; ?></td>
+                                    <td><?php echo $value["email"]; ?></td>
+                                    <td><span class="badge iq-bg-primary"><?php echo $value["gender"]; ?></span></td>
+                                    <td><?php echo $value["birth_date"]; ?></td>
+                                    <td>2019/12/01</td>
                                     <td>
-                                       <p class="mb-0"><?= $buku["deskripsi_buku"] ?></p>
-                                    </td>
-                                    <td><?= $buku["tahun_terbit"] ?></td>
-                                    <td><a href="resources/ebook/<?= $buku["pdf_buku"] ?>"><i class="ri-file-fill text-secondary font-size-18"></i></a></td>
-                                    <td>
-                                       <form action="" method="post">
-                                          <div class="flex align-items-center list-user-action">
-                                             <input type="hidden" name="id_buku" value="<?= $buku["id_buku"] ?>">
-                                             <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" href="admin-add-book.php?id_buku=<?= $buku["id_buku"]; ?>"><i class="ri-pencil-line"></i></a>
-                                             <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="Delete" href="delete-book.php?id_buku=<?= $buku["id_buku"]; ?>"><i class="ri-delete-bin-line"></i></a>
-                                          </div>
-                                       </form>
+                                       <div class="flex align-items-center list-user-action">
+                                          <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="user-list.php?hapus=<?php echo $value["id_user"]; ?>"><i class="ri-delete-bin-line"></i></a>
+                                       </div>
                                     </td>
                                  </tr>
-                              </tbody>
-                              <?php $i++; ?>
-                           <?php endforeach ?>
+                              <?php
+                              }
+                              // End of Loop 
+                              ?>
+                           </tbody>
+
                         </table>
                      </div>
                   </div>
@@ -135,8 +160,6 @@ checkRole($_SESSION);
    <script src="js/jquery.min.js"></script>
    <script src="js/popper.min.js"></script>
    <script src="js/bootstrap.min.js"></script>
-   <script src="js/jquery.dataTables.min.js"></script>
-   <script src="js/dataTables.bootstrap4.min.js"></script>
    <!-- Appear JavaScript -->
    <script src="js/jquery.appear.js"></script>
    <!-- Countdown JavaScript -->
@@ -172,14 +195,6 @@ checkRole($_SESSION);
    <script src="js/maps.js"></script>
    <!-- am worldLow JavaScript -->
    <script src="js/worldLow.js"></script>
-   <!-- Raphael-min JavaScript -->
-   <script src="js/raphael-min.js"></script>
-   <!-- Morris JavaScript -->
-   <script src="js/morris.js"></script>
-   <!-- Morris min JavaScript -->
-   <script src="js/morris.min.js"></script>
-   <!-- Flatpicker Js -->
-   <script src="js/flatpickr.js"></script>
    <!-- Style Customizer -->
    <script src="js/style-customizer.js"></script>
    <!-- Chart Custom JavaScript -->
@@ -187,4 +202,7 @@ checkRole($_SESSION);
    <!-- Custom JavaScript -->
    <script src="js/custom.js"></script>
 </body>
+
+<!-- Mirrored from templates.iqonic.design/booksto/html/user-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Apr 2023 04:58:42 GMT -->
+
 </html>

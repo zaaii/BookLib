@@ -2,10 +2,12 @@
 session_start();
 require("model.php");
 
+$user = getData("users");
+
 //cek apakah user sudah login
 if (!isset($_SESSION["login"])) {
-    header("Location: login.php");
-    exit;
+   header("Location: login.php");
+   exit;
 }
 
 // Check if sesion user still exists
@@ -15,22 +17,58 @@ if (isSessionStillAlive($_SESSION) == false) {
    header("Location:login.php");
 }
 
-$user = getData("users");
-// Mengambil data buku di database
-$bukus = getData("buku");
+$id_category = !empty($_GET['id_category']) ? $_GET['id_category'] : '';
+//memeriksa apakah tombol submit sudah ditekan atau belum
+if (isset($_POST["submit"])) {
+   if (insertDataCategory($_POST) > 0) {
+      echo "
+      <script>
+      alert('Data berhasil ditambahkan');
+      document.location.href = 'admin-category.php';
+      </script>
+      ";
+   } else {
+      echo "
+      <script>
+      alert('Data gagal ditambahkan');
+      document.location.href = 'admin-category.php';
+      </script>
+      ";
+   }
+}
+//memeriksa apakah tombol ubah sudah ditekan atau belum
+if (isset($_POST["ubah"])) {
+   if (updateDataCategory($_POST) > 0) {
+      echo "
+      <script>
+      alert('Data berhasil diubah');
+      document.location.href = 'admin-category.php';
+      </script>
+      ";
+   } else {
+      echo "
+      <script>
+      alert('Data gagal diubah');
+      document.location.href = 'admin-category.php';
+      </script>
+      ";
+   }
+}
 
 // Check Role user
 checkRole($_SESSION);
 
 ?>
-
 <!doctype html>
 <html lang="en">
+
+<!-- Mirrored from templates.iqonic.design/booksto/html/admin-add-category.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Apr 2023 04:59:25 GMT -->
+
 <head>
    <!-- Required meta tags -->
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-   <title>BookLib - Online Book Library</title>
+   <title>Booksto - Responsive Bootstrap 4 Admin Dashboard Template</title>
    <!-- Favicon -->
    <link rel="shortcut icon" href="images/favicon.ico" />
    <!-- Bootstrap CSS -->
@@ -42,7 +80,6 @@ checkRole($_SESSION);
    <link rel="stylesheet" href="css/style.css">
    <!-- Responsive CSS -->
    <link rel="stylesheet" href="css/responsive.css">
-
 </head>
 
 <body>
@@ -67,63 +104,54 @@ checkRole($_SESSION);
             <div class="col-sm-12">
                <div class="iq-card">
                   <div class="iq-card-header d-flex justify-content-between">
-                     <div class="iq-header-title">
-                        <h4 class="card-title">Book Lists</h4>
-                     </div>
-                     <div class="iq-card-header-toolbar d-flex align-items-center">
-                        <a href="admin-add-book.php" class="btn btn-primary">Add New book</a>
-                     </div>
+                     <?php if (empty($id_category)) : ?>
+                        <div class="iq-header-title">
+                           <h4 class="card-title">Add Categories</h4>
+                        </div>
                   </div>
                   <div class="iq-card-body">
-                     <div class="table-responsive">
-                        <table class="data-tables table table-striped table-bordered" style="width:100%">
-                           <thead>
-                              <tr>
-                                 <th style="width: 3%;">No</th>
-                                 <th style="width: 12%;">Book Image</th>
-                                 <th style="width: 15%;">Book Name</th>
-                                 <th style="width: 15%;">Book Author</th>
-                                 <th style="width: 15%;">Book Publisher</th>
-                                 <th style="width: 18%;">Book Description</th>
-                                 <th style="width: 7%;">Book Year</th>
-                                 <th style="width: 7%;">Book pdf</th>
-                                 <th style="width: 15%;">Action</th>
-                              </tr>
-                           </thead>
-                           <?php $i = 1; ?>
-                           <?php foreach ($bukus as $buku) : ?>
-                              <tbody>
-                                 <tr>
-                                    <td><?= $i; ?></td>
-                                    <td><img class="img-fluid rounded" src="resources/cover/<?= $buku["gambar_buku"] ?>" alt=""></td>
-                                    <td><?= $buku["judul_buku"] ?></td>
-                                    <td><?= $buku["penulis"] ?></td>
-                                    <td><?= $buku["penerbit"] ?></td>
-                                    <td>
-                                       <p class="mb-0"><?= $buku["deskripsi_buku"] ?></p>
-                                    </td>
-                                    <td><?= $buku["tahun_terbit"] ?></td>
-                                    <td><a href="resources/ebook/<?= $buku["pdf_buku"] ?>"><i class="ri-file-fill text-secondary font-size-18"></i></a></td>
-                                    <td>
-                                       <form action="" method="post">
-                                          <div class="flex align-items-center list-user-action">
-                                             <input type="hidden" name="id_buku" value="<?= $buku["id_buku"] ?>">
-                                             <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" href="admin-add-book.php?id_buku=<?= $buku["id_buku"]; ?>"><i class="ri-pencil-line"></i></a>
-                                             <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="Delete" href="delete-book.php?id_buku=<?= $buku["id_buku"]; ?>"><i class="ri-delete-bin-line"></i></a>
-                                          </div>
-                                       </form>
-                                    </td>
-                                 </tr>
-                              </tbody>
-                              <?php $i++; ?>
-                           <?php endforeach ?>
-                        </table>
-                     </div>
+                     <form action="" method="post">
+                        <div class="form-group">
+                           <label>Category Name:</label>
+                           <input type="text" name="category_name" id="category_name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                           <label>Category Description:</label>
+                           <textarea class="form-control" rows="4" name="category_description" id="category_description"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+                        <a href="admin-category.php" class="btn btn-danger">Back</a>
+                     </form>
                   </div>
                </div>
             </div>
+         <?php endif; ?>
+         <?php if (!empty($id_category)) : ?>
+            <?php $category = getData("category WHERE id_category = $id_category")[0]; ?>
+            <div class="iq-header-title">
+               <h4 class="card-title">Add Categories</h4>
+            </div>
+         </div>
+         <div class="iq-card-body">
+            <form action="" method="post">
+            <input type="hidden" name="id_category" value="<?= $category["id_category"] ?>">
+               <div class="form-group">
+                  <label>Category Name:</label>
+                  <input type="text" name="category_name" id="category_name" class="form-control" required value="<?= $category["category_name"] ?>">
+               </div>
+               <div class="form-group">
+                  <label>Category Description:</label>
+                  <input class="form-control" rows="4" name="category_description" id="category_description" value="<?= $category["category_description"] ?>"></input>
+               </div>
+               <button type="submit" class="btn btn-primary" name="ubah">Change</button>
+               <a href="admin-category.php" class="btn btn-danger">Cancel</a>
+            </form>
          </div>
       </div>
+   <?php endif; ?>
+   </div>
+   </div>
+   </div>
    </div>
    </div>
    <!-- Wrapper END -->
@@ -187,4 +215,7 @@ checkRole($_SESSION);
    <!-- Custom JavaScript -->
    <script src="js/custom.js"></script>
 </body>
+
+<!-- Mirrored from templates.iqonic.design/booksto/html/admin-add-category.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Apr 2023 04:59:25 GMT -->
+
 </html>
