@@ -22,7 +22,6 @@ if (isSessionStillAlive($_SESSION) == false) {
 
 <!doctype html>
 <html lang="en">
-
 <head>
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
@@ -133,5 +132,4 @@ if (isSessionStillAlive($_SESSION) == false) {
 	<!-- Custom JavaScript -->
 	<script src="js/custom.js"></script>
 </body>
-
 </html>

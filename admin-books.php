@@ -8,6 +8,19 @@ if (!isset($_SESSION["login"])) {
    exit;
 }
 
+if (isset($_GET['book_id'])) {
+   $book_id = $_GET['book_id'];
+   if (deleteDataBuku($book_id) > 0) {
+      $message = "Data Buku berhasil dihapus";
+      $alertType = "primary";
+      $alertIcon = "ri-check-line";
+   } else {
+      $message = "Data Buku gagal dihapus";
+      $alertType = "danger";
+      $alertIcon = "ri-close-line";
+   }
+}
+
 // Check if sesion user still exists
 if (isSessionStillAlive($_SESSION) == false) {
    // jika session is already not exist in database delete existing session
@@ -75,6 +88,17 @@ checkRole($_SESSION);
                         <a href="admin-add-book.php" class="btn btn-primary">Add New book</a>
                      </div>
                   </div>
+                  <?php if (isset($message)) : ?>
+                     <div class="alert text-white bg-<?= $alertType ?> mr-4 ml-4" role="alert">
+                        <div class="iq-alert-icon">
+                           <i class="<?= $alertIcon ?>"></i>
+                        </div>
+                        <div class="iq-alert-text"><?= $message ?></div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                           <i class="ri-close-line"></i>
+                        </button>
+                     </div>
+                  <?php endif; ?>
                   <div class="iq-card-body">
                      <div class="table-responsive">
                         <table class="data-tables table table-striped table-bordered" style="width:100%">
@@ -137,7 +161,7 @@ checkRole($_SESSION);
                                           <div class="flex align-items-center list-user-action">
                                              <input type="hidden" name="id_buku" value="<?= $buku["id_buku"] ?>">
                                              <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" href="admin-add-book.php?id_buku=<?= $buku["id_buku"]; ?>"><i class="ri-pencil-line"></i></a>
-                                             <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="Delete" href="delete-book.php?id_buku=<?= $buku["id_buku"]; ?>"><i class="ri-delete-bin-line"></i></a>
+                                             <a class="bg-primary" data-toggle="tooltip" data-placement="top" name="delete" href="?book_id=<?= $buku["id_buku"] ?>"><i class="ri-delete-bin-line"></i></a>
                                           </div>
                                        </form>
                                     </td>

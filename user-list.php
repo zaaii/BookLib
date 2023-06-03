@@ -124,17 +124,23 @@ checkRole($_SESSION);
                               foreach ($user as $key => $value) {
                               ?>
                                  <tr>
-                                    <td class="text-center"><img class="rounded img-fluid avatar-40" src="resources/profile/<?= $value['user_photo'] ?>" alt="profile"></td>
-                                    <td><?php echo $value["full_name"]; ?></td>
-                                    <td><?php echo $value["email"]; ?></td>
-                                    <td><span class="badge iq-bg-primary"><?php echo $value["gender"]; ?></span></td>
-                                    <td><?php echo $value["birth_date"]; ?></td>
-                                    <td>2019/12/01</td>
-                                    <td>
-                                       <div class="flex align-items-center list-user-action">
-                                          <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="user-list.php?hapus=<?php echo $value["id_user"]; ?>"><i class="ri-delete-bin-line"></i></a>
-                                       </div>
+                                    <td class="text-center">
+                                       <?php if (empty($value['user_photo'])) : ?>
+                                          <img class="rounded img-fluid avatar-40" src="resources/profile/default.jpg" alt="user">
+                                       <?php else : ?>
+                                          <img class="rounded img-fluid avatar-40" src="resources/profile/<?= $value['user_photo'] ?>" alt="profile">
                                     </td>
+                                 <?php endif; ?>
+                                 <td><?php echo $value["full_name"]; ?></td>
+                                 <td><?php echo $value["email"]; ?></td>
+                                 <td><span class="badge iq-bg-primary"><?php echo $value["gender"]; ?></span></td>
+                                 <td><?php echo $value["birth_date"]; ?></td>
+                                 <td><?php echo $value["date_created"]; ?></td>
+                                 <td>
+                                    <div class="flex align-items-center list-user-action">
+                                       <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="user-list.php?hapus=<?php echo $value["id_user"]; ?>"><i class="ri-delete-bin-line"></i></a>
+                                    </div>
+                                 </td>
                                  </tr>
                               <?php
                               }
@@ -202,7 +208,4 @@ checkRole($_SESSION);
    <!-- Custom JavaScript -->
    <script src="js/custom.js"></script>
 </body>
-
-<!-- Mirrored from templates.iqonic.design/booksto/html/user-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Apr 2023 04:58:42 GMT -->
-
 </html>

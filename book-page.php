@@ -57,46 +57,47 @@ if (isSessionStillAlive($_SESSION) == false) {
    <!-- Page Content  -->
    <?php if (!empty($id_buku)) : ?>
       <?php $buku = getData("buku WHERE id_buku = $id_buku")[0]; ?>
-   <div id="content-page" class="content-page">
-      <div class="container-fluid">
-         <div class="row">
-            <div class="col-sm-12">
-               <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
-                  <div class="iq-card-header d-flex justify-content-between align-items-center">
-                     <h4 class="card-title mb-0">Books Description</h4>
-                  </div>
-                  <div class="iq-card-body pb-0">
-                     <div class="description-contens align-items-top row">
-                        <div class="col-md-3">
-                           <div class="iq-card-transparent iq-card-block iq-card-stretch iq-card-height">
-                              <div class="iq-card-body p-0">
-                                 <div class="row align-items-center">
-                                    <div class="col-12">
-                                       <ul id="description-slider" class="list-inline p-0 m-0  d-flex align-items-center">
-                                          <li>
-                                             <a href="javascript:void(0);">
-                                                <img src="resources/cover/<?= $buku["gambar_buku"]?>" class="img-fluid w-100 rounded" alt="">
-                                             </a>
-                                          </li>
-                                       </ul>
+      <div id="content-page" class="content-page">
+         <div class="container-fluid">
+            <div class="row">
+               <div class="col-sm-12">
+                  <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
+                     <div class="iq-card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0">Books Description</h4>
+                     </div>
+                     <div class="iq-card-body pb-0">
+                        <div class="description-contens align-items-top row">
+                           <div class="col-md-3">
+                              <div class="iq-card-transparent iq-card-block iq-card-stretch iq-card-height">
+                                 <div class="iq-card-body p-0">
+                                    <div class="row align-items-center">
+                                       <div class="col-12">
+                                          <ul id="description-slider" class="list-inline p-0 m-0  d-flex align-items-center">
+                                             <li>
+                                                <a href="javascript:void(0);">
+                                                   <img src="resources/cover/<?= $buku["gambar_buku"] ?>" class="img-fluid w-100 rounded" alt="">
+                                                </a>
+                                             </li>
+                                          </ul>
+                                       </div>
                                     </div>
                                  </div>
                               </div>
                            </div>
-                        </div>
-                        <div class="col-md-6">
-                           <div class="iq-card-transparent iq-card-block iq-card-stretch iq-card-height">
-                              <div class="iq-card-body p-0">
-                                 <h3 class="mb-3"><?= $buku["judul_buku"] ?></h3>
-                                 <span class="text-dark mb-4 pb-4 iq-border-bottom d-block"><?= $buku["deskripsi_buku"] ?></span>
-                                 <div class="text-primary mb-4">Author: <span class="text-body"><?= $buku["penulis"] ?></span></div>
-                                 <div class="text-primary mb-4">Publisher: <span class="text-body"><?= $buku["penerbit"] ?></span></div>
-                                 <div class="text-primary mb-4">Year: <span class="text-body"><?= $buku["tahun_terbit"] ?></span></div>
-                                 <div class="mb-4 d-flex align-items-center">
-                                    <input type="hidden" name="id_buku" value="<?= $buku["id_buku"] ?>">
-                                    <a href="book-pdf.php?id_buku=<?= $buku["id_buku"]; ?>" class="btn btn-primary view-more mr-2">Read</a>
-                                 </div>
-                                 <div class="mb-3">
+                           <div class="col-md-6">
+                              <div class="iq-card-transparent iq-card-block iq-card-stretch iq-card-height">
+                                 <div class="iq-card-body p-0">
+                                    <h3 class="mb-3"><?= $buku["judul_buku"] ?></h3>
+                                    <span class="text-dark mb-4 pb-4 iq-border-bottom d-block"><?= $buku["deskripsi_buku"] ?></span>
+                                    <div class="text-primary mb-4">Author: <span class="text-body"><?= $buku["penulis"] ?></span></div>
+                                    <div class="text-primary mb-4">Publisher: <span class="text-body"><?= $buku["penerbit"] ?></span></div>
+                                    <div class="text-primary mb-4">Year: <span class="text-body"><?= $buku["tahun_terbit"] ?></span></div>
+                                    <div class="mb-4 d-flex align-items-center">
+                                       <input type="hidden" name="id_buku" value="<?= $buku["id_buku"] ?>">
+                                       <a href="book-pdf.php?id_buku=<?= $buku["id_buku"]; ?>" class="btn btn-primary view-more mr-2">Read</a>
+                                    </div>
+                                    <div class="mb-3">
+                                    </div>
                                  </div>
                               </div>
                            </div>
@@ -107,8 +108,7 @@ if (isSessionStillAlive($_SESSION) == false) {
             </div>
          </div>
       </div>
-   </div>
-   </div>
+      </div>
    <?php endif; ?>
    <!-- Wrapper END -->
    <!-- Footer -->

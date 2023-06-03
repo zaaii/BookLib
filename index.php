@@ -128,6 +128,26 @@ if (isSessionStillAlive($_SESSION) == false) {
          </div>
       </div>
    </div>
+   <?php if (isset($message)) : ?>
+      <div class="toast-container">
+         <div class="toast fade show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+               <svg class="bd-placeholder-img rounded mr-2" width="50" height="20" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img">
+                  <rect width="100%" height="100%" fill="#007aff"></rect>
+               </svg>
+               <strong class="mr-auto">BookLib System</strong>
+               <small class="text-muted">just now</small>
+               <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+               </button>
+            </div>
+            <div class="toast-body">
+               <?= $message; ?>
+            </div>
+         </div>
+      </div>
+   <?php endif; ?>
+   </div>
    </div>
    </div>
    <!-- Wrapper END -->
@@ -136,7 +156,6 @@ if (isSessionStillAlive($_SESSION) == false) {
    <!-- Footer END -->
    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
    <script src="js/jquery.min.js"></script>
    <script src="js/popper.min.js"></script>
    <script src="js/bootstrap.min.js"></script>
@@ -189,6 +208,7 @@ if (isSessionStillAlive($_SESSION) == false) {
    <script src="js/chart-custom.js"></script>
    <!-- Custom JavaScript -->
    <script src="js/custom.js"></script>
+   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
    <script>
       const buttons = document.querySelectorAll(".addFavorite .ri-heart-line");
 
@@ -209,14 +229,12 @@ if (isSessionStillAlive($_SESSION) == false) {
                      button.classList.toggle("text-danger");
 
                      if (button.classList.contains("ri-heart-fill")) {
-                        alert("Buku berhasil ditambahkan ke Reading List!");
+                        swal("Success !", "Buku berhasil ditambahkan ke Reading List!", "success");
                         document.cookie = `addedBook_${id_buku}_user_${id_user}=true; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
-                        location.reload();
                      } else {
                         button.classList.add("ri-heart-line");
-                        alert("Buku berhasil dihapus dari Reading List!");
+                        swal("Success !", "Buku berhasil dihapus ke Reading List!", "success");
                         document.cookie = `addedBook_${id_buku}_user_${id_user}=true; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
-                        location.reload();
                      }
                   } else {
                      alert("Error: " + xhr.status);

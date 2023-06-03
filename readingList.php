@@ -9,16 +9,17 @@ if (isset($_GET['keyword'])) {
    $bukus = getData("buku");
 }
 
-$current_user = $_SESSION['id_user'];
-$readlists = getFavorit($current_user);
-$user = getData("users");
-
 
 //cek apakah user sudah login
 if (!isset($_SESSION["login"])) {
    header("Location: login.php");
    exit;
 }
+
+
+$current_user = $_SESSION['id_user'];
+$readlists = getFavorit($current_user);
+$user = getData("users");
 
 ?>
 <!doctype html>
@@ -123,7 +124,6 @@ if (!isset($_SESSION["login"])) {
    </div>
    </div>
    <!-- Wrapper END -->
-   <!-- Footer -->
    <?php require("footer.php") ?>
    <!-- Footer END -->
    <!-- Optional JavaScript -->

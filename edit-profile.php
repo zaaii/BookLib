@@ -15,17 +15,13 @@ if (isset($_POST["submit"])) {
       if (!empty($_FILES["user_photo"]["name"])) {
          $_SESSION["user_photo"] = $_FILES["user_photo"]["name"];
       }
-      echo "
-         <script>
-            alert('Data berhasil diubah!');
-         </script>
-      ";
+      $message = "Data Profil berhasil diubah!";
+      $alertType = "primary";
+      $alertIcon = "ri-check-line";
    } else {
-      echo "
-         <script>
-            alert('Data gagal diubah!');
-         </script>
-      ";
+      $message = "Data Profil gagal diubah!";
+      $alertType = "danger";
+      $alertIcon = "ri-close-line";
    }
 }
 
@@ -34,17 +30,13 @@ if (isset($_POST["changepass"])) {
    $result = changePassword($_POST);
 
    if ($result > 0) {
-      echo "
-         <script>
-            alert('Password berhasil diubah!');
-         </script>
-      ";
+      $message2 = "Password berhasil diubah!";
+      $alertType = "primary";
+      $alertIcon = "ri-check-line";
    } else {
-      echo "
-         <script>
-            alert('Password gagal diubah!');
-         </script>
-      ";
+      $message2 = "Password Lama Salah, Password gagal diubah!";
+      $alertType = "danger";
+      $alertIcon = "ri-close-line";
    }
 }
 //cek apakah user sudah login
@@ -84,108 +76,142 @@ if (!isset($_SESSION["login"])) {
    </div>
       <!-- TOP Nav Bar -->
       <?php require("navbar.php") ?>
-      <!-- TOP Nav Bar END -->
-
-      <!-- Page Content  -->
-      <div id="content-page" class="content-page">
-         <div class="container-fluid">
-            <div class="row">
-               <div class="col-lg-12">
-                  <div class="iq-card">
-                     <div class="iq-card-body p-0">
-                        <div class="iq-edit-list">
-                           <ul class="iq-edit-profile d-flex nav nav-pills">
-                              <li class="col-md-3 p-0">
-                                 <a class="nav-link active" data-toggle="pill" href="#personal-information">
-                                    Personal Information
-                                 </a>
-                              </li>
-                              <li class="col-md-3 p-0">
-                                 <a class="nav-link" data-toggle="pill" href="#chang-pwd">
-                                    Change Password
-                                 </a>
-                              </li>
-                           </ul>
-                        </div>
+   <!-- Page Content  -->
+   <div id="content-page" class="content-page">
+      <div class="container-fluid">
+         <div class="row">
+            <div class="col-lg-12">
+               <div class="iq-card">
+                  <div class="iq-card-body p-0">
+                     <div class="iq-edit-list">
+                        <ul class="iq-edit-profile d-flex nav nav-pills">
+                           <li class="col-md-3 p-0">
+                              <a class="nav-link active" data-toggle="pill" href="#personal-information">
+                                 Personal Information
+                              </a>
+                           </li>
+                           <li class="col-md-3 p-0">
+                              <a class="nav-link" data-toggle="pill" href="#chang-pwd">
+                                 Change Password
+                              </a>
+                           </li>
+                        </ul>
                      </div>
                   </div>
                </div>
-               <div class="col-lg-12">
-                  <div class="iq-edit-list-data">
-                     <div class="tab-content">
-                        <div class="tab-pane fade active show" id="personal-information" role="tabpanel">
-                           <div class="iq-card">
-                              <div class="iq-card-header d-flex justify-content-between">
-                                 <div class="iq-header-title">
-                                    <h4 class="card-title">Personal Information</h4>
-                                 </div>
-                              </div>
-                              <div class="iq-card-body">
-                                 <form method="POST" enctype="multipart/form-data">
-                                 <input type="hidden" name="id_user" value="<?= $_SESSION['id_user']; ?>">
-                                    <div class="form-group row align-items-center">
-                                       <div class="col-md-12">
-                                          <div class="profile-img-edit">
-                                             <img class="profile-pic" src="resources/profile/<?= $_SESSION["user_photo"] ?>" alt="<?= $_SESSION['full_name'] ?>">
-                                             <div class="p-image">
-                                                <i class="ri-pencil-line upload-button"></i>
-                                                <input class="file-upload" type="file" name="user_photo" accept="image/*"/>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div class=" row align-items-center">
-                                       <div class="form-group col-sm-6">
-                                          <label for="fname">Full Name:</label>
-                                          <input type="text" class="form-control" value="<?= isset($_POST['full_name']) ? $_POST['full_name'] : $_SESSION['full_name'] ?>" id="fname" name="full_name">
-                                       </div>
-                                       <div class="form-group col-sm-6">
-                                          <label for="email">Email :</label>
-                                          <input type="text" class="form-control" id="email" name="email" value="<?= isset($_POST['email']) ? $_POST['email'] : $_SESSION['email'] ?>">
-                                       </div>
-                                       <div class="form-group col-sm-6">
-                                          <label class="d-block">Gender:</label>
-                                          <div class="custom-control custom-radio custom-control-inline">
-                                             <input type="radio" name="gender" id="male" value="male" class="custom-control-input" <?= ($_SESSION['gender'] == 'male') ? 'checked' : '' ?>>
-                                             <label class="custom-control-label" for="male"> Male </label>
-                                          </div>
-                                          <div class="custom-control custom-radio custom-control-inline">
-                                             <input type="radio" name="gender" id="female" value="female" class="custom-control-input" <?= ($_SESSION['gender'] == 'female') ? 'checked' : '' ?>>
-                                             <label class="custom-control-label" for="female"> Female </label>
-                                          </div>
-                                       </div>
-                                       <div class="form-group col-sm-6">
-                                          <label for="dob">Date Of Birth:</label>
-                                          <input type="date" class="form-control" name="birth_date" id="dob" value="<?= isset($_POST['birth_date']) ? $_POST['birth_date'] : $_SESSION['birth_date'] ?>">
-                                       </div>
-                                    </div>
-                                    <button type="submit" name="submit" class="btn btn-primary mr-2">Submit</button>
-                                    <button type="reset" class="btn iq-bg-danger">Reset</button>
-                                 </form>
+            </div>
+            <div class="col-lg-12">
+               <div class="iq-edit-list-data">
+                  <div class="tab-content">
+                     <div class="tab-pane fade active show" id="personal-information" role="tabpanel">
+                        <div class="iq-card">
+                           <div class="iq-card-header d-flex justify-content-between">
+                              <div class="iq-header-title">
+                                 <h4 class="card-title">Personal Information</h4>
                               </div>
                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="chang-pwd" role="tabpanel">
-                           <div class="iq-card">
-                              <div class="iq-card-header d-flex justify-content-between">
-                                 <div class="iq-header-title">
-                                    <h4 class="card-title">Change Password</h4>
+                           <?php if (isset($message)) : ?>
+                              <div class="alert text-white bg-<?= $alertType ?> mr-4 ml-4" role="alert">
+                                 <div class="iq-alert-icon">
+                                    <i class="<?= $alertIcon ?>"></i>
                                  </div>
+                                 <div class="iq-alert-text"><?= $message ?></div>
+                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <i class="ri-close-line"></i>
+                                 </button>
                               </div>
-                              <div class="iq-card-body">
-                                 <form method="POST">
-                                    <div class="form-group">
-                                       <label for="cpass">Current Password:</label>
-                                       <input type="Password" class="form-control" id="cpass" name="cpass" value="">
+                           <?php endif; ?>
+                           <div class="iq-card-body">
+                              <form method="POST" enctype="multipart/form-data">
+                                 <input type="hidden" name="id_user" value="<?= $_SESSION['id_user']; ?>">
+                                 <div class="form-group row align-items-center">
+                                    <div class="col-md-12">
+                                       <div class="profile-img-edit">
+                                          <?php if (empty($_SESSION['user_photo'])) : ?>
+                                             <img src="resources/profile/default.jpg" class="img-fluid rounded-circle mr-3" alt="user">
+                                          <?php else : ?>
+                                             <img class="profile-pic" src="resources/profile/<?= $_SESSION["user_photo"] ?>" alt="<?= $_SESSION['full_name'] ?>">
+                                          <?php endif; ?>
+                                          <div class="p-image">
+                                             <i class="ri-pencil-line upload-button"></i>
+                                             <input class="file-upload" type="file" name="user_photo" accept="image/*" />
+                                          </div>
+                                       </div>
                                     </div>
-                                    <div class="form-group">
-                                       <label for="npass">New Password:</label>
-                                       <input type="Password" class="form-control" id="npass" name="npass" value="">
+                                 </div>
+                                 <div class=" row align-items-center">
+                                    <div class="form-group col-sm-6">
+                                       <label for="fname">Full Name:</label>
+                                       <input type="text" class="form-control" value="<?= isset($_POST['full_name']) ? $_POST['full_name'] : $_SESSION['full_name'] ?>" id="fname" name="full_name">
                                     </div>
-                                    <button type="submit" name="changepass" class="btn btn-primary mr-2">Submit</button>
-                                    <button type="reset" class="btn iq-bg-danger">Cancel</button>
-                                 </form>
+                                    <div class="form-group col-sm-6">
+                                       <label for="email">Email :</label>
+                                       <input type="text" class="form-control" id="email" name="email" value="<?= isset($_POST['email']) ? $_POST['email'] : $_SESSION['email'] ?>">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                       <label class="d-block">Gender:</label>
+                                       <div class="custom-control custom-radio custom-control-inline">
+                                          <input type="radio" name="gender" id="male" value="male" class="custom-control-input" <?= ($_SESSION['gender'] == 'male') ? 'checked' : '' ?>>
+                                          <label class="custom-control-label" for="male"> Male </label>
+                                       </div>
+                                       <div class="custom-control custom-radio custom-control-inline">
+                                          <input type="radio" name="gender" id="female" value="female" class="custom-control-input" <?= ($_SESSION['gender'] == 'female') ? 'checked' : '' ?>>
+                                          <label class="custom-control-label" for="female"> Female </label>
+                                       </div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                       <label for="dob">Date Of Birth:</label>
+                                       <input type="date" class="form-control" name="birth_date" id="dob" value="<?= isset($_POST['birth_date']) ? $_POST['birth_date'] : $_SESSION['birth_date'] ?>">
+                                    </div>
+                                 </div>
+                                 <button type="submit" name="submit" class="btn btn-primary mr-2">Submit</button>
+                                 <button type="reset" class="btn iq-bg-danger">Reset</button>
+                              </form>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="tab-pane fade" id="chang-pwd" role="tabpanel">
+                        <div class="iq-card">
+                           <div class="iq-card-header d-flex justify-content-between">
+                              <div class="iq-header-title">
+                                 <h4 class="card-title">Change Password</h4>
                               </div>
+                           </div>
+                           <?php if (isset($message2)) : ?>
+                              <div class="alert text-white bg-<?= $alertType ?> mr-4 ml-4" role="alert">
+                                 <div class="iq-alert-icon">
+                                    <i class="<?= $alertIcon ?>"></i>
+                                 </div>
+                                 <div class="iq-alert-text"><?= $message2 ?></div>
+                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <i class="ri-close-line"></i>
+                                 </button>
+                              </div>
+                           <?php endif; ?>
+                           <?php if (isset($messagePass)) : ?>
+                              <div class="alert text-white bg-danger mr-4 ml-4" role="alert">
+                                 <div class="iq-alert-icon">
+                                    <i class="ri-close-line"></i>
+                                 </div>
+                                 <div class="iq-alert-text"><?= $messagePass ?></div>
+                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <i class="ri-close-line"></i>
+                                 </button>
+                              </div>
+                           <?php endif; ?>
+                           <div class="iq-card-body">
+                              <form method="POST">
+                                 <div class="form-group">
+                                    <label for="cpass">Current Password:</label>
+                                    <input type="Password" class="form-control" id="cpass" name="cpass" value="">
+                                 </div>
+                                 <div class="form-group">
+                                    <label for="npass">New Password:</label>
+                                    <input type="Password" class="form-control" id="npass" name="npass" value="">
+                                 </div>
+                                 <button type="submit" name="changepass" class="btn btn-primary mr-2">Submit</button>
+                                 <button type="reset" class="btn iq-bg-danger">Cancel</button>
+                              </form>
                            </div>
                         </div>
                      </div>
