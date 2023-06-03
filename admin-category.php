@@ -1,33 +1,11 @@
 <?php
-// Mulai Session
 session_start();
 require("model.php");
 
-// Check login
+//cek apakah user sudah login
 if (!isset($_SESSION["login"])) {
    header("Location: login.php");
    exit;
-}
-
-// Check parameter get hapus
-if (isset($_GET["hapus"])) {
-   $id_user = $_GET["hapus"];
-   $result = deleteUser($id_user);
-   if ($result === true) {
-      echo "
-      <script>
-      alert('Data berhasil Dihapus');
-      document.location.href = 'user-list.php';
-      </script>
-      ";
-   } else {
-      echo "
-         <script>
-         alert('Data Gagal Dihapus');
-         document.location.href = 'user-list.php';
-         </script>
-         ";
-   }
 }
 
 // Check if sesion user still exists
@@ -37,31 +15,37 @@ if (isSessionStillAlive($_SESSION) == false) {
    header("Location:login.php");
 }
 
-// Mengambil data user
 $user = getData("users");
+// Mengambil data buku di database
+$categories = getData("categories");
 
 // Check Role user
 checkRole($_SESSION);
 
 ?>
+
 <!doctype html>
 <html lang="en">
+
+<!-- Mirrored from templates.iqonic.design/booksto/html/admin-category.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Apr 2023 04:58:39 GMT -->
 
 <head>
    <!-- Required meta tags -->
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-   <title>BookLib - Online Book Library</title>
+   <title>Booksto - Responsive Bootstrap 4 Admin Dashboard Template</title>
    <!-- Favicon -->
    <link rel="shortcut icon" href="images/favicon.ico" />
    <!-- Bootstrap CSS -->
    <link rel="stylesheet" href="css/bootstrap.min.css">
+   <link rel="stylesheet" href="css/dataTables.bootstrap4.min.css">
    <!-- Typography CSS -->
    <link rel="stylesheet" href="css/typography.css">
    <!-- Style CSS -->
    <link rel="stylesheet" href="css/style.css">
    <!-- Responsive CSS -->
    <link rel="stylesheet" href="css/responsive.css">
+
 </head>
 
 <body>
@@ -78,8 +62,8 @@ checkRole($_SESSION);
    </div>
    <!-- TOP Nav Bar -->
    <?php require("navbar.php") ?>
-   <!-- TOP Nav Bar END -->
 
+   <!-- TOP Nav Bar END -->
    <!-- Page Content  -->
    <div id="content-page" class="content-page">
       <div class="container-fluid">
@@ -88,66 +72,43 @@ checkRole($_SESSION);
                <div class="iq-card">
                   <div class="iq-card-header d-flex justify-content-between">
                      <div class="iq-header-title">
-                        <h4 class="card-title">User List</h4>
+                        <h4 class="card-title">Category Lists</h4>
+                     </div>
+                     <div class="iq-card-header-toolbar d-flex align-items-center">
+                        <a href="admin-add-category.php" class="btn btn-primary">Add New Category</a>
                      </div>
                   </div>
                   <div class="iq-card-body">
                      <div class="table-responsive">
-                        <div class="row justify-content-between">
-                           <div class="col-sm-12 col-md-6">
-                              <div id="user_list_datatable_info" class="dataTables_filter">
-                              </div>
-                           </div>
-                           <div class="col-sm-12 col-md-6">
-                              <div class="user-list-files d-flex float-right">
-                                 <a class="iq-bg-primary" href="javascript:void(window.print());">
-                                    Print
-                                 </a>
-                              </div>
-                           </div>
-                        </div>
-                        <table id="user-list-table" class="table table-striped table-bordered mt-4 table-hover" role="grid" aria-describedby="user-list-page-info">
+                        <table class="data-tables table table-striped table-bordered" style="width:100%">
                            <thead>
                               <tr>
-                                 <th>Profile</th>
-                                 <th>Name</th>
-                                 <th>Email</th>
-                                 <th>Gender</th>
-                                 <th>Birth date</th>
-                                 <th>Join Date</th>
-                                 <th>Action</th>
+                                 <th width="5%">No</th>
+                                 <th width="20%">Category Name</th>
+                                 <th width="65%">Category Description</th>
+                                 <th width="10%">Action</th>
                               </tr>
                            </thead>
+                           <?php $i = 1; ?>
+                           <?php foreach ($categories as $category) : ?>
                            <tbody>
-                              <?php
-                              // loop untuk menampilkan tabel user
-                              foreach ($user as $key => $value) {
-                              ?>
-                                 <tr>
-                                    <td class="text-center">
-                                       <?php if (empty($value['user_photo'])) : ?>
-                                          <img class="rounded img-fluid avatar-40" src="resources/profile/default.jpg" alt="user">
-                                       <?php else : ?>
-                                          <img class="rounded img-fluid avatar-40" src="resources/profile/<?= $value['user_photo'] ?>" alt="profile">
-                                    </td>
-                                 <?php endif; ?>
-                                 <td><?php echo $value["full_name"]; ?></td>
-                                 <td><?php echo $value["email"]; ?></td>
-                                 <td><span class="badge iq-bg-primary"><?php echo $value["gender"]; ?></span></td>
-                                 <td><?php echo $value["birth_date"]; ?></td>
-                                 <td><?php echo $value["date_created"]; ?></td>
+                              <tr>
+                                 <td><?= $i; ?></td>
+                                 <td><?= $category["category_name"] ?></td>
+                                 <td>
+                                    <p class="mb-0"><?= $category["category_description"] ?></p>
+                                 </td>
                                  <td>
                                     <div class="flex align-items-center list-user-action">
-                                       <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="user-list.php?hapus=<?php echo $value["id_user"]; ?>"><i class="ri-delete-bin-line"></i></a>
+                                       <input type="hidden" name="id_category" value="<?= $category["id_category"] ?>">
+                                       <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" href="admin-add-category.php?id_category=<?= $category["id_category"]; ?>"><i class="ri-pencil-line"></i></a>
+                                             <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="Delete" href="delete-category.php?id_category=<?= $category["id_category"]; ?>"><i class="ri-delete-bin-line"></i></a>
                                     </div>
                                  </td>
-                                 </tr>
-                              <?php
-                              }
-                              // End of Loop 
-                              ?>
+                              </tr>
                            </tbody>
-
+                           <?php $i++; ?>
+                           <?php endforeach ?>
                         </table>
                      </div>
                   </div>
@@ -166,6 +127,8 @@ checkRole($_SESSION);
    <script src="js/jquery.min.js"></script>
    <script src="js/popper.min.js"></script>
    <script src="js/bootstrap.min.js"></script>
+   <script src="js/jquery.dataTables.min.js"></script>
+   <script src="js/dataTables.bootstrap4.min.js"></script>
    <!-- Appear JavaScript -->
    <script src="js/jquery.appear.js"></script>
    <!-- Countdown JavaScript -->
@@ -201,6 +164,14 @@ checkRole($_SESSION);
    <script src="js/maps.js"></script>
    <!-- am worldLow JavaScript -->
    <script src="js/worldLow.js"></script>
+   <!-- Raphael-min JavaScript -->
+   <script src="js/raphael-min.js"></script>
+   <!-- Morris JavaScript -->
+   <script src="js/morris.js"></script>
+   <!-- Morris min JavaScript -->
+   <script src="js/morris.min.js"></script>
+   <!-- Flatpicker Js -->
+   <script src="js/flatpickr.js"></script>
    <!-- Style Customizer -->
    <script src="js/style-customizer.js"></script>
    <!-- Chart Custom JavaScript -->
@@ -208,4 +179,5 @@ checkRole($_SESSION);
    <!-- Custom JavaScript -->
    <script src="js/custom.js"></script>
 </body>
+
 </html>

@@ -4,6 +4,8 @@ session_start();
 require("model.php");
 
 $user = getData("users");
+// Ambil daftar kategori dari database
+$categories = getData("categories");
 
 //cek apakah user sudah login
 if (!isset($_SESSION["login"])) {
@@ -82,6 +84,8 @@ checkRole($_SESSION);
       <?php require("sidebar.php") ?>
    </div>
    <!-- TOP Nav Bar -->
+
+   <?php require("navbar.php") ?>
    <div class="iq-top-navbar">
       <div class="iq-navbar-custom">
          <nav class="navbar navbar-expand-lg navbar-light p-0">
@@ -226,14 +230,14 @@ checkRole($_SESSION);
                         <div class="form-group">
                            <label>Book Image:</label>
                            <div class="custom-file">
-                              <input type="file" class="custom-file-input" accept="image/png, image/jpeg, image/webp" name="gambar_buku" id="gambar_buku">
+                              <input type="file" class="custom-file-input" accept="image/png, image/jpeg, image/webp" name="gambar_buku" id="gambar_buku" required>
                               <label class="custom-file-label">Choose file</label>
                            </div>
                         </div>
                         <div class="form-group">
                            <label>Book pdf:</label>
                            <div class="custom-file">
-                              <input type="file" class="custom-file-input" accept="application/pdf" name="pdf_buku" id="pdf_buku">
+                              <input type="file" class="custom-file-input" accept="application/pdf" name="pdf_buku" id="pdf_buku" required>
                               <label class="custom-file-label">Choose file</label>
                            </div>
                         </div>
@@ -241,8 +245,20 @@ checkRole($_SESSION);
                            <label>Book Description:</label>
                            <textarea class="form-control" rows="4" name="deskripsi_buku" id="deskripsi_buku" class="form-control" required></textarea>
                         </div>
+                        <div class="form-group">
+                           <label>Category Book</label>
+                           <select class="form-control" name="category_ids" id="category_ids" required>
+                           <option selected="" disabled="">Select your category book</option>
+                              <?php
+                              $categories = $koneksi->query("SELECT * FROM categories");
+                              while ($row = $categories->fetch_assoc()) :
+                              ?>
+                                 <option value="<?php echo $row['id_category'] ?>" <?php echo isset($category_ids) && !empty($category_ids) &&  in_array($row['id_category'], explode(',', $category_ids)) ? 'selected' : '' ?>><?php echo ucwords($row['category_name']) ?></option>
+                              <?php endwhile; ?>
+                           </select>
+                        </div>
                         <button type="submit" class="btn btn-primary" name="submit">Submit</button>
-                        <button type="reset" class="btn btn-danger">Reset</button>
+                        <a href="admin-books.php" class="btn btn-danger">Back</a>
                      </form>
                   </div>
                </div>
@@ -303,6 +319,18 @@ checkRole($_SESSION);
                      <label>Book Description:</label>
                      <input type="text" name="deskripsi_buku" id="deskripsi_buku" class="form-control" required value="<?= $buku["deskripsi_buku"] ?>">
                   </div>
+                  <div class="form-group">
+                           <label>Category Book</label>
+                           <select class="form-control" name="category_ids" id="category_ids" required>
+                           <option selected="" disabled="">Select your category book</option>
+                              <?php
+                              $categories = $koneksi->query("SELECT * FROM categories");
+                              while ($row = $categories->fetch_assoc()) :
+                              ?>
+                                 <option value="<?php echo $row['id_category'] ?>" <?php echo isset($category_ids) && !empty($category_ids) &&  in_array($row['id_category'], explode(',', $category_ids)) ? 'selected' : '' ?>><?php echo ucwords($row['category_name']) ?></option>
+                              <?php endwhile; ?>
+                           </select>
+                        </div>
                   <button type="submit" class="btn btn-primary" name="ubah">Change</button>
                   <a href="admin-books.php" class="btn btn-danger">Back</a>
                </form>
@@ -315,21 +343,7 @@ checkRole($_SESSION);
    </div>
    <!-- Wrapper END -->
    <!-- Footer -->
-   <footer class="iq-footer">
-      <div class="container-fluid">
-         <div class="row">
-            <div class="col-lg-6">
-               <ul class="list-inline mb-0">
-                  <li class="list-inline-item"><a href="privacy-policy.html">Privacy Policy</a></li>
-                  <li class="list-inline-item"><a href="terms-of-service.html">Terms of Use</a></li>
-               </ul>
-            </div>
-            <div class="col-lg-6 text-right">
-               Copyright 2023 <a href="#">BookLib</a> All Rights Reserved.
-            </div>
-         </div>
-      </div>
-   </footer>
+   <?php require("footer.php") ?>
    <!-- Footer END -->
    <!-- Optional JavaScript -->
    <!-- jQuery first, then Popper.js, then Bootstrap JS -->

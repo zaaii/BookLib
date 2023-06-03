@@ -1,12 +1,12 @@
 <?php
 require("model.php");
 session_start();
-//cek login atau tidak
-if (isset($_SESSION["login"])) {
-    header("Location: index.php");
-    exit;
-}
-
+    //cek login atau tidak
+    if (isset($_SESSION["login"])) {
+        header("Location: index.php");
+        exit;
+    }
+    
 if (isset($_POST["submit"])) {
     if (register($_POST) > 0) {
         echo "
@@ -27,7 +27,6 @@ if (isset($_POST["submit"])) {
 ?>
 <!doctype html>
 <html lang="en">
-
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -123,5 +122,4 @@ if (isset($_POST["submit"])) {
     <!-- Custom JavaScript -->
     <script src="js/custom.js"></script>
 </body>
-
 </html>
