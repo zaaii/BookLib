@@ -15,17 +15,13 @@ if (isset($_POST["submit"])) {
       if (!empty($_FILES["user_photo"]["name"])) {
          $_SESSION["user_photo"] = $_FILES["user_photo"]["name"];
       }
-      echo "
-         <script>
-            alert('Data berhasil diubah!');
-         </script>
-      ";
+      $message = "Data Profil berhasil diubah!";
+      $alertType = "primary";
+      $alertIcon = "ri-check-line";
    } else {
-      echo "
-         <script>
-            alert('Data gagal diubah!');
-         </script>
-      ";
+      $message = "Data Profil gagal diubah!";
+      $alertType = "danger";
+      $alertIcon = "ri-close-line";
    }
 }
 
@@ -34,17 +30,13 @@ if (isset($_POST["changepass"])) {
    $result = changePassword($_POST);
 
    if ($result > 0) {
-      echo "
-         <script>
-            alert('Password berhasil diubah!');
-         </script>
-      ";
+      $message2 = "Password berhasil diubah!";
+      $alertType = "primary";
+      $alertIcon = "ri-check-line";
    } else {
-      echo "
-         <script>
-            alert('Password gagal diubah!');
-         </script>
-      ";
+      $message2 = "Password Lama Salah, Password gagal diubah!";
+      $alertType = "danger";
+      $alertIcon = "ri-close-line";
    }
 }
 //cek apakah user sudah login
@@ -55,6 +47,7 @@ if (!isset($_SESSION["login"])) {
 ?>
 <!doctype html>
 <html lang="en">
+
 <head>
    <!-- Required meta tags -->
    <meta charset="utf-8">
@@ -71,6 +64,7 @@ if (!isset($_SESSION["login"])) {
    <!-- Responsive CSS -->
    <link rel="stylesheet" href="css/responsive.css">
 </head>
+
 <body class="sidebar-main-active right-column-fixed">
    <!-- loader Start -->
    <div id="loading">
@@ -80,10 +74,10 @@ if (!isset($_SESSION["login"])) {
    <!-- loader END -->
    <!-- Wrapper Start -->
    <div class="wrapper">
-   <?php require("sidebar.php") ?>
+      <?php require("sidebar.php") ?>
    </div>
-      <!-- TOP Nav Bar -->
-      <div class="iq-top-navbar">
+   <!-- TOP Nav Bar -->
+   <div class="iq-top-navbar">
       <div class="iq-navbar-custom">
          <nav class="navbar navbar-expand-lg navbar-light p-0">
             <div class="iq-menu-bt d-flex align-items-center">
@@ -122,24 +116,29 @@ if (!isset($_SESSION["login"])) {
                                  <h5 class="mb-0 text-white">All Notifications<small class="badge  badge-light float-right pt-1">1</small></h5>
                               </div>
                               <a class="iq-sub-card">
-                                    <div class="media align-items-center">
-                                       <div class="">
-                                          <img class="avatar-40 rounded" src="resources/profile/<?= $user[0]["user_photo"] ?>" alt="">
-                                       </div>
-                                       <div class="media-body ml-3">
-                                          <h6 class="mb-0 ">System</h6>
-                                          <small class="float-right font-size-12">Just Now</small>
-                                          <p class="mb-0">Welcome to BookLib</p>
-                                       </div>
+                                 <div class="media align-items-center">
+                                    <div class="">
+                                       <img class="avatar-40 rounded" src="resources/profile/<?= $user[0]["user_photo"] ?>" alt="">
                                     </div>
-                                 </a>
+                                    <div class="media-body ml-3">
+                                       <h6 class="mb-0 ">System</h6>
+                                       <small class="float-right font-size-12">Just Now</small>
+                                       <p class="mb-0">Welcome to BookLib</p>
+                                    </div>
+                                 </div>
+                              </a>
                            </div>
                         </div>
                      </div>
                   </li>
                   <li class="line-height pt-3">
                      <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
-                        <img src="resources/profile/<?= $_SESSION['user_photo'] ?>" class="img-fluid rounded-circle mr-3" alt="user">
+                        <!-- user will user photo default -->
+                        <?php if (empty($_SESSION['user_photo'])) : ?>
+                           <img src="resources/profile/default.jpg" class="img-fluid rounded-circle mr-3" alt="user">
+                        <?php else : ?>
+                           <img src="resources/profile/<?= $_SESSION['user_photo'] ?>" class="img-fluid rounded-circle mr-3" alt="user">
+                        <?php endif; ?>
                         <div class="caption">
                            <h6 class="mb-1 line-height"><?= $_SESSION['full_name']; ?>
                            </h6>
@@ -176,108 +175,144 @@ if (!isset($_SESSION["login"])) {
          </nav>
       </div>
    </div>
-      <!-- TOP Nav Bar END -->
+   <!-- TOP Nav Bar END -->
 
-      <!-- Page Content  -->
-      <div id="content-page" class="content-page">
-         <div class="container-fluid">
-            <div class="row">
-               <div class="col-lg-12">
-                  <div class="iq-card">
-                     <div class="iq-card-body p-0">
-                        <div class="iq-edit-list">
-                           <ul class="iq-edit-profile d-flex nav nav-pills">
-                              <li class="col-md-3 p-0">
-                                 <a class="nav-link active" data-toggle="pill" href="#personal-information">
-                                    Personal Information
-                                 </a>
-                              </li>
-                              <li class="col-md-3 p-0">
-                                 <a class="nav-link" data-toggle="pill" href="#chang-pwd">
-                                    Change Password
-                                 </a>
-                              </li>
-                           </ul>
-                        </div>
+   <!-- Page Content  -->
+   <div id="content-page" class="content-page">
+      <div class="container-fluid">
+         <div class="row">
+            <div class="col-lg-12">
+               <div class="iq-card">
+                  <div class="iq-card-body p-0">
+                     <div class="iq-edit-list">
+                        <ul class="iq-edit-profile d-flex nav nav-pills">
+                           <li class="col-md-3 p-0">
+                              <a class="nav-link active" data-toggle="pill" href="#personal-information">
+                                 Personal Information
+                              </a>
+                           </li>
+                           <li class="col-md-3 p-0">
+                              <a class="nav-link" data-toggle="pill" href="#chang-pwd">
+                                 Change Password
+                              </a>
+                           </li>
+                        </ul>
                      </div>
                   </div>
                </div>
-               <div class="col-lg-12">
-                  <div class="iq-edit-list-data">
-                     <div class="tab-content">
-                        <div class="tab-pane fade active show" id="personal-information" role="tabpanel">
-                           <div class="iq-card">
-                              <div class="iq-card-header d-flex justify-content-between">
-                                 <div class="iq-header-title">
-                                    <h4 class="card-title">Personal Information</h4>
-                                 </div>
-                              </div>
-                              <div class="iq-card-body">
-                                 <form method="POST" enctype="multipart/form-data">
-                                 <input type="hidden" name="id_user" value="<?= $_SESSION['id_user']; ?>">
-                                    <div class="form-group row align-items-center">
-                                       <div class="col-md-12">
-                                          <div class="profile-img-edit">
-                                             <img class="profile-pic" src="resources/profile/<?= $_SESSION["user_photo"] ?>" alt="<?= $_SESSION['full_name'] ?>">
-                                             <div class="p-image">
-                                                <i class="ri-pencil-line upload-button"></i>
-                                                <input class="file-upload" type="file" name="user_photo" accept="image/*"/>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div class=" row align-items-center">
-                                       <div class="form-group col-sm-6">
-                                          <label for="fname">Full Name:</label>
-                                          <input type="text" class="form-control" value="<?= isset($_POST['full_name']) ? $_POST['full_name'] : $_SESSION['full_name'] ?>" id="fname" name="full_name">
-                                       </div>
-                                       <div class="form-group col-sm-6">
-                                          <label for="email">Email :</label>
-                                          <input type="text" class="form-control" id="email" name="email" value="<?= isset($_POST['email']) ? $_POST['email'] : $_SESSION['email'] ?>">
-                                       </div>
-                                       <div class="form-group col-sm-6">
-                                          <label class="d-block">Gender:</label>
-                                          <div class="custom-control custom-radio custom-control-inline">
-                                             <input type="radio" name="gender" id="male" value="male" class="custom-control-input" <?= ($_SESSION['gender'] == 'male') ? 'checked' : '' ?>>
-                                             <label class="custom-control-label" for="male"> Male </label>
-                                          </div>
-                                          <div class="custom-control custom-radio custom-control-inline">
-                                             <input type="radio" name="gender" id="female" value="female" class="custom-control-input" <?= ($_SESSION['gender'] == 'female') ? 'checked' : '' ?>>
-                                             <label class="custom-control-label" for="female"> Female </label>
-                                          </div>
-                                       </div>
-                                       <div class="form-group col-sm-6">
-                                          <label for="dob">Date Of Birth:</label>
-                                          <input type="date" class="form-control" name="birth_date" id="dob" value="<?= isset($_POST['birth_date']) ? $_POST['birth_date'] : $_SESSION['birth_date'] ?>">
-                                       </div>
-                                    </div>
-                                    <button type="submit" name="submit" class="btn btn-primary mr-2">Submit</button>
-                                    <button type="reset" class="btn iq-bg-danger">Reset</button>
-                                 </form>
+            </div>
+            <div class="col-lg-12">
+               <div class="iq-edit-list-data">
+                  <div class="tab-content">
+                     <div class="tab-pane fade active show" id="personal-information" role="tabpanel">
+                        <div class="iq-card">
+                           <div class="iq-card-header d-flex justify-content-between">
+                              <div class="iq-header-title">
+                                 <h4 class="card-title">Personal Information</h4>
                               </div>
                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="chang-pwd" role="tabpanel">
-                           <div class="iq-card">
-                              <div class="iq-card-header d-flex justify-content-between">
-                                 <div class="iq-header-title">
-                                    <h4 class="card-title">Change Password</h4>
+                           <?php if (isset($message)) : ?>
+                              <div class="alert text-white bg-<?= $alertType ?> mr-4 ml-4" role="alert">
+                                 <div class="iq-alert-icon">
+                                    <i class="<?= $alertIcon ?>"></i>
                                  </div>
+                                 <div class="iq-alert-text"><?= $message ?></div>
+                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <i class="ri-close-line"></i>
+                                 </button>
                               </div>
-                              <div class="iq-card-body">
-                                 <form method="POST">
-                                    <div class="form-group">
-                                       <label for="cpass">Current Password:</label>
-                                       <input type="Password" class="form-control" id="cpass" name="cpass" value="">
+                           <?php endif; ?>
+                           <div class="iq-card-body">
+                              <form method="POST" enctype="multipart/form-data">
+                                 <input type="hidden" name="id_user" value="<?= $_SESSION['id_user']; ?>">
+                                 <div class="form-group row align-items-center">
+                                    <div class="col-md-12">
+                                       <div class="profile-img-edit">
+                                          <?php if (empty($_SESSION['user_photo'])) : ?>
+                                             <img src="resources/profile/default.jpg" class="img-fluid rounded-circle mr-3" alt="user">
+                                          <?php else : ?>
+                                             <img class="profile-pic" src="resources/profile/<?= $_SESSION["user_photo"] ?>" alt="<?= $_SESSION['full_name'] ?>">
+                                          <?php endif; ?>
+                                          <div class="p-image">
+                                             <i class="ri-pencil-line upload-button"></i>
+                                             <input class="file-upload" type="file" name="user_photo" accept="image/*" />
+                                          </div>
+                                       </div>
                                     </div>
-                                    <div class="form-group">
-                                       <label for="npass">New Password:</label>
-                                       <input type="Password" class="form-control" id="npass" name="npass" value="">
+                                 </div>
+                                 <div class=" row align-items-center">
+                                    <div class="form-group col-sm-6">
+                                       <label for="fname">Full Name:</label>
+                                       <input type="text" class="form-control" value="<?= isset($_POST['full_name']) ? $_POST['full_name'] : $_SESSION['full_name'] ?>" id="fname" name="full_name">
                                     </div>
-                                    <button type="submit" name="changepass" class="btn btn-primary mr-2">Submit</button>
-                                    <button type="reset" class="btn iq-bg-danger">Cancel</button>
-                                 </form>
+                                    <div class="form-group col-sm-6">
+                                       <label for="email">Email :</label>
+                                       <input type="text" class="form-control" id="email" name="email" value="<?= isset($_POST['email']) ? $_POST['email'] : $_SESSION['email'] ?>">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                       <label class="d-block">Gender:</label>
+                                       <div class="custom-control custom-radio custom-control-inline">
+                                          <input type="radio" name="gender" id="male" value="male" class="custom-control-input" <?= ($_SESSION['gender'] == 'male') ? 'checked' : '' ?>>
+                                          <label class="custom-control-label" for="male"> Male </label>
+                                       </div>
+                                       <div class="custom-control custom-radio custom-control-inline">
+                                          <input type="radio" name="gender" id="female" value="female" class="custom-control-input" <?= ($_SESSION['gender'] == 'female') ? 'checked' : '' ?>>
+                                          <label class="custom-control-label" for="female"> Female </label>
+                                       </div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                       <label for="dob">Date Of Birth:</label>
+                                       <input type="date" class="form-control" name="birth_date" id="dob" value="<?= isset($_POST['birth_date']) ? $_POST['birth_date'] : $_SESSION['birth_date'] ?>">
+                                    </div>
+                                 </div>
+                                 <button type="submit" name="submit" class="btn btn-primary mr-2">Submit</button>
+                                 <button type="reset" class="btn iq-bg-danger">Reset</button>
+                              </form>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="tab-pane fade" id="chang-pwd" role="tabpanel">
+                        <div class="iq-card">
+                           <div class="iq-card-header d-flex justify-content-between">
+                              <div class="iq-header-title">
+                                 <h4 class="card-title">Change Password</h4>
                               </div>
+                           </div>
+                           <?php if (isset($message2)) : ?>
+                              <div class="alert text-white bg-<?= $alertType ?> mr-4 ml-4" role="alert">
+                                 <div class="iq-alert-icon">
+                                    <i class="<?= $alertIcon ?>"></i>
+                                 </div>
+                                 <div class="iq-alert-text"><?= $message2 ?></div>
+                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <i class="ri-close-line"></i>
+                                 </button>
+                              </div>
+                           <?php endif; ?>
+                           <?php if (isset($messagePass)) : ?>
+                              <div class="alert text-white bg-danger mr-4 ml-4" role="alert">
+                                 <div class="iq-alert-icon">
+                                    <i class="ri-close-line"></i>
+                                 </div>
+                                 <div class="iq-alert-text"><?= $messagePass ?></div>
+                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <i class="ri-close-line"></i>
+                                 </button>
+                              </div>
+                           <?php endif; ?>
+                           <div class="iq-card-body">
+                              <form method="POST">
+                                 <div class="form-group">
+                                    <label for="cpass">Current Password:</label>
+                                    <input type="Password" class="form-control" id="cpass" name="cpass" value="">
+                                 </div>
+                                 <div class="form-group">
+                                    <label for="npass">New Password:</label>
+                                    <input type="Password" class="form-control" id="npass" name="npass" value="">
+                                 </div>
+                                 <button type="submit" name="changepass" class="btn btn-primary mr-2">Submit</button>
+                                 <button type="reset" class="btn iq-bg-danger">Cancel</button>
+                              </form>
                            </div>
                         </div>
                      </div>
@@ -286,6 +321,7 @@ if (!isset($_SESSION["login"])) {
             </div>
          </div>
       </div>
+   </div>
    </div>
    <!-- Wrapper END -->
    <!-- Footer -->
@@ -299,51 +335,52 @@ if (!isset($_SESSION["login"])) {
       </div>
    </footer>
    <!-- Footer END -->
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="js/jquery.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<!-- Appear JavaScript -->
-<script src="js/jquery.appear.js"></script>
-<!-- Countdown JavaScript -->
-<script src="js/countdown.min.js"></script>
-<!-- Counterup JavaScript -->
-<script src="js/waypoints.min.js"></script>
-<script src="js/jquery.counterup.min.js"></script>
-<!-- Wow JavaScript -->
-<script src="js/wow.min.js"></script>
-<!-- Apexcharts JavaScript -->
-<script src="js/apexcharts.js"></script>
-<!-- Slick JavaScript -->
-<script src="js/slick.min.js"></script>
-<!-- Select2 JavaScript -->
-<script src="js/select2.min.js"></script>
-<!-- Owl Carousel JavaScript -->
-<script src="js/owl.carousel.min.js"></script>
-<!-- Magnific Popup JavaScript -->
-<script src="js/jquery.magnific-popup.min.js"></script>
-<!-- Smooth Scrollbar JavaScript -->
-<script src="js/smooth-scrollbar.js"></script>
-<!-- lottie JavaScript -->
-<script src="js/lottie.js"></script>
-<!-- am core JavaScript -->
-<script src="js/core.js"></script>
-<!-- am charts JavaScript -->
-<script src="js/charts.js"></script>
-<!-- am animated JavaScript -->
-<script src="js/animated.js"></script>
-<!-- am kelly JavaScript -->
-<script src="js/kelly.js"></script>
-<!-- am maps JavaScript -->
-<script src="js/maps.js"></script>
-<!-- am worldLow JavaScript -->
-<script src="js/worldLow.js"></script>
-<!-- Style Customizer -->
-<script src="js/style-customizer.js"></script>
-<!-- Chart Custom JavaScript -->
-<script src="js/chart-custom.js"></script>
-<!-- Custom JavaScript -->
-<script src="js/custom.js"></script>
+   <!-- Optional JavaScript -->
+   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+   <script src="js/jquery.min.js"></script>
+   <script src="js/popper.min.js"></script>
+   <script src="js/bootstrap.min.js"></script>
+   <!-- Appear JavaScript -->
+   <script src="js/jquery.appear.js"></script>
+   <!-- Countdown JavaScript -->
+   <script src="js/countdown.min.js"></script>
+   <!-- Counterup JavaScript -->
+   <script src="js/waypoints.min.js"></script>
+   <script src="js/jquery.counterup.min.js"></script>
+   <!-- Wow JavaScript -->
+   <script src="js/wow.min.js"></script>
+   <!-- Apexcharts JavaScript -->
+   <script src="js/apexcharts.js"></script>
+   <!-- Slick JavaScript -->
+   <script src="js/slick.min.js"></script>
+   <!-- Select2 JavaScript -->
+   <script src="js/select2.min.js"></script>
+   <!-- Owl Carousel JavaScript -->
+   <script src="js/owl.carousel.min.js"></script>
+   <!-- Magnific Popup JavaScript -->
+   <script src="js/jquery.magnific-popup.min.js"></script>
+   <!-- Smooth Scrollbar JavaScript -->
+   <script src="js/smooth-scrollbar.js"></script>
+   <!-- lottie JavaScript -->
+   <script src="js/lottie.js"></script>
+   <!-- am core JavaScript -->
+   <script src="js/core.js"></script>
+   <!-- am charts JavaScript -->
+   <script src="js/charts.js"></script>
+   <!-- am animated JavaScript -->
+   <script src="js/animated.js"></script>
+   <!-- am kelly JavaScript -->
+   <script src="js/kelly.js"></script>
+   <!-- am maps JavaScript -->
+   <script src="js/maps.js"></script>
+   <!-- am worldLow JavaScript -->
+   <script src="js/worldLow.js"></script>
+   <!-- Style Customizer -->
+   <script src="js/style-customizer.js"></script>
+   <!-- Chart Custom JavaScript -->
+   <script src="js/chart-custom.js"></script>
+   <!-- Custom JavaScript -->
+   <script src="js/custom.js"></script>
 </body>
+
 </html>

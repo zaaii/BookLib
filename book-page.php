@@ -7,8 +7,8 @@ $user = getData("users");
 
 //cek apakah user sudah login
 if (!isset($_SESSION["login"])) {
-    header("Location: login.php");
-    exit;
+   header("Location: login.php");
+   exit;
 }
 
 // Check if sesion user still exists
@@ -22,6 +22,7 @@ if (isSessionStillAlive($_SESSION) == false) {
 
 <!doctype html>
 <html lang="en">
+
 <head>
    <!-- Required meta tags -->
    <meta charset="utf-8">
@@ -53,144 +54,149 @@ if (isSessionStillAlive($_SESSION) == false) {
    </div>
    <!-- TOP Nav Bar -->
    <div class="iq-top-navbar">
-            <div class="iq-navbar-custom">
-               <nav class="navbar navbar-expand-lg navbar-light p-0">
-                  <div class="iq-menu-bt d-flex align-items-center">
-                     <div class="wrapper-menu">
-                        <div class="main-circle"><i class="las la-bars"></i></div>
+      <div class="iq-navbar-custom">
+         <nav class="navbar navbar-expand-lg navbar-light p-0">
+            <div class="iq-menu-bt d-flex align-items-center">
+               <div class="wrapper-menu">
+                  <div class="main-circle"><i class="las la-bars"></i></div>
+               </div>
+               <div class="iq-navbar-logo d-flex justify-content-between">
+                  <a href="index.php" class="header-logo">
+                     <img src="images/logo.png" class="img-fluid rounded-normal" alt="">
+                     <div class="logo-title">
+                        <span class="text-primary text-uppercase">Booklib</span>
                      </div>
-                     <div class="iq-navbar-logo d-flex justify-content-between">
-                        <a href="index.php" class="header-logo">
-                           <img src="images/logo.png" class="img-fluid rounded-normal" alt="">
-                           <div class="logo-title">
-                              <span class="text-primary text-uppercase">Booklib</span>
-                           </div>
-                        </a>
-                     </div>
-                  </div>
-                  <div class="navbar-breadcrumb">
-                     <h5 class="mb-0">Book Page</h5>
-                     <nav aria-label="breadcrumb">
-                        <ul class="breadcrumb">
-                           <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                           <li class="breadcrumb-item active" aria-current="page">Book Page</li>
-                        </ul>
-                     </nav>
-                  </div>
-                  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"  aria-label="Toggle navigation">
-                  <i class="ri-menu-3-line"></i>
-                  </button>
-                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                     <ul class="navbar-nav ml-auto navbar-list">
-                        <li class="nav-item nav-icon">
-                           <a href="#" class="search-toggle iq-waves-effect text-gray rounded">
-                           <i class="ri-notification-2-fill"></i>
-                           <span class="bg-primary dots"></span>
-                           </a>
-                           <div class="iq-sub-dropdown">
-                              <div class="iq-card shadow-none m-0">
-                                 <div class="iq-card-body p-0">
-                                    <div class="bg-primary p-3">
-                                       <h5 class="mb-0 text-white">All Notifications<small class="badge  badge-light float-right pt-1">1</small></h5>
-                                    </div>
-                                    <a href="#" class="iq-sub-card" >
-                                       <div class="media align-items-center">
-                                          <div class="">
-                                             <img class="avatar-40 rounded" src="images/user/01.jpg" alt="">
-                                          </div>
-                                          <div class="media-body ml-3">
-                                             <h6 class="mb-0 ">System</h6>
-                                             <small class="float-right font-size-12">Just Now</small>
-                                             <p class="mb-0">Welcome To Booklib</p>
-                                          </div>
-                                       </div>
-                                    </a>
-                                 </div>
-                              </div>
-                           </div>
-                        </li>
-                        <li class="line-height pt-3">
-                           <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
-                              <img src="resources/profile/<?= $_SESSION["user_photo"] ?>" class="img-fluid rounded-circle mr-3" alt="user">
-                              <div class="caption">
-                                 <h6 class="mb-1 line-height"><?= $_SESSION['full_name']; ?></h6>
-                                 <p class="mb-0 text-primary"><?= $_SESSION['role'] ?></p>
-                              </div>
-                           </a>
-                           <div class="iq-sub-dropdown iq-user-dropdown">
-                              <div class="iq-card shadow-none m-0">
-                                 <div class="iq-card-body p-0 ">
-                                    <div class="bg-primary p-3">
-                                       <h5 class="mb-0 text-white line-height">Hello <?= $_SESSION['full_name']; ?></h5>
-                                       <span class="text-white font-size-12"><?= $_SESSION['role'] ?></span>
-                                    </div>
-                                    <a href="edit-profile.php" class="iq-sub-card iq-bg-primary-hover">
-                                       <div class="media align-items-center">
-                                          <div class="rounded iq-card-icon iq-bg-primary">
-                                             <i class="ri-profile-line"></i>
-                                          </div>
-                                          <div class="media-body ml-3">
-                                             <h6 class="mb-0 ">Edit Profile</h6>
-                                             <p class="mb-0 font-size-12">Modify your personal details.</p>
-                                          </div>
-                                       </div>
-                                    </a>
-                                    <div class="d-inline-block w-100 text-center p-3">
-                                       <a class="bg-primary iq-sign-btn" href="logout.php" role="button">Sign out<i class="ri-login-box-line ml-2"></i></a>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </li>
-                     </ul>
-                  </div>
+                  </a>
+               </div>
+            </div>
+            <div class="navbar-breadcrumb">
+               <h5 class="mb-0">Book Page</h5>
+               <nav aria-label="breadcrumb">
+                  <ul class="breadcrumb">
+                     <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                     <li class="breadcrumb-item active" aria-current="page">Book Page</li>
+                  </ul>
                </nav>
             </div>
-         </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-label="Toggle navigation">
+               <i class="ri-menu-3-line"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+               <ul class="navbar-nav ml-auto navbar-list">
+                  <li class="nav-item nav-icon">
+                     <a href="#" class="search-toggle iq-waves-effect text-gray rounded">
+                        <i class="ri-notification-2-fill"></i>
+                        <span class="bg-primary dots"></span>
+                     </a>
+                     <div class="iq-sub-dropdown">
+                        <div class="iq-card shadow-none m-0">
+                           <div class="iq-card-body p-0">
+                              <div class="bg-primary p-3">
+                                 <h5 class="mb-0 text-white">All Notifications<small class="badge  badge-light float-right pt-1">1</small></h5>
+                              </div>
+                              <a href="#" class="iq-sub-card">
+                                 <div class="media align-items-center">
+                                    <div class="">
+                                       <img class="avatar-40 rounded" src="images/user/01.jpg" alt="">
+                                    </div>
+                                    <div class="media-body ml-3">
+                                       <h6 class="mb-0 ">System</h6>
+                                       <small class="float-right font-size-12">Just Now</small>
+                                       <p class="mb-0">Welcome To Booklib</p>
+                                    </div>
+                                 </div>
+                              </a>
+                           </div>
+                        </div>
+                     </div>
+                  </li>
+                  <li class="line-height pt-3">
+                     <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
+                        <?php if (empty($_SESSION['user_photo'])) : ?>
+                           <img src="resources/profile/default.jpg" class="img-fluid rounded-circle mr-3" alt="user">
+                        <?php else : ?>
+                           <img src="resources/profile/<?= $_SESSION["user_photo"] ?>" class="img-fluid rounded-circle mr-3" alt="user">
+                        <?php endif; ?>
+                        <div class="caption">
+                           <h6 class="mb-1 line-height"><?= $_SESSION['full_name']; ?></h6>
+                           <p class="mb-0 text-primary"><?= $_SESSION['role'] ?></p>
+                        </div>
+                     </a>
+                     <div class="iq-sub-dropdown iq-user-dropdown">
+                        <div class="iq-card shadow-none m-0">
+                           <div class="iq-card-body p-0 ">
+                              <div class="bg-primary p-3">
+                                 <h5 class="mb-0 text-white line-height">Hello <?= $_SESSION['full_name']; ?></h5>
+                                 <span class="text-white font-size-12"><?= $_SESSION['role'] ?></span>
+                              </div>
+                              <a href="edit-profile.php" class="iq-sub-card iq-bg-primary-hover">
+                                 <div class="media align-items-center">
+                                    <div class="rounded iq-card-icon iq-bg-primary">
+                                       <i class="ri-profile-line"></i>
+                                    </div>
+                                    <div class="media-body ml-3">
+                                       <h6 class="mb-0 ">Edit Profile</h6>
+                                       <p class="mb-0 font-size-12">Modify your personal details.</p>
+                                    </div>
+                                 </div>
+                              </a>
+                              <div class="d-inline-block w-100 text-center p-3">
+                                 <a class="bg-primary iq-sign-btn" href="logout.php" role="button">Sign out<i class="ri-login-box-line ml-2"></i></a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </li>
+               </ul>
+            </div>
+         </nav>
+      </div>
+   </div>
    <!-- TOP Nav Bar END -->
    <!-- Page Content  -->
    <?php if (!empty($id_buku)) : ?>
       <?php $buku = getData("buku WHERE id_buku = $id_buku")[0]; ?>
-   <div id="content-page" class="content-page">
-      <div class="container-fluid">
-         <div class="row">
-            <div class="col-sm-12">
-               <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
-                  <div class="iq-card-header d-flex justify-content-between align-items-center">
-                     <h4 class="card-title mb-0">Books Description</h4>
-                  </div>
-                  <div class="iq-card-body pb-0">
-                     <div class="description-contens align-items-top row">
-                        <div class="col-md-3">
-                           <div class="iq-card-transparent iq-card-block iq-card-stretch iq-card-height">
-                              <div class="iq-card-body p-0">
-                                 <div class="row align-items-center">
-                                    <div class="col-12">
-                                       <ul id="description-slider" class="list-inline p-0 m-0  d-flex align-items-center">
-                                          <li>
-                                             <a href="javascript:void(0);">
-                                                <img src="resources/cover/<?= $buku["gambar_buku"]?>" class="img-fluid w-100 rounded" alt="">
-                                             </a>
-                                          </li>
-                                       </ul>
+      <div id="content-page" class="content-page">
+         <div class="container-fluid">
+            <div class="row">
+               <div class="col-sm-12">
+                  <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
+                     <div class="iq-card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0">Books Description</h4>
+                     </div>
+                     <div class="iq-card-body pb-0">
+                        <div class="description-contens align-items-top row">
+                           <div class="col-md-3">
+                              <div class="iq-card-transparent iq-card-block iq-card-stretch iq-card-height">
+                                 <div class="iq-card-body p-0">
+                                    <div class="row align-items-center">
+                                       <div class="col-12">
+                                          <ul id="description-slider" class="list-inline p-0 m-0  d-flex align-items-center">
+                                             <li>
+                                                <a href="javascript:void(0);">
+                                                   <img src="resources/cover/<?= $buku["gambar_buku"] ?>" class="img-fluid w-100 rounded" alt="">
+                                                </a>
+                                             </li>
+                                          </ul>
+                                       </div>
                                     </div>
                                  </div>
                               </div>
                            </div>
-                        </div>
-                        <div class="col-md-6">
-                           <div class="iq-card-transparent iq-card-block iq-card-stretch iq-card-height">
-                              <div class="iq-card-body p-0">
-                                 <h3 class="mb-3"><?= $buku["judul_buku"] ?></h3>
-                                 <span class="text-dark mb-4 pb-4 iq-border-bottom d-block"><?= $buku["deskripsi_buku"] ?></span>
-                                 <div class="text-primary mb-4">Author: <span class="text-body"><?= $buku["penulis"] ?></span></div>
-                                 <div class="text-primary mb-4">Publisher: <span class="text-body"><?= $buku["penerbit"] ?></span></div>
-                                 <div class="text-primary mb-4">Year: <span class="text-body"><?= $buku["tahun_terbit"] ?></span></div>
-                                 <div class="mb-4 d-flex align-items-center">
-                                    <input type="hidden" name="id_buku" value="<?= $buku["id_buku"] ?>">
-                                    <a href="book-pdf.php?id_buku=<?= $buku["id_buku"]; ?>" class="btn btn-primary view-more mr-2">Read</a>
-                                 </div>
-                                 <div class="mb-3">
+                           <div class="col-md-6">
+                              <div class="iq-card-transparent iq-card-block iq-card-stretch iq-card-height">
+                                 <div class="iq-card-body p-0">
+                                    <h3 class="mb-3"><?= $buku["judul_buku"] ?></h3>
+                                    <span class="text-dark mb-4 pb-4 iq-border-bottom d-block"><?= $buku["deskripsi_buku"] ?></span>
+                                    <div class="text-primary mb-4">Author: <span class="text-body"><?= $buku["penulis"] ?></span></div>
+                                    <div class="text-primary mb-4">Publisher: <span class="text-body"><?= $buku["penerbit"] ?></span></div>
+                                    <div class="text-primary mb-4">Year: <span class="text-body"><?= $buku["tahun_terbit"] ?></span></div>
+                                    <div class="mb-4 d-flex align-items-center">
+                                       <input type="hidden" name="id_buku" value="<?= $buku["id_buku"] ?>">
+                                       <a href="book-pdf.php?id_buku=<?= $buku["id_buku"]; ?>" class="btn btn-primary view-more mr-2">Read</a>
+                                    </div>
+                                    <div class="mb-3">
+                                    </div>
                                  </div>
                               </div>
                            </div>
@@ -201,8 +207,7 @@ if (isSessionStillAlive($_SESSION) == false) {
             </div>
          </div>
       </div>
-   </div>
-   </div>
+      </div>
    <?php endif; ?>
    <!-- Wrapper END -->
    <!-- Footer -->
@@ -277,4 +282,5 @@ if (isSessionStillAlive($_SESSION) == false) {
    <!-- Custom JavaScript -->
    <script src="js/custom.js"></script>
 </body>
+
 </html>

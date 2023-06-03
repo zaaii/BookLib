@@ -67,7 +67,7 @@ if (isset($_POST["submit"])) {
       </div>
       <!-- loader END -->
         <!-- Sign in Start -->
-        <section class="sign-in-page">
+        <section class="sign-in-page" style="background-image: url('images/bg.jpg'); background-size: cover; ">
             <div class="container p-0">
                 <div class="row no-gutters height-self-center">
                   <div class="col-sm-12 align-self-center page-content rounded">
@@ -85,8 +85,9 @@ if (isset($_POST["submit"])) {
                                       <label for="password">Password</label>
                                       <input type="password" class="form-control mb-0" id="password" name="password" placeholder="Password" required>
                                   </div>
+                                  <a href="forgot-password.php" class="float-right text-white">Forgot password?</a>
                                   <div class="d-inline-block w-100">
-                                      <div class="custom-control custom-checkbox d-inline-block mt-2 pt-1">
+                                      <div class="custom-control custom-checkbox d-inline-block mt-1 pt-1">
                                           <input type="checkbox" class="custom-control-input" id="rememberme" name="rememberme">
                                           <label class="custom-control-label" for="rememberme">Remember Me</label>
                                       </div>

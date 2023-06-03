@@ -14,33 +14,36 @@
             </div>
         </div>
     </div>
-<div id="sidebar-scrollbar">
-<nav class="iq-sidebar-menu">
-<ul id="iq-sidebar-toggle" class="iq-menu">
-<li>
-<a href="index.php" class="iq-waves-effect" ><span class="ripple rippleEffect"></span><i class="ri-home-line"></i><span>Home</span></a>
-</li>
-<li>
-<a href="#book" class="iq-waves-effect" data-toggle="collapse" aria-expanded="false"><span class="ripple rippleEffect"></span><i class="ri-book-line"></i><span>Book Menu</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
-<ul id="book" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
-<li><a href="readingList.php"><i class="ri-heart-line"></i>Reading List</a></li>
-</ul>
-</li>
-<?php
-// Checking User Role
-    $role = $_SESSION['role'];
-    if ($role == 'admin') {
-        ?>
-        <li>
+    <div id="sidebar-scrollbar">
+        <nav class="iq-sidebar-menu">
+            <ul id="iq-sidebar-toggle" class="iq-menu">
+                <li>
+                    <a href="index.php" class="iq-waves-effect"><span class="ripple rippleEffect"></span><i class="ri-home-line"></i><span>Home</span></a>
+                </li>
+                <li>
+                    <a href="#book" class="iq-waves-effect" data-toggle="collapse" aria-expanded="false"><span class="ripple rippleEffect"></span><i class="ri-book-line"></i><span>Book Menu</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
+                    <ul id="book" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
+                        <li><a href="readingList.php"><i class="ri-heart-line"></i>Reading List</a></li>
+                        <!-- <li><a href="recommendation.php"><i class="ri-pantone-line"></i>Recommendation Book</a></li> -->
+                    </ul>
+                </li>
+                <?php
+                // Checking User Role
+                $role = $_SESSION['role'];
+                if ($role == 'admin') {
+                ?>
+                    <li>
                         <a href="#admin" class="iq-waves-effect" data-toggle="collapse" aria-expanded="false"><span class="ripple rippleEffect"></span><i class="ri-shield-user-line iq-arrow-left"></i><span>Admin</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
                         <ul id="admin" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
+                            <li><a href="admin-dashboard.php"><i class="ri-dashboard-line"></i>Admin Dashboard</a></li>
                             <li><a href="admin-books.php"><i class="ri-file-pdf-line"></i>Book Management</a></li>
                             <li><a href="user-list.php"><i class="las la-th-list"></i>User Management</a></li>
                         </ul>
                     </li>
-                    <?php
-                }    
-            ?>
-                </ul>
+                <?php
+                }
+                ?>
+            </ul>
         </nav>
     </div>
+    <script src="js/custom.js"></script>

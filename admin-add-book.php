@@ -7,8 +7,8 @@ $user = getData("users");
 
 //cek apakah user sudah login
 if (!isset($_SESSION["login"])) {
-    header("Location: login.php");
-    exit;
+   header("Location: login.php");
+   exit;
 }
 
 // Check if sesion user still exists
@@ -22,37 +22,25 @@ $id_buku = !empty($_GET['id_buku']) ? $_GET['id_buku'] : '';
 //memeriksa apakah tombol submit sudah ditekan atau belum
 if (isset($_POST["submit"])) {
    if (insertDataBuku($_POST) > 0) {
-      echo "
-      <script>
-      alert('Data berhasil ditambahkan');
-      document.location.href = 'admin-books.php';
-      </script>
-      ";
+      $message = "Data buku berhasil ditambahkan";
+      $alertType = "primary";
+      $alertIcon = "ri-check-line";
    } else {
-      echo "
-      <script>
-      alert('Data gagal ditambahkan');
-      document.location.href = 'admin-books.php';
-      </script>
-      ";
+      $message = "Data buku gagal ditambahkan";
+      $alertType = "danger";
+      $alertIcon = "ri-close-line";
    }
 }
 //memeriksa apakah tombol ubah sudah ditekan atau belum
 if (isset($_POST["ubah"])) {
    if (updateDataBuku($_POST) > 0) {
-      echo "
-      <script>
-      alert('Data berhasil diubah');
-      document.location.href = 'admin-books.php';
-      </script>
-      ";
+      $message = "Data buku berhasil diubah";
+      $alertType = "primary";
+      $alertIcon = "ri-check-line";
    } else {
-      echo "
-      <script>
-      alert('Data gagal diubah');
-      document.location.href = 'admin-books.php';
-      </script>
-      ";
+      $message = "Data buku gagal diubah";
+      $alertType = "danger";
+      $alertIcon = "ri-close-line";
    }
 }
 
@@ -62,6 +50,7 @@ checkRole($_SESSION);
 ?>
 <!doctype html>
 <html lang="en">
+
 <head>
    <!-- Required meta tags -->
    <meta charset="utf-8">
@@ -94,100 +83,104 @@ checkRole($_SESSION);
    </div>
    <!-- TOP Nav Bar -->
    <div class="iq-top-navbar">
-            <div class="iq-navbar-custom">
-               <nav class="navbar navbar-expand-lg navbar-light p-0">
-                  <div class="iq-menu-bt d-flex align-items-center">
-                     <div class="wrapper-menu">
-                        <div class="main-circle"><i class="las la-bars"></i></div>
+      <div class="iq-navbar-custom">
+         <nav class="navbar navbar-expand-lg navbar-light p-0">
+            <div class="iq-menu-bt d-flex align-items-center">
+               <div class="wrapper-menu">
+                  <div class="main-circle"><i class="las la-bars"></i></div>
+               </div>
+               <div class="iq-navbar-logo d-flex justify-content-between">
+                  <a href="index.php" class="header-logo">
+                     <img src="images/logo.png" class="img-fluid rounded-normal" alt="">
+                     <div class="logo-title">
+                        <span class="text-primary text-uppercase">Booklib</span>
                      </div>
-                     <div class="iq-navbar-logo d-flex justify-content-between">
-                        <a href="index.php" class="header-logo">
-                           <img src="images/logo.png" class="img-fluid rounded-normal" alt="">
-                           <div class="logo-title">
-                              <span class="text-primary text-uppercase">Booklib</span>
-                           </div>
-                        </a>
-                     </div>
-                  </div>
-                  <div class="navbar-breadcrumb">
-                     <h5 class="mb-0">Book Page</h5>
-                     <nav aria-label="breadcrumb">
-                        <ul class="breadcrumb">
-                           <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-                           <li class="breadcrumb-item active" aria-current="page">Add Book</li>
-                        </ul>
-                     </nav>
-                  </div>
-                  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"  aria-label="Toggle navigation">
-                  <i class="ri-menu-3-line"></i>
-                  </button>
-                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                     <ul class="navbar-nav ml-auto navbar-list">
-                        <li class="nav-item nav-icon">
-                           <a href="#" class="search-toggle iq-waves-effect text-gray rounded">
-                           <i class="ri-notification-2-fill"></i>
-                           <span class="bg-primary dots"></span>
-                           </a>
-                           <div class="iq-sub-dropdown">
-                              <div class="iq-card shadow-none m-0">
-                                 <div class="iq-card-body p-0">
-                                    <div class="bg-primary p-3">
-                                       <h5 class="mb-0 text-white">All Notifications<small class="badge  badge-light float-right pt-1">1</small></h5>
-                                    </div>
-                                    <a class="iq-sub-card">
-                                    <div class="media align-items-center">
-                                       <div class="">
-                                          <img class="avatar-40 rounded" src="resources/profile/<?= $user[0]["user_photo"] ?>" alt="">
-                                       </div>
-                                       <div class="media-body ml-3">
-                                          <h6 class="mb-0 ">System</h6>
-                                          <small class="float-right font-size-12">Just Now</small>
-                                          <p class="mb-0">Welcome to BookLib</p>
-                                       </div>
-                                    </div>
-                                 </a>
-                                 </div>
-                              </div>
-                           </div>
-                        </li>
-                        <li class="line-height pt-3">
-                           <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
-                              <img src="resources/profile/<?= $_SESSION["user_photo"] ?>" class="img-fluid rounded-circle mr-3" alt="user">
-                              <div class="caption">
-                                 <h6 class="mb-1 line-height"><?= $_SESSION['full_name']; ?></h6>
-                                 <p class="mb-0 text-primary"><?= $_SESSION['role'] ?></p>
-                              </div>
-                           </a>
-                           <div class="iq-sub-dropdown iq-user-dropdown">
-                              <div class="iq-card shadow-none m-0">
-                                 <div class="iq-card-body p-0 ">
-                                    <div class="bg-primary p-3">
-                                       <h5 class="mb-0 text-white line-height">Hello <?= $_SESSION['full_name']; ?></h5>
-                                       <span class="text-white font-size-12"><?= $_SESSION['role'] ?></span>
-                                    </div>
-                                    <a href="edit-profile.php" class="iq-sub-card iq-bg-primary-hover">
-                                       <div class="media align-items-center">
-                                          <div class="rounded iq-card-icon iq-bg-primary">
-                                             <i class="ri-profile-line"></i>
-                                          </div>
-                                          <div class="media-body ml-3">
-                                             <h6 class="mb-0 ">Edit Profile</h6>
-                                             <p class="mb-0 font-size-12">Modify your personal details.</p>
-                                          </div>
-                                       </div>
-                                    </a>
-                                    <div class="d-inline-block w-100 text-center p-3">
-                                       <a class="bg-primary iq-sign-btn" href="logout.php" role="button">Sign out<i class="ri-login-box-line ml-2"></i></a>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </li>
-                     </ul>
-                  </div>
+                  </a>
+               </div>
+            </div>
+            <div class="navbar-breadcrumb">
+               <h5 class="mb-0">Book Page</h5>
+               <nav aria-label="breadcrumb">
+                  <ul class="breadcrumb">
+                     <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                     <li class="breadcrumb-item active" aria-current="page">Add Book</li>
+                  </ul>
                </nav>
             </div>
-         </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-label="Toggle navigation">
+               <i class="ri-menu-3-line"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+               <ul class="navbar-nav ml-auto navbar-list">
+                  <li class="nav-item nav-icon">
+                     <a href="#" class="search-toggle iq-waves-effect text-gray rounded">
+                        <i class="ri-notification-2-fill"></i>
+                        <span class="bg-primary dots"></span>
+                     </a>
+                     <div class="iq-sub-dropdown">
+                        <div class="iq-card shadow-none m-0">
+                           <div class="iq-card-body p-0">
+                              <div class="bg-primary p-3">
+                                 <h5 class="mb-0 text-white">All Notifications<small class="badge  badge-light float-right pt-1">1</small></h5>
+                              </div>
+                              <a class="iq-sub-card">
+                                 <div class="media align-items-center">
+                                    <div class="">
+                                       <img class="avatar-40 rounded" src="resources/profile/<?= $user[0]["user_photo"] ?>" alt="">
+                                    </div>
+                                    <div class="media-body ml-3">
+                                       <h6 class="mb-0 ">System</h6>
+                                       <small class="float-right font-size-12">Just Now</small>
+                                       <p class="mb-0">Welcome to BookLib</p>
+                                    </div>
+                                 </div>
+                              </a>
+                           </div>
+                        </div>
+                     </div>
+                  </li>
+                  <li class="line-height pt-3">
+                     <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
+                        <?php if (empty($_SESSION['user_photo'])) : ?>
+                           <img src="resources/profile/default.jpg" class="img-fluid rounded-circle mr-3" alt="user">
+                        <?php else : ?>
+                           <img src="resources/profile/<?= $_SESSION["user_photo"] ?>" class="img-fluid rounded-circle mr-3" alt="user">
+                        <?php endif; ?>
+                        <div class="caption">
+                           <h6 class="mb-1 line-height"><?= $_SESSION['full_name']; ?></h6>
+                           <p class="mb-0 text-primary"><?= $_SESSION['role'] ?></p>
+                        </div>
+                     </a>
+                     <div class="iq-sub-dropdown iq-user-dropdown">
+                        <div class="iq-card shadow-none m-0">
+                           <div class="iq-card-body p-0 ">
+                              <div class="bg-primary p-3">
+                                 <h5 class="mb-0 text-white line-height">Hello <?= $_SESSION['full_name']; ?></h5>
+                                 <span class="text-white font-size-12"><?= $_SESSION['role'] ?></span>
+                              </div>
+                              <a href="edit-profile.php" class="iq-sub-card iq-bg-primary-hover">
+                                 <div class="media align-items-center">
+                                    <div class="rounded iq-card-icon iq-bg-primary">
+                                       <i class="ri-profile-line"></i>
+                                    </div>
+                                    <div class="media-body ml-3">
+                                       <h6 class="mb-0 ">Edit Profile</h6>
+                                       <p class="mb-0 font-size-12">Modify your personal details.</p>
+                                    </div>
+                                 </div>
+                              </a>
+                              <div class="d-inline-block w-100 text-center p-3">
+                                 <a class="bg-primary iq-sign-btn" href="logout.php" role="button">Sign out<i class="ri-login-box-line ml-2"></i></a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </li>
+               </ul>
+            </div>
+         </nav>
+      </div>
+   </div>
    <!-- TOP Nav Bar END -->
    <!-- Page Content  -->
    <div id="content-page" class="content-page">
@@ -197,105 +190,127 @@ checkRole($_SESSION);
                <div class="iq-card">
                   <div class="iq-card-header d-flex justify-content-between">
                      <?php if (empty($id_buku)) : ?>
-                     <div class="iq-header-title">
-                        <h4 class="card-title">Add Books</h4>
-                     </div>
+                        <div class="iq-header-title">
+                           <h4 class="card-title">Add Books</h4>
+                        </div>
                   </div>
-                     <div class="iq-card-body">
-                        <form action="" method="post" enctype="multipart/form-data">
-                           <div class="form-group">
-                              <label>Book Name:</label>
-                              <input type="text" name="judul_buku" id="judul_buku" class="form-control" required>
-                           </div>
-                           <div class="form-group">
-                              <label>Book Author:</label>
-                              <input type="text" name="penulis" id="penulis" class="form-control" required>
-                           </div>
-                           <div class="form-group">
-                              <label>Book Publisher:</label>
-                              <input type="text" name="penerbit" id="penerbit" class="form-control" required>
-                           </div>
-                           <div class="form-group">
-                              <label>Book Year:</label>
-                              <input type="number" name="tahun_terbit" id="tahun_terbit" class="form-control" required>
-                           </div>
-                           <div class="form-group">
-                              <label>Book Image:</label>
-                              <div class="custom-file">
-                                 <input type="file" class="custom-file-input" accept="image/png, image/jpeg, image/webp" name="gambar_buku" id="gambar_buku">
-                                 <label class="custom-file-label">Choose file</label>
-                              </div>
-                           </div>
-                           <div class="form-group">
-                              <label>Book pdf:</label>
-                              <div class="custom-file">
-                                 <input type="file" class="custom-file-input" accept="application/pdf" name="pdf_buku" id="pdf_buku">
-                                 <label class="custom-file-label">Choose file</label>
-                              </div>
-                           </div>
-                           <div class="form-group">
-                              <label>Book Description:</label>
-                              <textarea class="form-control" rows="4" name="deskripsi_buku" id="deskripsi_buku" class="form-control" required></textarea>
-                           </div>
-                           <button type="submit" class="btn btn-primary" name="submit">Submit</button>
-                           <button type="reset" class="btn btn-danger">Reset</button>
-                        </form>
+                  <?php if (isset($message)) : ?>
+                     <div class="alert text-white bg-<?= $alertType ?> mr-4 ml-4" role="alert">
+                        <div class="iq-alert-icon">
+                           <i class="<?= $alertIcon ?>"></i>
+                        </div>
+                        <div class="iq-alert-text"><?= $message ?></div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                           <i class="ri-close-line"></i>
+                        </button>
                      </div>
+                  <?php endif; ?>
+                  <div class="iq-card-body">
+                     <form action="" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                           <label>Book Name:</label>
+                           <input type="text" name="judul_buku" id="judul_buku" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                           <label>Book Author:</label>
+                           <input type="text" name="penulis" id="penulis" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                           <label>Book Publisher:</label>
+                           <input type="text" name="penerbit" id="penerbit" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                           <label>Book Year:</label>
+                           <input type="number" name="tahun_terbit" id="tahun_terbit" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                           <label>Book Image:</label>
+                           <div class="custom-file">
+                              <input type="file" class="custom-file-input" accept="image/png, image/jpeg, image/webp" name="gambar_buku" id="gambar_buku">
+                              <label class="custom-file-label">Choose file</label>
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label>Book pdf:</label>
+                           <div class="custom-file">
+                              <input type="file" class="custom-file-input" accept="application/pdf" name="pdf_buku" id="pdf_buku">
+                              <label class="custom-file-label">Choose file</label>
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label>Book Description:</label>
+                           <textarea class="form-control" rows="4" name="deskripsi_buku" id="deskripsi_buku" class="form-control" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+                        <button type="reset" class="btn btn-danger">Reset</button>
+                     </form>
+                  </div>
                </div>
             <?php endif; ?>
             <?php if (!empty($id_buku)) : ?>
                <?php $buku = getData("buku WHERE id_buku = $id_buku")[0]; ?>
                <div class="iq-header-title">
-                        <h4 class="card-title">Update Books</h4>
-                     </div>
+                  <h4 class="card-title">Update Books</h4>
+               </div>
+            </div>
+            <?php if (isset($message)) : ?>
+               <div class="alert text-white bg-<?= $alertType ?> mr-4 ml-4" role="alert">
+                  <div class="iq-alert-icon">
+                     <i class="<?= $alertIcon ?>"></i>
                   </div>
-               <div class="iq-card-body">
-                  <form action="" method="post" enctype="multipart/form-data">
-                     <input type="hidden" name="id_buku" value="<?= $buku["id_buku"] ?>">
-                     <div class="form-group">
-                        <label>Book Name:</label>
-                        <input type="text" name="judul_buku" id="judul_buku" class="form-control" required value="<?= $buku["judul_buku"] ?>">
-                     </div>
-                     <div class="form-group">
-                        <label>Book Author:</label>
-                        <input type="text" name="penulis" id="penulis" class="form-control" required value="<?= $buku["penulis"] ?>">
-                     </div>
-                     <div class="form-group">
-                        <label>Book Publisher:</label>
-                        <input type="text" name="penerbit" id="penerbit" class="form-control" required value="<?= $buku["penerbit"] ?>">
-                     </div>
-                     <div class="form-group">
-                        <label>Book Year:</label>
-                        <input type="number" name="tahun_terbit" id="tahun_terbit" class="form-control" required value="<?= $buku["tahun_terbit"] ?>">
-                     </div>
-                     <div class="form-group">
-                        <label>Book Image:</label>
-                        <span><?= $buku["gambar_buku"] ?></span>
-                        <div class="custom-file">
-                           <input type="file" name="gambar_buku" id="gambar_buku" class="custom-file-input" accept="image/png, image/jpeg, image/webp">
-                           <label class="custom-file-label">Choose file</label>
-                        </div>
-                     </div>
-                     <div class="form-group">
-                        <label>Book pdf:</label>
-                        <span><?= $buku["pdf_buku"] ?></span>
-                        <div class="custom-file">
-                           <input type="file" name="pdf_buku" id="pdf_buku" class="custom-file-input" accept="application/pdf">
-                           <label class="custom-file-label">Choose file</label>
-                        </div>
-                     </div>
-                     <div class="form-group">
-                        <label>Book Description:</label>
-                        <input type="text" name="deskripsi_buku" id="deskripsi_buku" class="form-control" required value="<?= $buku["deskripsi_buku"] ?>">
-                     </div>
-                     <button type="submit" class="btn btn-primary" name="ubah">Change</button>
-                     <a href="admin-books.php" class="btn btn-danger">Back</a>
-                  </form>
+                  <div class="iq-alert-text"><?= $message ?></div>
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                     <i class="ri-close-line"></i>
+                  </button>
                </div>
             <?php endif; ?>
+            <div class="iq-card-body">
+               <form action="" method="post" enctype="multipart/form-data">
+                  <input type="hidden" name="id_buku" value="<?= $buku["id_buku"] ?>">
+                  <div class="form-group">
+                     <label>Book Name:</label>
+                     <input type="text" name="judul_buku" id="judul_buku" class="form-control" required value="<?= $buku["judul_buku"] ?>">
+                  </div>
+                  <div class="form-group">
+                     <label>Book Author:</label>
+                     <input type="text" name="penulis" id="penulis" class="form-control" required value="<?= $buku["penulis"] ?>">
+                  </div>
+                  <div class="form-group">
+                     <label>Book Publisher:</label>
+                     <input type="text" name="penerbit" id="penerbit" class="form-control" required value="<?= $buku["penerbit"] ?>">
+                  </div>
+                  <div class="form-group">
+                     <label>Book Year:</label>
+                     <input type="number" name="tahun_terbit" id="tahun_terbit" class="form-control" required value="<?= $buku["tahun_terbit"] ?>">
+                  </div>
+                  <div class="form-group">
+                     <label>Book Image:</label>
+                     <span><?= $buku["gambar_buku"] ?></span>
+                     <div class="custom-file">
+                        <input type="file" name="gambar_buku" id="gambar_buku" class="custom-file-input" accept="image/png, image/jpeg, image/webp">
+                        <label class="custom-file-label">Choose file</label>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label>Book pdf:</label>
+                     <span><?= $buku["pdf_buku"] ?></span>
+                     <div class="custom-file">
+                        <input type="file" name="pdf_buku" id="pdf_buku" class="custom-file-input" accept="application/pdf">
+                        <label class="custom-file-label">Choose file</label>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label>Book Description:</label>
+                     <input type="text" name="deskripsi_buku" id="deskripsi_buku" class="form-control" required value="<?= $buku["deskripsi_buku"] ?>">
+                  </div>
+                  <button type="submit" class="btn btn-primary" name="ubah">Change</button>
+                  <a href="admin-books.php" class="btn btn-danger">Back</a>
+               </form>
             </div>
+         <?php endif; ?>
          </div>
       </div>
+   </div>
    </div>
    </div>
    <!-- Wrapper END -->
