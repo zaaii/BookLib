@@ -4,8 +4,8 @@ require("model.php");
 
 //cek apakah user sudah login
 if (!isset($_SESSION["login"])) {
-    header("Location: login.php");
-    exit;
+   header("Location: login.php");
+   exit;
 }
 
 // Check if sesion user still exists
@@ -26,6 +26,7 @@ checkRole($_SESSION);
 
 <!doctype html>
 <html lang="en">
+
 <head>
    <!-- Required meta tags -->
    <meta charset="utf-8">
@@ -82,19 +83,29 @@ checkRole($_SESSION);
                                  <th style="width: 3%;">No</th>
                                  <th style="width: 12%;">Book Image</th>
                                  <th style="width: 15%;">Book Name</th>
-                                 <th style="width: 15%;">Book Author</th>
-                                 <th style="width: 15%;">Book Publisher</th>
+                                 <th style="width: 10%;">Book Author</th>
+                                 <th style="width: 10%;">Book Publisher</th>
                                  <th style="width: 18%;">Book Description</th>
                                  <th style="width: 7%;">Book Year</th>
                                  <th style="width: 7%;">Book pdf</th>
+                                 <th style="width: 10%;">Category Book</th>
                                  <th style="width: 15%;">Action</th>
                               </tr>
                            </thead>
                            <?php $i = 1; ?>
-                           <?php foreach ($bukus as $buku) : ?>
+                           <?php
+                           $i = 1;
+                           $cname[0] = "Not Set";
+                           $categories = $koneksi->query("SELECT * FROM categories");
+                           foreach ($categories as $row) {
+                              $cname[$row['id_category']] = ucwords($row['category_name']);
+                           }
+                           $bukus = $koneksi->query("SELECT * FROM buku");
+                           foreach ($bukus as $buku) :
+                           ?>
                               <tbody>
                                  <tr>
-                                    <td><?= $i; ?></td>
+                                    <td><?= $i++; ?></td>
                                     <td><img class="img-fluid rounded" src="resources/cover/<?= $buku["gambar_buku"] ?>" alt=""></td>
                                     <td><?= $buku["judul_buku"] ?></td>
                                     <td><?= $buku["penulis"] ?></td>
@@ -104,6 +115,23 @@ checkRole($_SESSION);
                                     </td>
                                     <td><?= $buku["tahun_terbit"] ?></td>
                                     <td><a href="resources/ebook/<?= $buku["pdf_buku"] ?>"><i class="ri-file-fill text-secondary font-size-18"></i></a></td>
+                                    <td>
+                                       <p>
+                                          <?php
+                                          $cats = '';
+                                          $cat = explode(',', $buku['category_ids']);
+                                          foreach ($cat as $key => $value) {
+                                             if (!empty($cats)) {
+                                                $cats .= ", ";
+                                             }
+                                             if (isset($cname[$value])) {
+                                                $cats .= $cname[$value];
+                                             }
+                                          }
+                                          echo $cats;
+                                          ?>
+                                       </p>
+                                    </td>
                                     <td>
                                        <form action="" method="post">
                                           <div class="flex align-items-center list-user-action">
@@ -115,7 +143,6 @@ checkRole($_SESSION);
                                     </td>
                                  </tr>
                               </tbody>
-                              <?php $i++; ?>
                            <?php endforeach ?>
                         </table>
                      </div>
@@ -187,4 +214,5 @@ checkRole($_SESSION);
    <!-- Custom JavaScript -->
    <script src="js/custom.js"></script>
 </body>
+
 </html>

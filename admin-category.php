@@ -17,7 +17,7 @@ if (isSessionStillAlive($_SESSION) == false) {
 
 $user = getData("users");
 // Mengambil data buku di database
-$categories = getData("category");
+$categories = getData("categories");
 
 // Check Role user
 checkRole($_SESSION);

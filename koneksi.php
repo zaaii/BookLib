@@ -1,6 +1,6 @@
 <?php
 //Koneksi database prosedural mysqli
-$koneksi = mysqli_connect('localhost', 'root', '', 'webook');
+$koneksi = mysqli_connect('localhost', 'root', '', 'perpustakaan');
 
 //Memeriksa koneksi
 if(!$koneksi){

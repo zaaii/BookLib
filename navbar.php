@@ -19,7 +19,7 @@
 
             </div>
             <?php
-            if (basename($_SERVER['PHP_SELF']) === 'home.php') {
+            if (basename($_SERVER['PHP_SELF']) === 'index.php') {
             ?>
                 <div class="iq-search-bar">
                     <form action="" class="searchbox" id="searchForm" method="get">

@@ -35,19 +35,20 @@ CREATE TABLE `buku` (
   `tahun_terbit` int(11) NOT NULL,
   `gambar_buku` blob DEFAULT NULL,
   `pdf_buku` blob DEFAULT NULL,
-  `deskripsi_buku` varchar(1000) DEFAULT NULL
+  `deskripsi_buku` varchar(1000) DEFAULT NULL,
+  `category_ids` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `buku`
 --
 
-INSERT INTO `buku` (`id_buku`, `judul_buku`, `penulis`, `penerbit`, `tahun_terbit`, `gambar_buku`, `pdf_buku`, `deskripsi_buku`) VALUES
-(2, 'Ego is the Enemy: The Fight to Master Our Greatest Opponent', 'Ryan Holiday', 'Profile selfs Ltd', 2016, 0x65676f2e6a7067, 0x73656c662e706466, 'Tertawalah sebelum tertawa itu dilarang'),
-(3, 'Everything Is F*cked: A self About Hope', 'Mark Manson', 'HarperCollins', 2019, 0x34333830383732332e6a7067, 0x73656c662e706466, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas auctor neque ut leo tempor, vitae malesuada quam ultricies. Curabitur pharetra nisi vel orci porta, at pharetra nibh posuere. Suspendisse potenti. Mauris id tincidunt mauris, nec cursus tellus. In sit amet interdum nunc. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin non justo eget massa dignissim malesuada nec nec justo. Sed eu tellus ac turpis pellentesque rhoncus. Cras varius dolor vel tortor elementum, sit amet hendrerit metus vulputate.'),
-(4, 'The Things You Can See Only When You Slow Down: How to Be Calm and Mindful in a Fast-Paced World', 'Haemin Sunim', 'Penguin selfs', 2017, 0x626f6f6b2d636f7665722d7468652d7468696e67732d796f752d63616e2d7365652d6f6e6c792d7768656e2d796f752d736c6f772d646f776e2e77656270, 0x73656c662e706466, 'Deskripsi Buku 4'),
-(5, 'Why We Sleep: Unlocking the Power of Sleep and Dreams', 'Matthew Walker, PhD', 'Scribner', 2017, 0x626f6f6b2d636f7665722d7768792d77652d736c6565702d38303637322e77656270, 0x73656c662e706466, 'Deskripsi Buku 5'),
-(7, ' Information Technology In The Service Society: A Twenty-first Century Lever', 'kkkk', 'kkk', 1999, 0x626f6f6b2d636f7665722d696e666f726d6174696f6e2d746563686e6f6c6f67792d696e2d7468652d736572766963652d736f63696574792e77656270, 0x6a61776162616e2066696e616c204578616d205453412e706466, 'kkkkkk');
+INSERT INTO `buku` (`id_buku`, `judul_buku`, `penulis`, `penerbit`, `tahun_terbit`, `gambar_buku`, `pdf_buku`, `deskripsi_buku`, `category_ids`) VALUES
+(2, 'Ego is the Enemy: The Fight to Master Our Greatest Opponent', 'Ryan Holiday', 'Profile selfs Ltd', 2016, 0x65676f2e6a7067, 0x73656c662e706466, 'Tertawalah sebelum tertawa itu dilarang', '1,2'),
+(3, 'Everything Is F*cked: A self About Hope', 'Mark Manson', 'HarperCollins', 2019, 0x34333830383732332e6a7067, 0x73656c662e706466, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas auctor neque ut leo tempor, vitae malesuada quam ultricies. Curabitur pharetra nisi vel orci porta, at pharetra nibh posuere. Suspendisse potenti. Mauris id tincidunt mauris, nec cursus tellus. In sit amet interdum nunc. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin non justo eget massa dignissim malesuada nec nec justo. Sed eu tellus ac turpis pellentesque rhoncus. Cras varius dolor vel tortor elementum, sit amet hendrerit metus vulputate.', '2,3'),
+(4, 'The Things You Can See Only When You Slow Down: How to Be Calm and Mindful in a Fast-Paced World', 'Haemin Sunim', 'Penguin selfs', 2017, 0x626f6f6b2d636f7665722d7468652d7468696e67732d796f752d63616e2d7365652d6f6e6c792d7768656e2d796f752d736c6f772d646f776e2e77656270, 0x73656c662e706466, 'Deskripsi Buku 4', '4,5'),
+(5, 'Why We Sleep: Unlocking the Power of Sleep and Dreams', 'Matthew Walker, PhD', 'Scribner', 2017, 0x626f6f6b2d636f7665722d7768792d77652d736c6565702d38303637322e77656270, 0x73656c662e706466, 'Deskripsi Buku 5', '2,4'),
+(7, ' Information Technology In The Service Society: A Twenty-first Century Lever', 'kkkk', 'kkk', 1999, 0x626f6f6b2d636f7665722d696e666f726d6174696f6e2d746563686e6f6c6f67792d696e2d7468652d736572766963652d736f63696574792e77656270, 0x6a61776162616e2066696e616c204578616d205453412e706466, 'kkkkkk', '1,3');
 
 -- --------------------------------------------------------
 
@@ -149,20 +150,20 @@ COMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
 --
--- Struktur dari tabel `category`
+-- Struktur dari tabel `categories`
 --
 
-CREATE TABLE `category`(
+CREATE TABLE `categories`(
   `id_category` int(11) NOT NULL,
   `category_name` varchar(255) DEFAULT NULL,
   `category_description` varchar(1000) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `category`
+-- Dumping data untuk tabel `categories`
 --
 
-INSERT INTO `category` (`id_category`, `category_name`, `category_description`) VALUES
+INSERT INTO `categories` (`id_category`, `category_name`, `category_description`) VALUES
 (1, 'Fiction', 'Category for fiction books'),
 (2, 'Non-Fiction', 'Category for non-fiction books'),
 (3, 'Romance', 'Category for romance books'),
@@ -172,22 +173,6 @@ INSERT INTO `category` (`id_category`, `category_name`, `category_description`) 
 --
 -- Indeks untuk tabel `category`
 --
-ALTER TABLE `category`
-  MODIFY COLUMN `id_category` int(11) NOT NULL AUTO_INCREMENT,
+ALTER TABLE `categories`
+  MODIFY COLUMN `id_category` int(11) NOT NULL, AUTO_INCREMENT=6,
   ADD PRIMARY KEY (`id_category`);
---
--- Indeks untuk tabel `category_book`
---
-CREATE TABLE `category_book` (
-  `id_category` int(11) NOT NULL,
-  `id_buku` int(11) NOT NULL,
-  PRIMARY KEY (`id_category`, `id_buku`),
-  FOREIGN KEY (`id_category`) REFERENCES `category` (`id_category`),
-  FOREIGN KEY (`id_buku`) REFERENCES `buku` (`id_buku`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- Dumping data untuk tabel `category`
---
-
-INSERT INTO category_book (id_category, id_buku)
-VALUES (1, 2), (3, 2);

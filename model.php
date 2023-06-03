@@ -28,7 +28,7 @@ function insertDataBuku($data)
     $gambar_buku = $_FILES["gambar_buku"]["name"];
     $pdf_buku = $_FILES["pdf_buku"]["name"];
     $deskripsi_buku = htmlspecialchars($data["deskripsi_buku"]);
-    $category_id = $_POST["category"]; // Mengambil nilai category_id dari form
+    $category_ids = htmlspecialchars($data["category_ids"]);
 
     // Upload gambar buku
     $gambar_buku_tmp = $_FILES["gambar_buku"]["tmp_name"];
@@ -41,7 +41,7 @@ function insertDataBuku($data)
     // Query insert data
     $query = "INSERT INTO buku 
     VALUES 
-    ('', '$judul_buku', '$penulis', '$penerbit', '$tahun_terbit', '$gambar_buku', '$pdf_buku', '$deskripsi_buku', '$category_id')
+    ('', '$judul_buku', '$penulis', '$penerbit', '$tahun_terbit', '$gambar_buku', '$pdf_buku', '$deskripsi_buku', '$category_ids')
     ";
     mysqli_query($koneksi, $query);
 
@@ -71,6 +71,7 @@ function updateDataBuku($data)
     $penerbit = htmlspecialchars($data["penerbit"]);
     $tahun_terbit = htmlspecialchars($data["tahun_terbit"]);
     $deskripsi_buku = htmlspecialchars($data["deskripsi_buku"]);
+    $category_ids = htmlspecialchars($data["category_ids"]);
 
     // Cek apakah ada file gambar_buku yang diunggah
     if (isset($_FILES["gambar_buku"]["tmp_name"]) && !empty($_FILES["gambar_buku"]["tmp_name"])) {
@@ -102,7 +103,8 @@ function updateDataBuku($data)
                 tahun_terbit = '$tahun_terbit',
                 gambar_buku = '$gambar_buku',
                 pdf_buku = '$pdf_buku',
-                deskripsi_buku = '$deskripsi_buku'
+                deskripsi_buku = '$deskripsi_buku',
+                category_ids = '$category_ids'
             WHERE id_buku = $id_buku";
 
     mysqli_query($koneksi, $query);
@@ -153,7 +155,8 @@ function cariDataBuku($keyword)
     Fungsi Menambahkan buku ke favorit
 */
 
-function getFavorit($id_user) {
+function getFavorit($id_user)
+{
     global $koneksi;
     $query = "SELECT * FROM favorit WHERE id_user = $id_user";
     $result = mysqli_query($koneksi, $query);
@@ -164,20 +167,23 @@ function getFavorit($id_user) {
     return $rows;
 }
 
-function isFavorite($id_user, $id_buku) {
+function isFavorite($id_user, $id_buku)
+{
     global $koneksi;
     $query = "SELECT * FROM favorit WHERE id_user = $id_user AND id_buku = $id_buku";
     $result = mysqli_query($koneksi, $query);
     return mysqli_num_rows($result) > 0;
 }
 
-function removeFavorite($id_user, $id_buku) {
+function removeFavorite($id_user, $id_buku)
+{
     global $koneksi;
     $query = "DELETE FROM favorit WHERE id_user = $id_user AND id_buku = $id_buku";
     mysqli_query($koneksi, $query);
 }
 
-function addFavorite($id_user, $id_buku) {
+function addFavorite($id_user, $id_buku)
+{
     global $koneksi;
     // Perform the necessary database operations to add the book to favorites for the given user
     $query = "INSERT INTO favorit VALUES ('', '$id_user', '$id_buku')";
@@ -276,7 +282,8 @@ function logout()
 }
 
 // Fungsi Delete User
-function deleteUser($id){
+function deleteUser($id)
+{
     global $koneksi;
 
     // Query Delete User
@@ -287,7 +294,8 @@ function deleteUser($id){
 }
 
 // Fungsi Check apakah User yang adap ada sesion masih ada di database
-function isSessionStillAlive($session){
+function isSessionStillAlive($session)
+{
 
     // Mengambil Informasi Dari Session Aktif
     $id = $session['id_user'];
@@ -299,7 +307,7 @@ function isSessionStillAlive($session){
     $result = mysqli_query($koneksi, $query);
     $result = mysqli_fetch_assoc($result);
 
-    if($id == $result['id_user'] && $email == $result['email']) {
+    if ($id == $result['id_user'] && $email == $result['email']) {
         return true;
     } else {
         return false;
@@ -335,13 +343,14 @@ function editProfil($data)
                 user_photo = '$user_photo',
                 birth_date = '$birth_date'
             WHERE id_user = $id_user";
-    
+
     mysqli_query($koneksi, $query);
     return mysqli_affected_rows($koneksi);
 }
 
 //change password
-function changePassword($data) {
+function changePassword($data)
+{
     global $koneksi;
 
     $id_user = $_SESSION["id_user"];
@@ -377,7 +386,8 @@ function checkRole($session)
     return true;
 }
 
-function getPageName() {
+function getPageName()
+{
     // Mendapatkan nama file halaman saat ini dari URL
     $currentPage = basename($_SERVER['PHP_SELF']);
 
@@ -437,25 +447,4 @@ function updateDataCategory($data)
     mysqli_query($koneksi, $query);
 
     return mysqli_affected_rows($koneksi);
-}
-
-function getBooksByCategory($category)
-{
-    global $koneksi;
-
-    // Melakukan query untuk mendapatkan buku berdasarkan kategori
-    $query = "SELECT * FROM buku
-            INNER JOIN category_book ON buku.id_buku = category_book.id_buku
-            INNER JOIN category ON category_book.id_category = category.id_category
-            WHERE category.category_name = '$category'";
-    $result = mysqli_query($koneksi, $query);
-
-    // Menyimpan hasil query dalam array
-    $books = array();
-    while ($row = mysqli_fetch_assoc($result)) {
-        $books[] = $row;
-    }
-
-    // Mengembalikan daftar buku
-    return $books;
 }

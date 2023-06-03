@@ -4,11 +4,13 @@ session_start();
 require("model.php");
 
 $user = getData("users");
+// Ambil daftar kategori dari database
+$categories = getData("categories");
 
 //cek apakah user sudah login
 if (!isset($_SESSION["login"])) {
-    header("Location: login.php");
-    exit;
+   header("Location: login.php");
+   exit;
 }
 
 // Check if sesion user still exists
@@ -62,6 +64,7 @@ checkRole($_SESSION);
 ?>
 <!doctype html>
 <html lang="en">
+
 <head>
    <!-- Required meta tags -->
    <meta charset="utf-8">
@@ -103,105 +106,129 @@ checkRole($_SESSION);
                <div class="iq-card">
                   <div class="iq-card-header d-flex justify-content-between">
                      <?php if (empty($id_buku)) : ?>
-                     <div class="iq-header-title">
-                        <h4 class="card-title">Add Books</h4>
-                     </div>
+                        <div class="iq-header-title">
+                           <h4 class="card-title">Add Books</h4>
+                        </div>
                   </div>
-                     <div class="iq-card-body">
-                        <form action="" method="post" enctype="multipart/form-data">
-                           <div class="form-group">
-                              <label>Book Name:</label>
-                              <input type="text" name="judul_buku" id="judul_buku" class="form-control" required>
+                  <div class="iq-card-body">
+                     <form action="" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                           <label>Book Name:</label>
+                           <input type="text" name="judul_buku" id="judul_buku" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                           <label>Book Author:</label>
+                           <input type="text" name="penulis" id="penulis" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                           <label>Book Publisher:</label>
+                           <input type="text" name="penerbit" id="penerbit" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                           <label>Book Year:</label>
+                           <input type="number" name="tahun_terbit" id="tahun_terbit" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                           <label>Book Image:</label>
+                           <div class="custom-file">
+                              <input type="file" class="custom-file-input" accept="image/png, image/jpeg, image/webp" name="gambar_buku" id="gambar_buku" required>
+                              <label class="custom-file-label">Choose file</label>
                            </div>
-                           <div class="form-group">
-                              <label>Book Author:</label>
-                              <input type="text" name="penulis" id="penulis" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                           <label>Book pdf:</label>
+                           <div class="custom-file">
+                              <input type="file" class="custom-file-input" accept="application/pdf" name="pdf_buku" id="pdf_buku" required>
+                              <label class="custom-file-label">Choose file</label>
                            </div>
-                           <div class="form-group">
-                              <label>Book Publisher:</label>
-                              <input type="text" name="penerbit" id="penerbit" class="form-control" required>
-                           </div>
-                           <div class="form-group">
-                              <label>Book Year:</label>
-                              <input type="number" name="tahun_terbit" id="tahun_terbit" class="form-control" required>
-                           </div>
-                           <div class="form-group">
-                              <label>Book Image:</label>
-                              <div class="custom-file">
-                                 <input type="file" class="custom-file-input" accept="image/png, image/jpeg, image/webp" name="gambar_buku" id="gambar_buku">
-                                 <label class="custom-file-label">Choose file</label>
-                              </div>
-                           </div>
-                           <div class="form-group">
-                              <label>Book pdf:</label>
-                              <div class="custom-file">
-                                 <input type="file" class="custom-file-input" accept="application/pdf" name="pdf_buku" id="pdf_buku">
-                                 <label class="custom-file-label">Choose file</label>
-                              </div>
-                           </div>
-                           <div class="form-group">
-                              <label>Book Description:</label>
-                              <textarea class="form-control" rows="4" name="deskripsi_buku" id="deskripsi_buku" class="form-control" required></textarea>
-                           </div>
-                           <button type="submit" class="btn btn-primary" name="submit">Submit</button>
-                           <button type="reset" class="btn btn-danger">Reset</button>
-                        </form>
-                     </div>
+                        </div>
+                        <div class="form-group">
+                           <label>Book Description:</label>
+                           <textarea class="form-control" rows="4" name="deskripsi_buku" id="deskripsi_buku" class="form-control" required></textarea>
+                        </div>
+                        <div class="form-group">
+                           <label>Category Book</label>
+                           <select class="form-control" name="category_ids" id="category_ids" required>
+                           <option selected="" disabled="">Select your category book</option>
+                              <?php
+                              $categories = $koneksi->query("SELECT * FROM categories");
+                              while ($row = $categories->fetch_assoc()) :
+                              ?>
+                                 <option value="<?php echo $row['id_category'] ?>" <?php echo isset($category_ids) && !empty($category_ids) &&  in_array($row['id_category'], explode(',', $category_ids)) ? 'selected' : '' ?>><?php echo ucwords($row['category_name']) ?></option>
+                              <?php endwhile; ?>
+                           </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+                        <a href="admin-books.php" class="btn btn-danger">Back</a>
+                     </form>
+                  </div>
                </div>
             <?php endif; ?>
             <?php if (!empty($id_buku)) : ?>
                <?php $buku = getData("buku WHERE id_buku = $id_buku")[0]; ?>
                <div class="iq-header-title">
-                        <h4 class="card-title">Update Books</h4>
+                  <h4 class="card-title">Update Books</h4>
+               </div>
+            </div>
+            <div class="iq-card-body">
+               <form action="" method="post" enctype="multipart/form-data">
+                  <input type="hidden" name="id_buku" value="<?= $buku["id_buku"] ?>">
+                  <div class="form-group">
+                     <label>Book Name:</label>
+                     <input type="text" name="judul_buku" id="judul_buku" class="form-control" required value="<?= $buku["judul_buku"] ?>">
+                  </div>
+                  <div class="form-group">
+                     <label>Book Author:</label>
+                     <input type="text" name="penulis" id="penulis" class="form-control" required value="<?= $buku["penulis"] ?>">
+                  </div>
+                  <div class="form-group">
+                     <label>Book Publisher:</label>
+                     <input type="text" name="penerbit" id="penerbit" class="form-control" required value="<?= $buku["penerbit"] ?>">
+                  </div>
+                  <div class="form-group">
+                     <label>Book Year:</label>
+                     <input type="number" name="tahun_terbit" id="tahun_terbit" class="form-control" required value="<?= $buku["tahun_terbit"] ?>">
+                  </div>
+                  <div class="form-group">
+                     <label>Book Image:</label>
+                     <span><?= $buku["gambar_buku"] ?></span>
+                     <div class="custom-file">
+                        <input type="file" name="gambar_buku" id="gambar_buku" class="custom-file-input" accept="image/png, image/jpeg, image/webp">
+                        <label class="custom-file-label">Choose file</label>
                      </div>
                   </div>
-               <div class="iq-card-body">
-                  <form action="" method="post" enctype="multipart/form-data">
-                     <input type="hidden" name="id_buku" value="<?= $buku["id_buku"] ?>">
-                     <div class="form-group">
-                        <label>Book Name:</label>
-                        <input type="text" name="judul_buku" id="judul_buku" class="form-control" required value="<?= $buku["judul_buku"] ?>">
+                  <div class="form-group">
+                     <label>Book pdf:</label>
+                     <span><?= $buku["pdf_buku"] ?></span>
+                     <div class="custom-file">
+                        <input type="file" name="pdf_buku" id="pdf_buku" class="custom-file-input" accept="application/pdf">
+                        <label class="custom-file-label">Choose file</label>
                      </div>
-                     <div class="form-group">
-                        <label>Book Author:</label>
-                        <input type="text" name="penulis" id="penulis" class="form-control" required value="<?= $buku["penulis"] ?>">
-                     </div>
-                     <div class="form-group">
-                        <label>Book Publisher:</label>
-                        <input type="text" name="penerbit" id="penerbit" class="form-control" required value="<?= $buku["penerbit"] ?>">
-                     </div>
-                     <div class="form-group">
-                        <label>Book Year:</label>
-                        <input type="number" name="tahun_terbit" id="tahun_terbit" class="form-control" required value="<?= $buku["tahun_terbit"] ?>">
-                     </div>
-                     <div class="form-group">
-                        <label>Book Image:</label>
-                        <span><?= $buku["gambar_buku"] ?></span>
-                        <div class="custom-file">
-                           <input type="file" name="gambar_buku" id="gambar_buku" class="custom-file-input" accept="image/png, image/jpeg, image/webp">
-                           <label class="custom-file-label">Choose file</label>
+                  </div>
+                  <div class="form-group">
+                     <label>Book Description:</label>
+                     <input type="text" name="deskripsi_buku" id="deskripsi_buku" class="form-control" required value="<?= $buku["deskripsi_buku"] ?>">
+                  </div>
+                  <div class="form-group">
+                           <label>Category Book</label>
+                           <select class="form-control" name="category_ids" id="category_ids" required>
+                           <option selected="" disabled="">Select your category book</option>
+                              <?php
+                              $categories = $koneksi->query("SELECT * FROM categories");
+                              while ($row = $categories->fetch_assoc()) :
+                              ?>
+                                 <option value="<?php echo $row['id_category'] ?>" <?php echo isset($category_ids) && !empty($category_ids) &&  in_array($row['id_category'], explode(',', $category_ids)) ? 'selected' : '' ?>><?php echo ucwords($row['category_name']) ?></option>
+                              <?php endwhile; ?>
+                           </select>
                         </div>
-                     </div>
-                     <div class="form-group">
-                        <label>Book pdf:</label>
-                        <span><?= $buku["pdf_buku"] ?></span>
-                        <div class="custom-file">
-                           <input type="file" name="pdf_buku" id="pdf_buku" class="custom-file-input" accept="application/pdf">
-                           <label class="custom-file-label">Choose file</label>
-                        </div>
-                     </div>
-                     <div class="form-group">
-                        <label>Book Description:</label>
-                        <input type="text" name="deskripsi_buku" id="deskripsi_buku" class="form-control" required value="<?= $buku["deskripsi_buku"] ?>">
-                     </div>
-                     <button type="submit" class="btn btn-primary" name="ubah">Change</button>
-                     <a href="admin-books.php" class="btn btn-danger">Back</a>
-                  </form>
-               </div>
-            <?php endif; ?>
+                  <button type="submit" class="btn btn-primary" name="ubah">Change</button>
+                  <a href="admin-books.php" class="btn btn-danger">Back</a>
+               </form>
             </div>
+         <?php endif; ?>
          </div>
       </div>
+   </div>
    </div>
    </div>
    <!-- Wrapper END -->
