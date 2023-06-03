@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 29 Bulan Mei 2023 pada 08.29
+-- Waktu pembuatan: 01 Jun 2023 pada 20.31
 -- Versi server: 10.4.22-MariaDB
 -- Versi PHP: 8.1.2
 
@@ -61,12 +61,18 @@ CREATE TABLE `favorit` (
   `id_buku` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data untuk tabel `favorit`
+-- Struktur dari tabel `forgot_password`
 --
 
-INSERT INTO `favorit` (`id`, `id_user`, `id_buku`) VALUES
-(120, 0, 2);
+CREATE TABLE `forgot_password` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `expiration` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -90,7 +96,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `full_name`, `email`, `password`, `gender`, `birth_date`, `user_photo`, `role`) VALUES
-(0, 'admin perpus', 'admin@admin.com', '$2y$10$qv3/99qfls4gzRyxMsV49uDBaNyB8J68vL6PgKMmKnFoVfjhQ8J4i', 'male', '2023-05-08', 'quran.png', 'admin');
+(0, 'admin perpus', 'admin@admin.com', '$2y$10$c5f84CUIceoSe4EomVKMbef3fn09.disCWK8edV/FUjXIsGDKMg..', 'male', '2023-05-08', 'quran.png', 'admin'),
+(64789, 'zens catz', 'akunpremku@gmail.com', '$2y$10$..FWdzVPdEB6nkX1PjtyzuSa5gW506U.tA.2ZTU3IbZmiuQOFmsWC', '', '0000-00-00', '', 'member'),
+(647893263, 'user', 'user@user.com', '$2y$10$zhiFdTJCCbSslP8NIy7FdudtURQEnykFTK61bVfg9QZqRXXcU76Z6', 'male', '2023-02-16', 'Untitled-2.png', 'member');
 
 --
 -- Indexes for dumped tables
@@ -109,6 +117,13 @@ ALTER TABLE `favorit`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_user` (`id_user`) USING BTREE,
   ADD KEY `id_buku` (`id_buku`) USING BTREE;
+
+--
+-- Indeks untuk tabel `forgot_password`
+--
+ALTER TABLE `forgot_password`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_user_id` (`user_id`);
 
 --
 -- Indeks untuk tabel `users`
@@ -130,7 +145,13 @@ ALTER TABLE `buku`
 -- AUTO_INCREMENT untuk tabel `favorit`
 --
 ALTER TABLE `favorit`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
+
+--
+-- AUTO_INCREMENT untuk tabel `forgot_password`
+--
+ALTER TABLE `forgot_password`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
@@ -142,6 +163,12 @@ ALTER TABLE `favorit`
 ALTER TABLE `favorit`
   ADD CONSTRAINT `favorit_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`),
   ADD CONSTRAINT `favorit_ibfk_2` FOREIGN KEY (`id_buku`) REFERENCES `buku` (`id_buku`);
+
+--
+-- Ketidakleluasaan untuk tabel `forgot_password`
+--
+ALTER TABLE `forgot_password`
+  ADD CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id_user`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
