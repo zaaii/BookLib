@@ -8,37 +8,45 @@ session_start();
     }
 
 if (isset($_POST["submit"])) {
-    $email = $_POST["email"];
-    $password = $_POST["password"];
-    $result = mysqli_query($koneksi, "SELECT * FROM users WHERE email = '$email'");
-    //cek email
-    if (mysqli_num_rows($result) === 1) {
-        //cek password
-        $row = mysqli_fetch_assoc($result);
-        if (password_verify($password, $row["password"])) {
-            //set session
-            $_SESSION["login"] = true;
-            $_SESSION["id_user"] = $row["id_user"];
-            $_SESSION["full_name"] = $row["full_name"];
-            $_SESSION["email"] = $row["email"];
-            $_SESSION["password"] = $row["password"];
-            $_SESSION["gender"] = $row["gender"];
-            $_SESSION["birth_date"] = $row["birth_date"];
-            $_SESSION["user_photo"] = $row["user_photo"];
-            $_SESSION["role"] = $row["role"];
-            header("Location: index.php");
-            exit;
-        } else {
-            echo "<script>
-                    alert('Email atau Password salah!');
-                </script>";
-        }
-    } 
-
-    if (isset($_POST["rememberme"])) {
-        //buat cookie
-        setcookie("login", "true", time() + 60);
+    $login = login($_POST);
+    if ($login == true) {
+        header("Location: index.php");
+    } else {
+        echo "<script>
+        alert('Email atau Password salah!');
+                    </script>";
     }
+    // $email = $_POST["email"];
+    // $password = $_POST["password"];
+    // $result = mysqli_query($koneksi, "SELECT * FROM users WHERE email = '$email'");
+    // //cek email
+    // if (mysqli_num_rows($result) === 1) {
+    //     //cek password
+    //     $row = mysqli_fetch_assoc($result);
+    //     if (password_verify($password, $row["password"])) {
+    //         //set session
+    //         $_SESSION["login"] = true;
+    //         $_SESSION["id_user"] = $row["id_user"];
+    //         $_SESSION["full_name"] = $row["full_name"];
+    //         $_SESSION["email"] = $row["email"];
+    //         $_SESSION["password"] = $row["password"];
+    //         $_SESSION["gender"] = $row["gender"];
+    //         $_SESSION["birth_date"] = $row["birth_date"];
+    //         $_SESSION["user_photo"] = $row["user_photo"];
+    //         $_SESSION["role"] = $row["role"];
+    //         header("Location: index.php");
+    //         exit;
+    //     } else {
+    //         echo "<script>
+    //                 alert('Email atau Password salah!');
+    //             </script>";
+    //     }
+    // } 
+
+    // if (isset($_POST["rememberme"])) {
+    //     //buat cookie
+    //     setcookie("login", "true", time() + 60);
+    // }
 }
 ?>
 <!doctype html>
