@@ -59,7 +59,6 @@ NOTE: This file contains the styling for responsive Template.
 ======================================
 [ End table content ]
 ======================================*/
-
 /*--------------------------------------------------------------------
                             General
 ---------------------------------------------------------------------*/
@@ -189,7 +188,7 @@ a:hover { text-decoration: none; }
 
 /*---------------------------------------------------------------------
                              Tasks Card
------------------------------------------------------------------------*/
+---------------------F--------------------------------------------------*/
 .tasks-card { padding: 0 0 15px 0; border-bottom: 1px solid var(--iq-border-light); margin: 0 0 15px 0; }
 .tasks-card .close { font-size: 16px; }
 .tasks-card:last-child { border: none; margin: 0; padding: 0; }
