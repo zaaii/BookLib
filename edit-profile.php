@@ -85,12 +85,12 @@ if (!isset($_SESSION["login"])) {
                   <div class="iq-card-body p-0">
                      <div class="iq-edit-list">
                         <ul class="iq-edit-profile d-flex nav nav-pills">
-                           <li class="col-md-3 p-0">
+                           <li class="col-md-6 p-1">
                               <a class="nav-link active" data-toggle="pill" href="#personal-information">
                                  Personal Information
                               </a>
                            </li>
-                           <li class="col-md-3 p-0">
+                           <li class="col-md-6 p-1">
                               <a class="nav-link" data-toggle="pill" href="#chang-pwd">
                                  Change Password
                               </a>

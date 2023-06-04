@@ -1,32 +1,34 @@
 <?php
 require("model.php");
 session_start();
-    //cek login atau tidak
-    if (isset($_SESSION["login"])) {
-        header("Location: index.php");
-        exit;
-    }
-    
+//cek login atau tidak
+if (isset($_SESSION["login"])) {
+    header("Location: index.php");
+    exit;
+}
+
+
 if (isset($_POST["submit"])) {
-    if (register($_POST) > 0) {
-        echo "
-            <script>
-                alert('Pengguna berhasil ditambahkan!');
-                document.location.href = 'register.php';
-            </script>
-        ";
+    if (isEmailExist($_POST['email'])) {
+        $message = "This <strong>email is already registered</strong>. Please try again with a different email.";
+        $alertType = "warning";
+        $alertIcon = "ri-alert-line";
     } else {
-        echo "
-            <script>
-                alert('Pengguna gagal ditambahkan!');
-                document.location.href = 'register.php';
-            </script>
-        ";
+        if (register($_POST) > 0) {
+            $message = "Your account has been <strong>successfully created</strong>. Please login to continue.";
+            $alertType = "primary";
+            $alertIcon = "ri-check-line";
+        } else {
+            $message = "Your account <strong>failed to be created</strong>. Please try again.";
+            $alertType = "danger";
+            $alertIcon = "ri-close-line";
+        }
     }
 }
 ?>
 <!doctype html>
 <html lang="en">
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -52,7 +54,7 @@ if (isset($_POST["submit"])) {
     </div>
     <!-- loader END -->
     <!-- Sign in Start -->
-    <section class="sign-in-page">
+    <section class="sign-in-page" style="background-image: url('images/bg.jpg'); background-size: cover;">
         <div class="container p-0">
             <div class="row no-gutters height-self-center">
                 <div class="col-sm-12 align-self-center page-content rounded">
@@ -60,7 +62,18 @@ if (isset($_POST["submit"])) {
                         <div class="col-sm-12 sign-in-page-data">
                             <div class="sign-in-from bg-primary rounded">
                                 <h3 class="mb-0 text-center text-white">Sign Up</h3>
-                                <p class="text-center text-white">Masukkan data diri anda.</p>
+                                <p class="text-center text-white">Insert your information data</p>
+                                <?php if (isset($message)) : ?>
+                                    <div class="alert alert-<?= $alertType ?> mr-0 ml-0" role="alert">
+                                        <div class="iq-alert-icon">
+                                            <i class="<?= $alertIcon ?>"></i>
+                                        </div>
+                                        <div class="iq-alert-text"><?= $message ?></div>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <i class="ri-close-line"></i>
+                                        </button>
+                                    </div>
+                                <?php endif; ?>
                                 <form class="mt-4 form-text" method="post">
                                     <div class="form-group">
                                         <label for="full_name">Full Name</label>
@@ -122,4 +135,5 @@ if (isset($_POST["submit"])) {
     <!-- Custom JavaScript -->
     <script src="js/custom.js"></script>
 </body>
+
 </html>

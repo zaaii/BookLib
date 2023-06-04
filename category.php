@@ -8,6 +8,20 @@ if (!isset($_SESSION["login"])) {
    exit;
 }
 
+if (isset($_POST['id_user'], $_POST['id_buku'])) {
+   $id_user = $_POST['id_user'];
+   $id_buku = $_POST['id_buku'];
+
+   // Perform database operations to add/remove favorites based on the current status
+   if (isFavorite($id_user, $id_buku)) {
+      removeFavorite($id_user, $id_buku);
+      http_response_code(200);
+   } else {
+      addFavorite($id_user, $id_buku);
+      http_response_code(200);
+   }
+}
+
 $user = getData("users");
 // Check if sesion user still exists
 if (isSessionStillAlive($_SESSION) == false) {
@@ -21,7 +35,6 @@ $query_categories = "SELECT * FROM categories";
 $result_categories = mysqli_query($koneksi, $query_categories);
 $categories = mysqli_fetch_all($result_categories, MYSQLI_ASSOC);
 
-// Mendapatkan buku berdasarkan kategori
 // Mendapatkan buku berdasarkan kategori
 if (isset($_GET['category_id'])) {
    $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : '';
@@ -56,14 +69,11 @@ if (!empty($category_id)) {
 ?>
 <!doctype html>
 <html lang="en">
-
-<!-- Mirrored from templates.iqonic.design/booksto/html/category.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Apr 2023 04:58:12 GMT -->
-
 <head>
    <!-- Required meta tags -->
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-   <title>Booksto - Responsive Bootstrap 4 Admin Dashboard Template</title>
+   <title>BookLib - Online Book Library</title>
    <!-- Favicon -->
    <link rel="shortcut icon" href="images/favicon.ico" />
    <!-- Bootstrap CSS -->
@@ -151,7 +161,7 @@ if (!empty($category_id)) {
                                                 <p class="font-size-13 line-height mb-1"><?php echo $book['penulis'] ?></p>
                                              </div>
                                              <div class="iq-product-action">
-                                                <a href="javascript:void();" class="ml-2"><i class="ri-heart-fill text-danger"></i></a>
+                                             <a type="button" class="addFavorite" name="<?= $book["id_buku"] ?>"><i class="ri-heart-line"></i></a>
                                              </div>
                                           </div>
                                        </div>
@@ -226,8 +236,51 @@ if (!empty($category_id)) {
    <script src="js/chart-custom.js"></script>
    <!-- Custom JavaScript -->
    <script src="js/custom.js"></script>
+   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+   <script>
+      const buttons = document.querySelectorAll(".addFavorite .ri-heart-line");
+
+      buttons.forEach(button => {
+         button.onclick = () => {
+            const id_buku = button.parentNode.getAttribute("name");
+            const id_user = <?php echo $_SESSION["id_user"]; ?>;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', 'index.php', true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onload = () => {
+               if (xhr.readyState === XMLHttpRequest.DONE) {
+                  if (xhr.status === 200) {
+                     button.classList.remove("ri-heart-line");
+                     button.classList.toggle("ri-heart-fill");
+                     button.classList.toggle("text-danger");
+
+                     if (button.classList.contains("ri-heart-fill")) {
+                        swal("Success !", "Buku berhasil ditambahkan ke Reading List!", "success");
+                        document.cookie = `addedBook_${id_buku}_user_${id_user}=true; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
+                     } else {
+                        button.classList.add("ri-heart-line");
+                        swal("Success !", "Buku berhasil dihapus ke Reading List!", "success");
+                        document.cookie = `addedBook_${id_buku}_user_${id_user}=true; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+                     }
+                  } else {
+                     alert("Error: " + xhr.status);
+                  }
+               }
+            }
+            const params = `id_user=${id_user}&id_buku=${id_buku}`;
+            xhr.send(params);
+         }
+         // Check if the book is already added by reading the cookie
+         const id_buku = button.parentNode.getAttribute("name");
+         const id_user = <?php echo $_SESSION["id_user"]; ?>;
+         const addedBookCookie = `addedBook_${id_buku}_user_${id_user}=true`;
+         if (document.cookie.includes(addedBookCookie)) {
+            button.classList.remove("ri-heart-line");
+            button.classList.add("ri-heart-fill", "text-danger");
+         }
+      });
+   </script>
 </body>
-
-<!-- Mirrored from templates.iqonic.design/booksto/html/category.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Apr 2023 04:58:32 GMT -->
-
 </html>

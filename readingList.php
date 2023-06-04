@@ -180,6 +180,7 @@ $user = getData("users");
    <script src="js/chart-custom.js"></script>
    <!-- Custom JavaScript -->
    <script src="js/custom.js"></script>
+   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
    <script>
       const buttons = document.querySelectorAll('#removeFavorite .ri-close-fill');
 
@@ -195,11 +196,13 @@ $user = getData("users");
             xhr.onload = () => {
                if (xhr.readyState === XMLHttpRequest.DONE) {
                   if (xhr.status === 200) {
-                     alert("Buku telah dihapus dari Reading List!");
+                     swal("Success !", "Book successfully removed to Reading List!", "success");
                      document.cookie = `addedBook_${id_buku}_user_${id_user}=true; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
-                     location.reload();
+                     setTimeout(function() {
+                        window.location.href = 'readingList.php';
+                     }, 1000);;
                   } else {
-                     alert("Terjadi kesalahan!");
+                     swal("Error !", "Something Went Wrong!", "failed");
                   }
                }
             }

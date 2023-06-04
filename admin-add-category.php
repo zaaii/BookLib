@@ -21,37 +21,25 @@ $id_category = !empty($_GET['id_category']) ? $_GET['id_category'] : '';
 //memeriksa apakah tombol submit sudah ditekan atau belum
 if (isset($_POST["submit"])) {
    if (insertDataCategory($_POST) > 0) {
-      echo "
-      <script>
-      alert('Data berhasil ditambahkan');
-      document.location.href = 'admin-category.php';
-      </script>
-      ";
+      $message = "Category successfully added";
+      $alertType = "success";
+      $alertIcon = "ri-check-line";
    } else {
-      echo "
-      <script>
-      alert('Data gagal ditambahkan');
-      document.location.href = 'admin-category.php';
-      </script>
-      ";
+      $message = "Category failed added";
+      $alertType = "danger";
+      $alertIcon = "ri-close-line";
    }
 }
 //memeriksa apakah tombol ubah sudah ditekan atau belum
 if (isset($_POST["ubah"])) {
    if (updateDataCategory($_POST) > 0) {
-      echo "
-      <script>
-      alert('Data berhasil diubah');
-      document.location.href = 'admin-category.php';
-      </script>
-      ";
+      $message = "Category successfully modified";
+      $alertType = "success";
+      $alertIcon = "ri-check-line";
    } else {
-      echo "
-      <script>
-      alert('Data gagal diubah');
-      document.location.href = 'admin-category.php';
-      </script>
-      ";
+      $message = "Category failed modified";
+      $alertType = "danger";
+      $alertIcon = "ri-close-line";
    }
 }
 
@@ -62,13 +50,11 @@ checkRole($_SESSION);
 <!doctype html>
 <html lang="en">
 
-<!-- Mirrored from templates.iqonic.design/booksto/html/admin-add-category.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Apr 2023 04:59:25 GMT -->
-
 <head>
    <!-- Required meta tags -->
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-   <title>Booksto - Responsive Bootstrap 4 Admin Dashboard Template</title>
+   <title>BookLib - Online Book Library</title>
    <!-- Favicon -->
    <link rel="shortcut icon" href="images/favicon.ico" />
    <!-- Bootstrap CSS -->
@@ -109,6 +95,17 @@ checkRole($_SESSION);
                            <h4 class="card-title">Add Categories</h4>
                         </div>
                   </div>
+                  <?php if (isset($message)) : ?>
+                     <div class="alert text-white bg-<?= $alertType ?> mr-4 ml-4" role="alert">
+                        <div class="iq-alert-icon">
+                           <i class="<?= $alertIcon ?>"></i>
+                        </div>
+                        <div class="iq-alert-text"><?= $message ?></div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                           <i class="ri-close-line"></i>
+                        </button>
+                     </div>
+                  <?php endif; ?>
                   <div class="iq-card-body">
                      <form action="" method="post">
                         <div class="form-group">
@@ -127,14 +124,25 @@ checkRole($_SESSION);
             </div>
          <?php endif; ?>
          <?php if (!empty($id_category)) : ?>
-            <?php $category = getData("category WHERE id_category = $id_category")[0]; ?>
+            <?php $category = getData("categories WHERE id_category = $id_category")[0]; ?>
             <div class="iq-header-title">
-               <h4 class="card-title">Add Categories</h4>
+               <h4 class="card-title">Edit Categories</h4>
             </div>
          </div>
+         <?php if (isset($message)) : ?>
+            <div class="alert text-white bg-<?= $alertType ?> mr-4 ml-4" role="alert">
+               <div class="iq-alert-icon">
+                  <i class="<?= $alertIcon ?>"></i>
+               </div>
+               <div class="iq-alert-text"><?= $message ?></div>
+               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <i class="ri-close-line"></i>
+               </button>
+            </div>
+         <?php endif; ?>
          <div class="iq-card-body">
             <form action="" method="post">
-            <input type="hidden" name="id_category" value="<?= $category["id_category"] ?>">
+               <input type="hidden" name="id_category" value="<?= $category["id_category"] ?>">
                <div class="form-group">
                   <label>Category Name:</label>
                   <input type="text" name="category_name" id="category_name" class="form-control" required value="<?= $category["category_name"] ?>">
@@ -215,7 +223,4 @@ checkRole($_SESSION);
    <!-- Custom JavaScript -->
    <script src="js/custom.js"></script>
 </body>
-
-<!-- Mirrored from templates.iqonic.design/booksto/html/admin-add-category.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Apr 2023 04:59:25 GMT -->
-
 </html>

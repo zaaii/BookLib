@@ -19,6 +19,25 @@ $user = getData("users");
 // Mengambil data buku di database
 $categories = getData("categories");
 
+if (isset($_GET['id_category'])) {
+   $id_category = $_GET['id_category'];
+   if (deleteDataCategory($id_category) > 0) {
+      $message = "Category Successfully Deleted";
+      $alertType = "primary";
+      $alertIcon = "ri-check-line";
+      echo "<script>
+      setTimeout(function(){
+         window.location.href = 'admin-category.php';
+      }, 2000);;</script>";
+
+
+   } else {
+      $message = "Category failed to Delete";
+      $alertType = "danger";
+      $alertIcon = "ri-close-line";
+   }
+}
+
 // Check Role user
 checkRole($_SESSION);
 
@@ -27,13 +46,11 @@ checkRole($_SESSION);
 <!doctype html>
 <html lang="en">
 
-<!-- Mirrored from templates.iqonic.design/booksto/html/admin-category.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Apr 2023 04:58:39 GMT -->
-
 <head>
    <!-- Required meta tags -->
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-   <title>Booksto - Responsive Bootstrap 4 Admin Dashboard Template</title>
+   <title>BookLib - Online Book Library</title>
    <!-- Favicon -->
    <link rel="shortcut icon" href="images/favicon.ico" />
    <!-- Bootstrap CSS -->
@@ -78,6 +95,17 @@ checkRole($_SESSION);
                         <a href="admin-add-category.php" class="btn btn-primary">Add New Category</a>
                      </div>
                   </div>
+                  <?php if (isset($message)) : ?>
+                     <div class="alert text-white bg-<?= $alertType ?> mr-4 ml-4" role="alert">
+                        <div class="iq-alert-icon">
+                           <i class="<?= $alertIcon ?>"></i>
+                        </div>
+                        <div class="iq-alert-text"><?= $message ?></div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                           <i class="ri-close-line"></i>
+                        </button>
+                     </div>
+                  <?php endif; ?>
                   <div class="iq-card-body">
                      <div class="table-responsive">
                         <table class="data-tables table table-striped table-bordered" style="width:100%">
@@ -91,23 +119,23 @@ checkRole($_SESSION);
                            </thead>
                            <?php $i = 1; ?>
                            <?php foreach ($categories as $category) : ?>
-                           <tbody>
-                              <tr>
-                                 <td><?= $i; ?></td>
-                                 <td><?= $category["category_name"] ?></td>
-                                 <td>
-                                    <p class="mb-0"><?= $category["category_description"] ?></p>
-                                 </td>
-                                 <td>
-                                    <div class="flex align-items-center list-user-action">
-                                       <input type="hidden" name="id_category" value="<?= $category["id_category"] ?>">
-                                       <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" href="admin-add-category.php?id_category=<?= $category["id_category"]; ?>"><i class="ri-pencil-line"></i></a>
-                                             <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="Delete" href="delete-category.php?id_category=<?= $category["id_category"]; ?>"><i class="ri-delete-bin-line"></i></a>
-                                    </div>
-                                 </td>
-                              </tr>
-                           </tbody>
-                           <?php $i++; ?>
+                              <tbody>
+                                 <tr>
+                                    <td><?= $i; ?></td>
+                                    <td><?= $category["category_name"] ?></td>
+                                    <td>
+                                       <p class="mb-0"><?= $category["category_description"] ?></p>
+                                    </td>
+                                    <td>
+                                       <div class="flex align-items-center list-user-action">
+                                          <input type="hidden" name="id_category" value="<?= $category["id_category"] ?>">
+                                          <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" href="admin-add-category.php?id_category=<?= $category["id_category"]; ?>"><i class="ri-pencil-line"></i></a>
+                                          <a class="bg-primary" data-toggle="tooltip" data-placement="top" name="delete" href="?id_category=<?= $category["id_category"] ?>"><i class="ri-delete-bin-line"></i></a>
+                                       </div>
+                                    </td>
+                                 </tr>
+                              </tbody>
+                              <?php $i++; ?>
                            <?php endforeach ?>
                         </table>
                      </div>

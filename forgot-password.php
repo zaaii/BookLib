@@ -4,19 +4,13 @@ require("model.php");
 
 if(isset($_POST["submit"])) {
     if(forgetPassword($_POST) > 0) {
-        echo "
-            <script>
-                alert('Password berhasil direset!, Silahkan cek email anda');
-                document.location.href = 'login.php';
-            </script>
-        ";
+        $message = "<strong> Password successfully reset!</strong>, Please check your email";
+        $alertType = "success";
+        $alertIcon = "ri-check-line";
     } else {
-        echo "
-            <script>
-                alert('Password gagal direset!, Pastikan Email anda benar');
-                document.location.href = 'forgot-password.php';
-            </script>
-        ";
+        $message = "<strong> Password failed to reset!</strong>, Make sure your Email is correct";
+        $alertType = "danger";
+        $alertIcon = "ri-close-line";
     }
 }
 ?>
@@ -55,6 +49,17 @@ if(isset($_POST["submit"])) {
                           <div class="sign-in-from bg-primary rounded">
                                 <h3 class="mb-0 text-white">Reset Password</h3>
                                 <p class="text-white">Enter your email address and we'll send you an email with instructions to reset your password.</p>
+                                <?php if (isset($message)) : ?>
+                                    <div class="alert alert-<?= $alertType ?> mr-0 ml-0" role="alert">
+                                        <div class="iq-alert-icon">
+                                            <i class="<?= $alertIcon ?>"></i>
+                                        </div>
+                                        <div class="iq-alert-text"><?= $message ?></div>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <i class="ri-close-line"></i>
+                                        </button>
+                                    </div>
+                                <?php endif; ?>
                                 <form method="POST" class="mt-4 form-text">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Email address</label>

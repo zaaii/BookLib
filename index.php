@@ -229,11 +229,11 @@ if (isSessionStillAlive($_SESSION) == false) {
                      button.classList.toggle("text-danger");
 
                      if (button.classList.contains("ri-heart-fill")) {
-                        swal("Success !", "Buku berhasil ditambahkan ke Reading List!", "success");
+                        swal("Success !", "Book successfully added to Reading List!", "success");
                         document.cookie = `addedBook_${id_buku}_user_${id_user}=true; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
                      } else {
                         button.classList.add("ri-heart-line");
-                        swal("Success !", "Buku berhasil dihapus ke Reading List!", "success");
+                        swal("Success !", "Book successfully removed to Reading List!", "success");
                         document.cookie = `addedBook_${id_buku}_user_${id_user}=true; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
                      }
                   } else {

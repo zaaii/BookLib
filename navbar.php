@@ -73,7 +73,11 @@
                     </li>
                     <li class="line-height pt-3">
                         <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
-                            <img src="resources/profile/<?= $_SESSION['user_photo'] ?>" class="img-fluid rounded-circle mr-3" alt="user">
+                            <?php if (empty($_SESSION['user_photo'])) : ?>
+                                <img src="resources/profile/default.jpg" class="img-fluid rounded-circle mr-3" alt="user">
+                            <?php else : ?>
+                                <img src="resources/profile/<?= $_SESSION['user_photo'] ?>" class="img-fluid rounded-circle mr-3" alt="user">
+                            <?php endif; ?>
                             <div class="caption">
                                 <h6 class="mb-1 line-height"><?= $_SESSION['full_name']; ?>
                                 </h6>

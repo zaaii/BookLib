@@ -13,27 +13,18 @@ if(isset($_POST["submit"])) {
 
     if($newpass === $newpass2) {
         if(newPassword($newpass, $newpass2)){
-            echo "
-                <script>
-                    alert('Password berhasil direset!, Silahkan login');
-                    document.location.href = 'login.php';
-                </script>
-            ";
+            $message = "<strong> Password reset successfully!</strong>, please login";
+            $alertType = "success";
+            $alertIcon = "ri-check-line";
         } else {
-            echo "
-                <script>
-                    alert('Password gagal direset!, Silahkan Kontak Admin');
-                    document.reload();
-                </script>
-            ";
+            $message = "<strong> Password failed to reset!</strong>,Please Contact Admin";
+            $alertType = "denger";
+            $alertIcon = "ri-close-line";
         }
     } else {
-        echo "
-            <script>
-                alert('Password tidak sama!');
-                document.location.href = 'reset-password.php';
-            </script>
-        ";
+        $message = "<strong> Passwords aren't the same!</strong>";
+        $alertType = "warning";
+        $alertIcon = "ri-alert-line";
     }
 }
 ?>
@@ -72,6 +63,17 @@ if(isset($_POST["submit"])) {
                           <div class="sign-in-from bg-primary rounded">
                                 <h3 class="mb-0 text-white">New Password</h3>
                                 <p class="text-white">Enter your <strong>New Password</strong> and you'll can sign-in again.</p>
+                                <?php if (isset($message)) : ?>
+                                    <div class="alert alert-<?= $alertType ?> mr-0 ml-0" role="alert">
+                                        <div class="iq-alert-icon">
+                                            <i class="<?= $alertIcon ?>"></i>
+                                        </div>
+                                        <div class="iq-alert-text"><?= $message ?></div>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <i class="ri-close-line"></i>
+                                        </button>
+                                    </div>
+                                <?php endif; ?>
                                 <form method="POST" class="mt-4 form-text">
                                     <div class="form-group">
                                         <label for="npass">New Password</label>
