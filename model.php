@@ -1,6 +1,6 @@
 <?php
 require("koneksi.php");
-
+ 
 //fungsi untuk menampilkan data
 function getData($tabel)
 {
@@ -191,23 +191,25 @@ function register($data)
 {
     global $koneksi;
 
-    $id_user = uniqid();
     $full_name = htmlspecialchars($data["full_name"]);
     $email = htmlspecialchars($data["email"]);
-    $password = mysqli_real_escape_string($koneksi, $data["password"]);
+    
+    //mysqli_real_escape_string blm dapat penggantinya
+    // $password = mysqli_real_escape_string($koneksi, $data["password"]);
+    $password = htmlspecialchars($data["password"]);
 
     // Enkripsi password
     $password = password_hash($password, PASSWORD_DEFAULT);
 
     // Tambahkan user baru ke database
-    $query = "INSERT INTO users VALUES('$id_user', '$full_name', '$email', '$password', '', '', '', 'member')";
-    $result = mysqli_query($koneksi, $query);
-
-    return mysqli_affected_rows($koneksi);
+    $query = "INSERT INTO users VALUES('', '$full_name', '$email', '$password', '', '', '', 'member')";
+    $result = oci_parse($koneksi, $query);
+    oci_execute($result);
+    return oci_num_rows($result);
 }
 
 // Fungsi Login
-
+// Ini ku konfik sesuai koneksi
 function login($data)
 {
     global $koneksi;
@@ -216,11 +218,13 @@ function login($data)
     $password = $data["password"];
 
     // Cek apakah email ada di database
-    $result = mysqli_query($koneksi, "SELECT * FROM users WHERE email = '$email'");
+    $sql = "SELECT * FROM users WHERE email = '$email'";
+    $result = oci_parse($koneksi, $sql);
+    oci_execute($result);
 
-    if (mysqli_num_rows($result) === 1) {
+    if ($rows = oci_fetch_all($result,$res) === 1) {
         // Cek password
-        $row = mysqli_fetch_assoc($result);
+        $row = oci_fetch_assoc($result);
         if (password_verify($password, $row["password"])) {
             // Set session
             $_SESSION["login"] = true;
