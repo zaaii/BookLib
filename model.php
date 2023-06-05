@@ -7,15 +7,21 @@ use PHPMailer\PHPMailer\PHPMailer;
 //fungsi untuk menampilkan data
 function getData($tabel)
 {
-    //digunakan untuk mengacu atau merujuk ke global variable
+    // Digunakan untuk mengacu atau merujuk ke global variable
     global $koneksi;
-    $result = mysqli_query($koneksi, "SELECT * FROM $tabel");
+
+    $query = "SELECT * FROM $tabel";
+    $stmt = oci_parse($koneksi, $query);
+    oci_execute($stmt);
+
     $rows = [];
-    while ($row = mysqli_fetch_assoc($result)) {
+    while ($row = oci_fetch_assoc($stmt)) {
         $rows[] = $row;
     }
+
     return $rows;
 }
+
 
 //fungsi untuk menambah data buku
 function insertDataBuku($data)
@@ -46,9 +52,10 @@ function insertDataBuku($data)
     VALUES 
     ('', '$judul_buku', '$penulis', '$penerbit', '$tahun_terbit', '$gambar_buku', '$pdf_buku', '$deskripsi_buku', '$category_ids')
     ";
-    mysqli_query($koneksi, $query);
+    $stmt = oci_parse($koneksi, $query);
+    oci_execute($stmt);
 
-    return mysqli_affected_rows($koneksi);
+    return oci_num_rows($stmt);
 }
 
 //fungsi untuk mengedit data buku
@@ -90,19 +97,35 @@ function updateDataBuku($data)
 
     // Query update data
     $query = "UPDATE buku SET 
-                judul_buku = '$judul_buku',
-                penulis = '$penulis',
-                penerbit = '$penerbit',
-                tahun_terbit = '$tahun_terbit',
-                gambar_buku = '$gambar_buku',
-                pdf_buku = '$pdf_buku',
-                deskripsi_buku = '$deskripsi_buku',
-                category_ids = '$category_ids'
-            WHERE id_buku = $id_buku";
+                judul_buku = :judul_buku,
+                penulis = :penulis,
+                penerbit = :penerbit,
+                tahun_terbit = :tahun_terbit,
+                gambar_buku = :gambar_buku,
+                pdf_buku = :pdf_buku,
+                deskripsi_buku = :deskripsi_buku,
+                category_ids = :category_ids
+            WHERE id_buku = :id_buku";
 
-    mysqli_query($koneksi, $query);
+    $stmt = oci_parse($koneksi, $query);
 
-    return mysqli_affected_rows($koneksi);
+    oci_bind_by_name($stmt, ':judul_buku', $judul_buku);
+    oci_bind_by_name($stmt, ':penulis', $penulis);
+    oci_bind_by_name($stmt, ':penerbit', $penerbit);
+    oci_bind_by_name($stmt, ':tahun_terbit', $tahun_terbit);
+    oci_bind_by_name($stmt, ':gambar_buku', $gambar_buku);
+    oci_bind_by_name($stmt, ':pdf_buku', $pdf_buku);
+    oci_bind_by_name($stmt, ':deskripsi_buku', $deskripsi_buku);
+    oci_bind_by_name($stmt, ':category_ids', $category_ids);
+    oci_bind_by_name($stmt, ':id_buku', $id_buku);
+
+    oci_execute($stmt);
+
+    $rowsAffected = oci_num_rows($stmt);
+
+    oci_free_statement($stmt);
+
+    return $rowsAffected;
 }
 
 function deleteDataBuku($id_buku)
@@ -116,8 +139,25 @@ function deleteDataBuku($id_buku)
     //delete pdf book from folder
     $pdf_buku = $bukuSebelumnya["pdf_buku"];
     unlink("resources/ebook/" . $pdf_buku);
-    mysqli_query($koneksi, "DELETE FROM buku WHERE id_buku = $id_buku");
-    return mysqli_affected_rows($koneksi);
+    $sql = "DELETE FROM buku WHERE id_buku = :id_buku";
+
+    // Prepare the statement
+    $stmt = oci_parse($koneksi, $sql);
+
+    // Bind the parameter
+    oci_bind_by_name($stmt, ":id_buku", $id_buku);
+
+    // Execute the statement
+    oci_execute($stmt);
+
+    // Get the number of affected rows
+    $numRows = oci_num_rows($stmt);
+
+    // Free the statement
+    oci_free_statement($stmt);
+
+    // Return the number of affected rows
+    return $numRows;
 }
 
 /* 
@@ -127,11 +167,15 @@ function deleteDataBuku($id_buku)
 function getDataCari($query)
 {
     global $koneksi;
-    $result = mysqli_query($koneksi, $query);
+    $stmt = oci_parse($koneksi, $query);
+    oci_execute($stmt);
+
     $rows = [];
-    while ($row = mysqli_fetch_assoc($result)) {
+    while ($row = oci_fetch_assoc($stmt)) {
         $rows[] = $row;
     }
+    oci_free_statement($stmt);
+
     return $rows;
 }
 
@@ -154,50 +198,91 @@ function cariDataBuku($keyword)
 function getFavorit($id_user)
 {
     global $koneksi;
-    $query = "SELECT * FROM favorit WHERE id_user = $id_user";
-    $result = mysqli_query($koneksi, $query);
-    $rows = [];
-    while ($row = mysqli_fetch_assoc($result)) {
-        $rows[] = $row;
-    }
-    return $rows;
+   // Prepare the statement for OCI
+   $stmt = oci_parse($koneksi, "SELECT * FROM favorit WHERE id_user = :id_user");
+   oci_bind_by_name($stmt, ":id_user", $id_user);
+   oci_execute($stmt);
+
+   $rows = [];
+   while ($row = oci_fetch_assoc($stmt)) {
+       $rows[] = $row;
+   }
+   oci_free_statement($stmt);
+
+   return $rows;
 }
 
 function isFavorite($id_user, $id_buku)
 {
     global $koneksi;
-    $query = "SELECT * FROM favorit WHERE id_user = $id_user AND id_buku = $id_buku";
-    $result = mysqli_query($koneksi, $query);
-    return mysqli_num_rows($result) > 0;
+
+    // Prepare the statement for OCI
+    $stmt = oci_parse($koneksi, "SELECT * FROM favorit WHERE id_user = :id_user AND id_buku = :id_buku");
+
+    // Bind the parameters
+    oci_bind_by_name($stmt, ":id_user", $id_user);
+    oci_bind_by_name($stmt, ":id_buku", $id_buku);
+    oci_execute($stmt);
+
+    // Check if any rows are returned
+    $numRows = oci_fetch_all($stmt, $rows);
+
+    // Free the statement
+    oci_free_statement($stmt);
+
+    return $numRows > 0;
 }
 
 function removeFavorite($id_user, $id_buku)
 {
     global $koneksi;
-    $query = "DELETE FROM favorit WHERE id_user = $id_user AND id_buku = $id_buku";
-    $result = mysqli_query($koneksi, $query);
+
+    // Prepare the statement for OCI
+    $stmt = oci_parse($koneksi, "DELETE FROM favorit WHERE id_user = :id_user AND id_buku = :id_buku");
+    oci_bind_by_name($stmt, ":id_user", $id_user);
+    oci_bind_by_name($stmt, ":id_buku", $id_buku);
+    oci_execute($stmt);
+
+    // Free the statement
+    oci_free_statement($stmt);
 }
 
 function addFavorite($id_user, $id_buku)
 {
     global $koneksi;
-    // Perform the necessary database operations to add the book to favorites for the given user
-    $query = "INSERT INTO favorit VALUES ('', '$id_user', '$id_buku')";
-    $result = mysqli_query($koneksi, $query);
+
+    // Prepare the statement for OCI
+    $stmt = oci_parse($koneksi, "INSERT INTO favorit VALUES ('', :id_user, :id_buku)");
+    oci_bind_by_name($stmt, ":id_user", $id_user);
+    oci_bind_by_name($stmt, ":id_buku", $id_buku);
+
+    // Execute the statement
+    oci_execute($stmt);
+
+    // Free the statement
+    oci_free_statement($stmt);
 }
 
 // recommended books
 function recommendation()
 {
     global $koneksi;
-    $query = "SELECT * FROM buku ORDER BY RAND() LIMIT 5";
-    $result = mysqli_query($koneksi, $query);
+
+    // Prepare the statement for OCI
+    $stmt = oci_parse($koneksi, "SELECT * FROM (SELECT * FROM buku ORDER BY DBMS_RANDOM.RANDOM) WHERE ROWNUM <= 5");
+    oci_execute($stmt);
+
     $rows = [];
-    while ($row = mysqli_fetch_assoc($result)) {
+    while ($row = oci_fetch_assoc($stmt)) {
         $rows[] = $row;
     }
+
+    // Free the statement
+    oci_free_statement($stmt);
+
     return $rows;
 }
+
 
 /*
     Fungsi Auth
@@ -211,27 +296,48 @@ function register($data)
 
     $full_name = htmlspecialchars($data["full_name"]);
     $email = htmlspecialchars($data["email"]);
-    $password = mysqli_real_escape_string($koneksi, $data["password"]);
+    $password =  $data["password"];
     $date_created = date("Y-m-d");
 
     // Enkripsi password
     $password = password_hash($password, PASSWORD_DEFAULT);
 
     $id_user = rand(1111, 9999);
+    $query = "INSERT INTO users (id_user, full_name, email, password, role, date_created) VALUES(:id_user, :full_name, :email, :password, 'member', TO_DATE(:date_created, 'YYYY-MM-DD'))";
 
-    // Tambahkan user baru ke database
-    $query = "INSERT INTO users (id_user, full_name, email, password, role, date_created) VALUES('$id_user', '$full_name', '$email', '$password', 'member', '$date_created')";
-    $result = mysqli_query($koneksi, $query);
+    // Prepare the statement for OCI
+    $stmt = oci_parse($koneksi, $query);
 
-    return mysqli_affected_rows($koneksi);
+    // Bind the parameters
+    oci_bind_by_name($stmt, ":id_user", $id_user);
+    oci_bind_by_name($stmt, ":full_name", $full_name);
+    oci_bind_by_name($stmt, ":email", $email);
+    oci_bind_by_name($stmt, ":password", $password);
+    oci_bind_by_name($stmt, ":date_created", $date_created);
+    oci_execute($stmt);
+
+    $numRows = oci_num_rows($stmt);
+
+    // Free the statement
+    oci_free_statement($stmt);
+
+    return $numRows;
 }
+
 
 function isEmailExist($email)
 {
     global $koneksi;
-    $query = "SELECT * FROM users WHERE email = '$email'";
-    $result = mysqli_query($koneksi, $query);
-    return mysqli_num_rows($result) > 0;
+
+    // Prepare the statement for OCI
+    $stmt = oci_parse($koneksi, "SELECT * FROM users WHERE email = :email");
+    oci_bind_by_name($stmt, ":email", $email);
+    oci_execute($stmt);
+
+    $numRows = oci_fetch_all($stmt, $rows);
+    oci_free_statement($stmt);
+
+    return $numRows > 0;
 }
 
 // Fungsi Login
@@ -244,28 +350,32 @@ function login($data)
     $password = $data["password"];
 
     // Cek apakah email ada di database
-    $result = mysqli_query($koneksi, "SELECT * FROM users WHERE email = '$email'");
+    $stmt = oci_parse($koneksi, "SELECT * FROM users WHERE email = :email");
+    oci_bind_by_name($stmt, ":email", $email);
+    oci_execute($stmt);
 
-    if (mysqli_num_rows($result) === 1) {
+    // Fetch the row
+    $row = oci_fetch_assoc($stmt);
+
+    if ($row !== false) {
         // Cek password
-        $row = mysqli_fetch_assoc($result);
-        if (password_verify($password, $row["password"])) {
+        if (password_verify($password, $row["PASSWORD"])) {
             // Set session
             $_SESSION["login"] = true;
-            $_SESSION["id_user"] = $row["id_user"];
-            $_SESSION["full_name"] = $row["full_name"];
-            $_SESSION["email"] = $row["email"];
-            $_SESSION["password"] = $row["password"];
-            $_SESSION["gender"] = $row["gender"];
-            $_SESSION["birth_date"] = $row["birth_date"];
-            $_SESSION["user_photo"] = $row["user_photo"];
-            $_SESSION["role"] = $row["role"];
+            $_SESSION["id_user"] = $row["ID_USER"];
+            $_SESSION["full_name"] = $row["FULL_NAME"];
+            $_SESSION["email"] = $row["EMAIL"];
+            $_SESSION["password"] = $row["PASSWORD"];
+            $_SESSION["gender"] = $row["GENDER"];
+            $_SESSION["birth_date"] = $row["BIRTH_DATE"];
+            $_SESSION["user_photo"] = $row["USER_PHOTO"];
+            $_SESSION["role"] = $row["ROLE"];
 
             // Cek apakah remember me dicentang
             if (isset($data["remember"])) {
                 // Buat cookie
-                setcookie("id_user", $row["id_user"], time() + 60);
-                setcookie("key", hash("sha256", $row["email"]), time() + 60);
+                setcookie("id_user", $row["ID_USER"], time() + 60);
+                setcookie("key", hash("sha256", $row["EMAIL"]), time() + 60);
             }
 
             return true;
@@ -275,33 +385,19 @@ function login($data)
     return false;
 }
 
-// Fungsi Logout
-
-function logout()
-{
-    // Hapus session
-    $_SESSION = [];
-    session_destroy();
-
-    // Hapus cookie
-    setcookie("id_user", "", time() - 60);
-    setcookie("key", "", time() - 60);
-
-    header("Location: index.php");
-    exit;
-}
-
 // Fungsi Delete User
 function deleteUser($id)
 {
     global $koneksi;
 
     // Hapus foto profil user
-    $query2 = "SELECT user_photo FROM users WHERE id_user = $id";
-    $results = mysqli_query($koneksi, $query2);
-    if ($results && mysqli_num_rows($results) > 0) {
-        $resultz = mysqli_fetch_assoc($results);
-        $foto = $resultz['user_photo'];
+    $query2 = "SELECT user_photo FROM users WHERE id_user = :id";
+    $stmt2 = oci_parse($koneksi, $query2);
+    oci_bind_by_name($stmt2, ":id", $id);
+    oci_execute($stmt2);
+
+    if (($row = oci_fetch_assoc($stmt2)) !== false) {
+        $foto = $row['USER_PHOTO'];
 
         // Check if the photo exists before unlinking
         if (!empty($foto) && file_exists("resources/profile/$foto")) {
@@ -318,25 +414,32 @@ function deleteUser($id)
             }
         }
     }
-    $query = "DELETE FROM users WHERE id_user = $id";
-    $result = mysqli_query($koneksi, $query);
+
+    $query = "DELETE FROM users WHERE id_user = :id";
+    $stmt = oci_parse($koneksi, $query);
+    oci_bind_by_name($stmt, ":id", $id);
+    $result = oci_execute($stmt);
 
     return $result;
 }
 
+
 // Fungsi Check apakah User yang adap ada sesion masih ada di database
 function isSessionStillAlive($session)
 {
+    global $koneksi;
 
     // Mengambil Informasi Dari Session Aktif
     $id = $session['id_user'];
     $email = $session['email'];
 
     // Mengambil Informasi user dari database
-    global $koneksi;
-    $query = "SELECT * FROM users WHERE id_user = '$id' AND email = '$email'";
-    $result = mysqli_query($koneksi, $query);
-    $result = mysqli_fetch_assoc($result);
+    $query = "SELECT * FROM users WHERE id_user = :id AND email = :email";
+    $stmt = oci_parse($koneksi, $query);
+    oci_bind_by_name($stmt, ":id", $id);
+    oci_bind_by_name($stmt, ":email", $email);
+    oci_execute($stmt);
+    $result = oci_fetch_assoc($stmt);
 
     if ($id == $result['id_user'] && $email == $result['email']) {
         return true;
@@ -344,6 +447,7 @@ function isSessionStillAlive($session)
         return false;
     }
 }
+
 
 /* 
     Fungsi Edit Profil
@@ -368,15 +472,24 @@ function editProfil($data)
 
     // Query update data
     $query = "UPDATE users SET 
-                full_name = '$full_name',
-                email = '$email',
-                gender = '$gender',
-                user_photo = '$user_photo',
-                birth_date = '$birth_date'
-            WHERE id_user = $id_user";
+                full_name = :full_name,
+                email = :email,
+                gender = :gender,
+                user_photo = :user_photo,
+                birth_date = :birth_date
+            WHERE id_user = :id_user";
 
-    mysqli_query($koneksi, $query);
-    return mysqli_affected_rows($koneksi);
+    $stmt = oci_parse($koneksi, $query);
+    oci_bind_by_name($stmt, ":full_name", $full_name);
+    oci_bind_by_name($stmt, ":email", $email);
+    oci_bind_by_name($stmt, ":gender", $gender);
+    oci_bind_by_name($stmt, ":user_photo", $user_photo);
+    oci_bind_by_name($stmt, ":birth_date", $birth_date);
+    oci_bind_by_name($stmt, ":id_user", $id_user);
+
+    oci_execute($stmt);
+
+    return oci_num_rows($stmt);
 }
 
 //change password
@@ -385,13 +498,15 @@ function changePassword($data)
     global $koneksi;
 
     $id_user = $_SESSION["id_user"];
-    $password = mysqli_real_escape_string($koneksi, $data["cpass"]);
-    $new_password = mysqli_real_escape_string($koneksi, $data["npass"]);
+    $password = $_POST["cpass"];
+    $new_password = $_POST["npass"];
 
     // Cek password
-    $result = mysqli_query($koneksi, "SELECT * FROM users WHERE id_user = '$id_user'");
-    $row = mysqli_fetch_assoc($result);
-    if (!password_verify($password, $row["password"])) {
+    $query = "SELECT * FROM users WHERE id_user = '$id_user'";
+    $stmt = oci_parse($koneksi, $query);
+    oci_execute($stmt);
+    $row = oci_fetch_assoc($stmt);
+    if (!password_verify($password, $row["PASSWORD"])) {
         $messagePass = "Password lama salah!";
         return false;
     }
@@ -400,17 +515,14 @@ function changePassword($data)
     $new_password = password_hash($new_password, PASSWORD_DEFAULT);
 
     // Query update data
-    $query = "UPDATE users SET password = '$new_password' WHERE id_user = $id_user";
-    mysqli_query($koneksi, $query);
+    $query = "UPDATE users SET password = :new_password WHERE id_user = :id_user";
+    $stmt = oci_parse($koneksi, $query);
+    oci_bind_by_name($stmt, ":new_password", $new_password);
+    oci_bind_by_name($stmt, ":id_user", $id_user);
+    oci_execute($stmt);
 
-    return mysqli_affected_rows($koneksi);
+    return oci_num_rows($stmt);
 }
-
-/* 
-    Fungsi Pencarian
-*/
-
-/*
 
 /*
     Fungsi Auth
@@ -450,9 +562,10 @@ function insertDataCategory($data)
     VALUES 
     ('$id_category', '$category_name', '$category_description')
     ";
-    mysqli_query($koneksi, $query);
+    $stmt = oci_parse($koneksi, $query);
+    oci_execute($stmt);
 
-    return mysqli_affected_rows($koneksi);
+    return oci_num_rows($stmt);
 }
 
 function deleteDataCategory($id_category)
@@ -460,8 +573,12 @@ function deleteDataCategory($id_category)
     global $koneksi;
 
     // Query delete data
-    mysqli_query($koneksi, "DELETE FROM categories WHERE id_category = '$id_category'");
-    return mysqli_affected_rows($koneksi);
+    $query = "DELETE FROM categories WHERE id_category = :id_category";
+    $stmt = oci_parse($koneksi, $query);
+    oci_bind_by_name($stmt, ":id_category", $id_category);
+    oci_execute($stmt);
+
+    return oci_num_rows($stmt);
 }
 
 function updateDataCategory($data)
@@ -475,11 +592,16 @@ function updateDataCategory($data)
     $category_description = htmlspecialchars($data["category_description"]);
 
     // Query update data
-    $query = "UPDATE categories SET category_name = '$category_name', category_description = '$category_description' WHERE id_category = '$id_category'";
-    mysqli_query($koneksi, $query);
+    $query = "UPDATE categories SET category_name = :category_name, category_description = :category_description WHERE id_category = :id_category";
+    $stmt = oci_parse($koneksi, $query);
+    oci_bind_by_name($stmt, ":category_name", $category_name);
+    oci_bind_by_name($stmt, ":category_description", $category_description);
+    oci_bind_by_name($stmt, ":id_category", $id_category);
+    oci_execute($stmt);
 
-    return mysqli_affected_rows($koneksi);
+    return oci_num_rows($stmt);
 }
+
 
 function checkRole($session)
 {
@@ -495,14 +617,22 @@ function forgetPassword($data)
     global $koneksi;
 
     $email = $data["email"];
-    $result = mysqli_query($koneksi, "SELECT * FROM users WHERE email = '$email'");
-    $row = mysqli_fetch_assoc($result);
-    if (mysqli_num_rows($result) === 1) {
+    $result = oci_parse($koneksi, "SELECT * FROM users WHERE email = :email");
+    oci_bind_by_name($result, ":email", $email);
+    oci_execute($result);
+    $row = oci_fetch_assoc($result);
+
+    if (oci_num_rows($result) === 1) {
         $id_user = $row["id_user"];
         $token = uniqid();
         $expiration = date('Y-m-d H:i:s', strtotime('+1 hour'));
-        $query = "INSERT INTO forgot_password VALUES ('', '$id_user', '$token', '$expiration')";
-        mysqli_query($koneksi, $query);
+
+        $query = "INSERT INTO forgot_password VALUES ('', :id_user, :token, TO_DATE(:expiration, 'YYYY-MM-DD HH24:MI:SS'))";
+        $stmt = oci_parse($koneksi, $query);
+        oci_bind_by_name($stmt, ":id_user", $id_user);
+        oci_bind_by_name($stmt, ":token", $token);
+        oci_bind_by_name($stmt, ":expiration", $expiration);
+        oci_execute($stmt);
 
         $mailer = new PHPMailer(true);
 
@@ -548,18 +678,31 @@ function newPassword($npass, $npass2)
         return false;
     }
 
-    $result = mysqli_query($koneksi, "SELECT * FROM forgot_password WHERE token = '$token'");
-    $row = mysqli_fetch_assoc($result);
-    if (mysqli_num_rows($result) === 1) {
+    $result = oci_parse($koneksi, "SELECT * FROM forgot_password WHERE token = :token");
+    oci_bind_by_name($result, ":token", $token);
+    oci_execute($result);
+    $row = oci_fetch_assoc($result);
+
+    if (oci_num_rows($result) === 1) {
         $id_user = $row["user_id"];
-        $resultUser = mysqli_query($koneksi, "SELECT * FROM users WHERE id_user = '$id_user'");
-        $rowUser = mysqli_fetch_assoc($resultUser);
+
+        $resultUser = oci_parse($koneksi, "SELECT * FROM users WHERE id_user = :id_user");
+        oci_bind_by_name($resultUser, ":id_user", $id_user);
+        oci_execute($resultUser);
+        $rowUser = oci_fetch_assoc($resultUser);
         $email = $rowUser["email"];
         $npassHash = password_hash($npass, PASSWORD_DEFAULT);
-        $query = "UPDATE users SET password = '$npassHash' WHERE id_user = '$id_user'";
-        mysqli_query($koneksi, $query);
-        $query2 = "DELETE FROM forgot_password WHERE token = '$token'";
-        mysqli_query($koneksi, $query2);
+
+        $query = "UPDATE users SET password = :npassHash WHERE id_user = :id_user";
+        $stmt = oci_parse($koneksi, $query);
+        oci_bind_by_name($stmt, ":npassHash", $npassHash);
+        oci_bind_by_name($stmt, ":id_user", $id_user);
+        oci_execute($stmt);
+
+        $query2 = "DELETE FROM forgot_password WHERE token = :token";
+        $stmt2 = oci_parse($koneksi, $query2);
+        oci_bind_by_name($stmt2, ":token", $token);
+        oci_execute($stmt2);
 
         $mailer = new PHPMailer(true);
 
@@ -590,7 +733,6 @@ function newPassword($npass, $npass2)
 
             return true;
         } catch (Exception $e) {
-
             return false;
         }
     } else {
@@ -598,14 +740,18 @@ function newPassword($npass, $npass2)
     }
 }
 
+
 function checkToken($token)
 {
     global $koneksi;
 
     $token = $_GET["token"];
-    $result = mysqli_query($koneksi, "SELECT * FROM forgot_password WHERE token = '$token'");
-    $row = mysqli_fetch_assoc($result);
-    if (mysqli_num_rows($result) === 1) {
+    $result = oci_parse($koneksi, "SELECT * FROM forgot_password WHERE token = :token");
+    oci_bind_by_name($result, ":token", $token);
+    oci_execute($result);
+    $row = oci_fetch_assoc($result);
+
+    if (oci_num_rows($result) === 1) {
         $expiration = $row["expiration"];
         if (date('Y-m-d H:i:s') > $expiration) {
             return false;
@@ -616,13 +762,13 @@ function checkToken($token)
     }
 }
 
-//count last register user in users table
 function lastRegister()
 {
     global $koneksi;
     $query = "SELECT COUNT(*) as count FROM users";
-    $result = mysqli_query($koneksi, $query);
-    $lastRecord = mysqli_fetch_assoc($result)['count'];
+    $result = oci_parse($koneksi, $query);
+    oci_execute($result);
+    $lastRecord = oci_fetch_assoc($result)['count'];
     return $lastRecord;
 }
 
@@ -634,15 +780,19 @@ function loginSession($userId)
     $loginTime = date('Y-m-d H:i:s');
 
     // Insert the login session into the sessions table
-    $query = "INSERT INTO sessions (user_id, login_time) VALUES ('$userId', '$loginTime')";
-    mysqli_query($koneksi, $query);
+    $query = "INSERT INTO sessions (user_id, login_time) VALUES (:userId, TO_DATE(:loginTime, 'YYYY-MM-DD HH24:MI:SS'))";
+    $stmt = oci_parse($koneksi, $query);
+    oci_bind_by_name($stmt, ":userId", $userId);
+    oci_bind_by_name($stmt, ":loginTime", $loginTime);
+    oci_execute($stmt);
 
     // Get the session ID of the inserted row
-    $sessionId = mysqli_insert_id($koneksi);
+    $sessionId = oci_fetch_assoc($stmt)['session_id'];
 
     // Return the session ID
     return $sessionId;
 }
+
 
 function logoutSession($sessionId)
 {
@@ -652,20 +802,24 @@ function logoutSession($sessionId)
     $logoutTime = date('Y-m-d H:i:s');
 
     // Update the logout time in the sessions table
-    $query = "UPDATE sessions SET logout_time = '$logoutTime' WHERE session_id = '$sessionId'";
-    mysqli_query($koneksi, $query);
+    $query = "UPDATE sessions SET logout_time = TO_DATE(:logoutTime, 'YYYY-MM-DD HH24:MI:SS') WHERE session_id = :sessionId";
+    $stmt = oci_parse($koneksi, $query);
+    oci_bind_by_name($stmt, ":logoutTime", $logoutTime);
+    oci_bind_by_name($stmt, ":sessionId", $sessionId);
+    oci_execute($stmt);
 }
 
 function getSessionCount($timeRange)
 {
     global $koneksi;
-    $query = "SELECT COUNT(*) as count FROM sessions WHERE login_time >= '$timeRange'";
-    $result = mysqli_query($koneksi, $query);
-    $count = mysqli_fetch_assoc($result)['count'];
+    $query = "SELECT COUNT(*) as count FROM sessions WHERE login_time >= TO_DATE(:timeRange, 'YYYY-MM-DD HH24:MI:SS')";
+    $stmt = oci_parse($koneksi, $query);
+    oci_bind_by_name($stmt, ":timeRange", $timeRange);
+    oci_execute($stmt);
+    $count = oci_fetch_assoc($stmt)['COUNT'];
     return $count;
 }
 
-// Function to format the count and percentage values
 function formatCount($count, $percentage)
 {
     $formattedCount = number_format($count);

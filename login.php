@@ -10,23 +10,27 @@ if (isset($_SESSION["login"])) {
 if (isset($_POST["submit"])) {
     $email = $_POST["email"];
     $password = $_POST["password"];
-    $result = mysqli_query($koneksi, "SELECT * FROM users WHERE email = '$email'");
-    //cek email
-    if (mysqli_num_rows($result) === 1) {
-        //cek password
-        $row = mysqli_fetch_assoc($result);
-        if (password_verify($password, $row["password"])) {
-            //set session
+    $stmt = oci_parse($koneksi, "SELECT * FROM users WHERE email = :email");
+    oci_bind_by_name($stmt, ":email", $email);
+    oci_execute($stmt);
+
+    // Fetch the row
+    $row = oci_fetch_assoc($stmt);
+
+    if ($row !== false) {
+        // Cek password
+        if (password_verify($password, $row["PASSWORD"])) {
+            // Set session
             $_SESSION["login"] = true;
-            $_SESSION["id_user"] = $row["id_user"];
-            $_SESSION["full_name"] = $row["full_name"];
-            $_SESSION["email"] = $row["email"];
-            $_SESSION["password"] = $row["password"];
-            $_SESSION["gender"] = $row["gender"];
-            $_SESSION["birth_date"] = $row["birth_date"];
-            $_SESSION["user_photo"] = $row["user_photo"];
-            $_SESSION["role"] = $row["role"];
-            $_SESSION["created_at"] = $row["created_at"];
+            $_SESSION["id_user"] = $row["ID_USER"];
+            $_SESSION["full_name"] = $row["FULL_NAME"];
+            $_SESSION["email"] = $row["EMAIL"];
+            $_SESSION["password"] = $row["PASSWORD"];
+            $_SESSION["gender"] = $row["GENDER"];
+            $_SESSION["birth_date"] = $row["BIRTH_DATE"];
+            $_SESSION["user_photo"] = $row["USER_PHOTO"];
+            $_SESSION["role"] = $row["ROLE"];
+            $_SESSION["created_at"] = $row["CREATED_AT"];
 
             $sessionId = loginSession($_SESSION['id_user']);
             // Store the user ID and session ID in the session
@@ -39,7 +43,6 @@ if (isset($_POST["submit"])) {
             $alertIcon = "ri-close-line";
         }
     }
-
     if (isset($_POST["rememberme"])) {
         //buat cookie
         setcookie("login", "true", time() + 60);
