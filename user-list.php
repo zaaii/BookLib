@@ -14,19 +14,13 @@ if (isset($_GET["hapus"])) {
    $id_user = $_GET["hapus"];
    $result = deleteUser($id_user);
    if ($result === true) {
-      echo "
-      <script>
-      alert('Data berhasil Dihapus');
-      document.location.href = 'user-list.php';
-      </script>
-      ";
+      $message = "<strong> User Successfully Removed !</strong>";
+      $alertType = "primary";
+      $alertIcon = "ri-check-line";
    } else {
-      echo "
-         <script>
-         alert('Data Gagal Dihapus');
-         document.location.href = 'user-list.php';
-         </script>
-         ";
+      $message = "<strong> User failed to remove!</strong>";
+      $alertType = "danger";
+      $alertIcon = "ri-close-line";
    }
 }
 
@@ -91,6 +85,17 @@ checkRole($_SESSION);
                         <h4 class="card-title">User List</h4>
                      </div>
                   </div>
+                  <?php if (isset($message)) : ?>
+                     <div class="alert alert-<?= $alertType ?> mr-0 ml-0" role="alert">
+                        <div class="iq-alert-icon">
+                           <i class="<?= $alertIcon ?>"></i>
+                        </div>
+                        <div class="iq-alert-text"><?= $message ?></div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                           <i class="ri-close-line"></i>
+                        </button>
+                     </div>
+                  <?php endif; ?>
                   <div class="iq-card-body">
                      <div class="table-responsive">
                         <div class="row justify-content-between">
@@ -208,4 +213,5 @@ checkRole($_SESSION);
    <!-- Custom JavaScript -->
    <script src="js/custom.js"></script>
 </body>
+
 </html>
