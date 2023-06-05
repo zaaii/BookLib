@@ -1,29 +1,29 @@
 <?php
 session_start();
 require("model.php");
-
-if (isset($_GET['keyword'])) {
-   $cari = $_GET['keyword'];
-   $bukus = cariDataBuku($cari);
-} else {
-   $bukus = getData("buku");
-}
-
-if (isset($_POST['id_user'], $_POST['id_buku'])) {
-   $id_user = $_POST['id_user'];
-   $id_buku = $_POST['id_buku'];
-
+// 
+// if (isset($_GET['keyword'])) {
+   // $cari = $_GET['keyword'];
+   // $bukus = cariDataBuku($cari);
+// } else {
+   // $bukus = getData("buku");
+// }
+// 
+// if (isset($_POST['id_user'], $_POST['id_buku'])) {
+   // $id_user = $_POST['id_user'];
+   // $id_buku = $_POST['id_buku'];
+// 
    // Perform database operations to add/remove favorites based on the current status
-   if (isFavorite($id_user, $id_buku)) {
-      removeFavorite($id_user, $id_buku);
-      http_response_code(200);
-   } else {
-      addFavorite($id_user, $id_buku);
-      http_response_code(200);
-   }
-}
-
-$user = getData("users");
+   // if (isFavorite($id_user, $id_buku)) {
+      // removeFavorite($id_user, $id_buku);
+      // http_response_code(200);
+   // } else {
+      // addFavorite($id_user, $id_buku);
+      // http_response_code(200);
+   // }
+// }
+// 
+// $user = getData("users");
 
 //cek apakah user sudah login
 if (!isset($_SESSION["login"])) {
