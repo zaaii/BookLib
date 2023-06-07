@@ -32,10 +32,11 @@ if (!isset($_SESSION["login"])) {
 }
 
 // Check if sesion user still exists
-if (isSessionStillAlive($_SESSION) == false) {
+if (!isSessionStillAlive($_SESSION)) {
    // jika session is already not exist in database delete existing session
    $_SESSION = [];
    header("Location:login.php");
+   exit();
 }
 
 ?>

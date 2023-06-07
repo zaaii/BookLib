@@ -31,18 +31,28 @@ if (isSessionStillAlive($_SESSION) == false) {
 }
 
 // Mendapatkan daftar kategori
+// Mendapatkan daftar kategori
 $query_categories = "SELECT * FROM categories";
-$result_categories = mysqli_query($koneksi, $query_categories);
-$categories = mysqli_fetch_all($result_categories, MYSQLI_ASSOC);
+$result_categories = oci_parse($koneksi, $query_categories);
+oci_execute($result_categories);
+$categories = [];
+while ($row = oci_fetch_assoc($result_categories)) {
+    $categories[] = $row;
+}
 
 // Mendapatkan buku berdasarkan kategori
 if (isset($_GET['category_id'])) {
    $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : '';
 
    if ($category_id > 0) {
-      $query_buku = "SELECT * FROM buku WHERE FIND_IN_SET($category_id, category_ids)";
-      $result_buku = mysqli_query($koneksi, $query_buku);
-      $buku = mysqli_fetch_all($result_buku, MYSQLI_ASSOC);
+      $query_buku = "SELECT * FROM buku WHERE INSTR(category_ids, :category_id) > 0";
+      $result_buku = oci_parse($koneksi, $query_buku);
+      oci_bind_by_name($result_buku, ":category_id", $category_id);
+      oci_execute($result_buku);
+      $buku = [];
+      while ($row = oci_fetch_assoc($result_buku)) {
+          $buku[] = $row;
+      }
    } else {
       // Handle the case when category_id is not a valid value (less than or equal to 0)
       // For example, display an error message or redirect to a different page

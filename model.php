@@ -374,8 +374,8 @@ function login($data)
             // Cek apakah remember me dicentang
             if (isset($data["remember"])) {
                 // Buat cookie
-                setcookie("id_user", $row["ID_USER"], time() + 60);
-                setcookie("key", hash("sha256", $row["EMAIL"]), time() + 60);
+                setcookie("id_user", $row["id_user"], time() + 60);
+                setcookie("key", hash("sha256", $row["email"]), time() + 60);
             }
 
             return true;
@@ -441,7 +441,7 @@ function isSessionStillAlive($session)
     oci_execute($stmt);
     $result = oci_fetch_assoc($stmt);
 
-    if ($id == $result['id_user'] && $email == $result['email']) {
+    if ($result !== false && $id == $result['id_user'] && $email == $result['email']) {
         return true;
     } else {
         return false;
