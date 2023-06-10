@@ -157,3 +157,64 @@ DirectoryIndex index.php index.html
 ```diff
 Options +Indexes
 ```
+
+<div id='iccloud'/>
+
+### Oracle Instant Client 
+Booklib using oracle autonomus database. Because that it's using **oci_connect()** function & to run it we need to setup Oracle instant client. 
+
+- **[*Oracle Instant Client*](https://www.oracle.com/database/technologies/instant-client/downloads.html)**
+
+We suggest to use the newest verions. But for right now we using oracle linux 8 with arm core so we are using *Version 19.10 for linux aarch64*
+
+1. For this walkthrough we are gonna install instant client using rpm. To setup instant client we need basic package, sqlplus package, and sdk package
+```diff
+wget https://download.oracle.com/otn_software/linux/instantclient/instantclient-basic-linux-arm64.rpm
+wget https://download.oracle.com/otn_software/linux/instantclient/instantclient-sqlplus-linux-arm64.rpm
+wget https://download.oracle.com/otn_software/linux/instantclient/instantclient-sdk-linux-arm64.rpm
+```
+
+2. Next we just need to install them using rpm.
+```diff
+sudo rpm -i instantclient-basic-linux-arm64.rpm
+sudo rpm -i instantclient-sqlplus-linux-arm64.rpm
+sudo rpm -i instantclient-sdk-linux-arm64.rpm
+```
+
+3. To verify the installation.
+```diff
+rpm -qa | grep oracle
+```
+>if instant client basic, sqlplus, and devel is there that mean installation is succes
+
+4. Then you need to add some environtment variables into your **.bashrc** 
+```diff
+nano ~/.bashrc
+```
+add this code at the bottom 
+```diff
+export LD_LIBRARY_PATH="/usr/lib/oracle/19.10/client64/lib"
+export ORACLE_HOME="/usr/lib/oracle/19.10/client64"
+export PATH="$PATH:$ORACLE_HOME/bin"
+export TNS_ADMIN="$LD_LIBRARY_PATH/network/admin"
+```
+
+5. Then you need to source **bash.rc** then check the variable by using **echo** on it. You can check if sqlplus is installed by checking it's version.
+```diff
+source ~/.bashrc
+echo $ORACLE_HOME
+which sqlplus
+```
+
+6. To connect into your autonomus database we need a wallet you need to extract the wallet in dir `/usr/lib/oracle/19.10/client64/lib/network/admin/`
+
+7. Then in **sqlnet.ora** you need to edit 
+
+
+### Git
+1. To install git you need to install it using dnf 
+```diff
+sudo dnf install git
+```
+
+2. 
