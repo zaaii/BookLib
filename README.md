@@ -1,5 +1,13 @@
 # BookLib
 
+*******
+Tables of contents Booklib README  
+ 1. [Configure Booklib to Autonomus database oracle On Windows](#windows)
+ 2. [Configure Booklib On Your Cloud](#cloud)
+*******
+
+<div id='windows'/> 
+
 ## Configure Booklib to Autonomus database oracle On Windows
 What We Need?
 
@@ -8,7 +16,7 @@ What We Need?
 - PHP Oci8
 
 *******
-Tables of contents  
+Tables of contents Booklib using Autonomus database oracle Windows
  1. [XAMPP](#xampp)
  2. [Oracle Instant Client](#oracle)
  3. [PHP Oci8](#php)
@@ -24,6 +32,7 @@ For XAMPP we need xampp with php version that support php oci8 extension so here
 for more information click [here](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/).
 
 You can just install xampp normaly.
+
 <div id='oracle'/> 
 
 ### Oracle Instant Client
@@ -45,7 +54,10 @@ But to acces autonomus database by oracle you need to have wallet. You can get y
 4. You can check your **tnsnames.ora** inside it's a connection string that needed to acces adb
 
 With this you are set to go. If you want to check Instant client you can use sqlplus in command promt.
->**`sqlplus -l admin@booklibdb1_high`** booklibdb1_high is one off entry in **tnsnames.ora**, you need a password to login this. 
+```diff
+sqlplus -l admin/(YourPassword)@booklibdb1_high
+```
+>booklibdb1_high is one off entry in **tnsnames.ora**, you need a password to login this. 
 
 <div id='php'/> 
 
@@ -63,6 +75,7 @@ What you need to pay attention to your php **Thread Safety** you can check it in
 
 now you can use func `oci_connect()` in your code for the example you can check [this file](https://github.com/zaaii/BookLib/blob/cloud/example.php)
 
+<div id='cloud'/> 
 
 ## Configure Booklib On Your Cloud
 >**You can use any cloud service provider but we use Oracle Cloud**
@@ -77,11 +90,12 @@ To run booklib in oracle linux8 we need a feew package.
 - Git
 
 *******
-Tables of contents  
+Tables of contents Configure Booklib in Oracle Cloud Instance
  1. [Php8](#php8)
  2. [Apache](#apache)
  3. [Oracle Instant Client](#iccloud)
- 4. [Git](#git)
+ 4. [Php Oci8](#phpoci)
+ 5. [Git](#git)
 *******
 
 <div id='php8'/> 
@@ -208,8 +222,62 @@ which sqlplus
 
 6. To connect into your autonomus database we need a wallet you need to extract the wallet in dir `/usr/lib/oracle/19.10/client64/lib/network/admin/`
 
-7. Then in **sqlnet.ora** you need to edit 
+7. Then in **sqlnet.ora** you need to edit **DIRECTORY** into.
+```diff
+$LD_LIBRARY_PATH/network/admin
+```
 
+8. Then you can test the connection to autonomus database with sqlplus
+```diff
+sqlplus -l admin/(YourPassword)@booklibdb1_high
+```
+
+<div id='phpoci'/>
+
+### Install & Config php oci8
+You need to install oci extension into you php to run any oci function. you can install itu by using pecl. In this scenario our php is verision 8.0.27 so we are gonna install php oci8 version 3.0.1 and installing it manually by downloading tgz file.
+
+- **[*Pecl Oci8*](https://pecl.php.net/package/oci8)**
+
+1. Download your oci8 and unzip it
+```diff
+wget https://pecl.php.net/get/oci8-3.0.1.tgz
+tar -xvzf oci8-3.0.1.tgz
+```
+
+2. Then you need to prepare the configure file by running **phpize** in the extracted dir.
+```diff
+phpize
+```
+
+3. Then you can run **configure** file like command below.
+```diff
+./configure --with-oci8=instantclient,$LD_LIBRARY_PATH
+```
+
+4. Then you can run make and then install it.
+```diff
+make
+sudo make install
+```
+
+5. Just to make sure you can *ls* the `/usr/lib64/php/modules/` if there is **oci8.so** in there then the installation is complete. Then to actualy enable it you need to add `extension=oci8.so` in **/etc/php.ini**
+
+6. Affter that you need to restart php service
+```diff
+sudo systemctl restart php-fpm
+```
+
+7. Then check in your phpinfo page if there is oci8 section then it's complete but if there is not you can check se linux mode if its enforcing, you need to turn it off.
+
+8. There is 2 way to disable it. To disable it temporary
+```diff
+sudo setenforce 0
+```
+to disable it permanetly you need to change this in selinux config file `sudo nano /etc/selinux/config` and change **SELINUX** into `disabled` then you can just restart php service again.
+
+
+<div id='git'/>
 
 ### Git
 1. To install git you need to install it using dnf 
@@ -217,4 +285,9 @@ which sqlplus
 sudo dnf install git
 ```
 
-2. 
+2. Then you can clone booklib from git into you web root dir
+```diff
+cd /var/www/html/
+sudo git clone https://github.com/zaaii/BookLib.git
+```
+> **Note**: Then don't forget to uncomment all line `putenv()` inside **koneksi.php**
