@@ -560,12 +560,10 @@ function insertDataCategory($data)
     // Mengambil data dari tiap elemen dalam form
     $category_name = htmlspecialchars($data["category_name"]);
     $category_description = htmlspecialchars($data["category_description"]);
-
-    $id_category = uniqid(1, 99);
     // Query insert data
     $query = "INSERT INTO categories 
     VALUES 
-    ('$id_category', '$category_name', '$category_description')
+    ('', '$category_name', '$category_description')
     ";
     $stmt = oci_parse($koneksi, $query);
     oci_execute($stmt);
