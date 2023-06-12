@@ -441,7 +441,7 @@ function isSessionStillAlive($session)
     oci_execute($stmt);
     $result = oci_fetch_assoc($stmt);
 
-    if ($result !== false && $id == $result['id_user'] && $email == $result['email']) {
+    if ($id == $result['id_user'] && $email == $result['email']) {
         return true;
     } else {
         return false;
