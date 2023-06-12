@@ -42,12 +42,12 @@ function insertDataBuku($data)
     // Upload gambar buku
     $gambar_buku_tmp = $_FILES["gambar_buku"]["tmp_name"];
     move_uploaded_file($gambar_buku_tmp, "resources/cover/" . $gambar_buku);
-    chmod('resources/cover/' . $gambar_buku_tmp, 0644);
+    chmod('resources/cover/' . $gambar_buku, 0777);
 
     // Upload PDF buku
     $pdf_buku_tmp = $_FILES["pdf_buku"]["tmp_name"];
     move_uploaded_file($pdf_buku_tmp, "resources/ebook/" . $pdf_buku);
-    chmod('resources/ebook/' . $gambar_buku_tmp, 0644);
+    chmod('resources/ebook/' . $pdf_buku, 0777);
 
     // Query insert data
     $query = "INSERT INTO buku 
@@ -80,7 +80,7 @@ function updateDataBuku($data)
         $gambar_buku = $_FILES["gambar_buku"]["name"];
         $gambar_buku_tmp = $_FILES["gambar_buku"]["tmp_name"];
         move_uploaded_file($gambar_buku_tmp, "resources/cover/" . $gambar_buku);
-        chmod('resources/cover/' . $gambar_buku_tmp, 0644);
+        chmod('resources/cover/' . $gambar_buku, 0777);
     } else {
         // Jika tidak ada perubahan, tetap gunakan gambar_buku sebelumnya
         $bukuSebelumnya = getData("buku WHERE id_buku = $id_buku")[0];
@@ -92,7 +92,7 @@ function updateDataBuku($data)
         $pdf_buku = $_FILES["pdf_buku"]["name"];
         $pdf_buku_tmp = $_FILES["pdf_buku"]["tmp_name"];
         move_uploaded_file($pdf_buku_tmp, "resources/ebook/" . $pdf_buku);
-        chmod('resources/ebook/' . $gambar_buku_tmp, 0644);
+        chmod('resources/ebook/' . $pdf_buku, 0777);
     } else {
         // Jika tidak ada perubahan, tetap gunakan pdf_buku sebelumnya
         $bukuSebelumnya = getData("buku WHERE id_buku = $id_buku")[0];
