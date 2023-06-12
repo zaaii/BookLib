@@ -109,36 +109,35 @@ checkRole($_SESSION);
                                  <th style="width: 15%;">Action</th>
                               </tr>
                            </thead>
-                           <?php $i = 1; ?>
                            <?php
                            $i = 1;
                            $cname[0] = "Not Set";
                            $categories = oci_parse($koneksi, "SELECT * FROM categories");
                            oci_execute($categories);
                            while ($row = oci_fetch_assoc($categories)) {
-                              $cname[$row['id_category']] = ucwords($row['category_name']);
+                              $cname[$row['ID_CATEGORY']] = ucwords($row['CATEGORY_NAME']);
                            }
                            $bukus = oci_parse($koneksi, "SELECT * FROM buku");
                            oci_execute($bukus);
-                           while ($buku = oci_fetch_assoc($bukus)) :
+                           while ($buku = oci_fetch_assoc($bukus)) {
                            ?>
                               <tbody>
                                  <tr>
                                     <td><?= $i++; ?></td>
-                                    <td><img class="img-fluid rounded" src="resources/cover/<?= $buku["gambar_buku"] ?>" alt=""></td>
-                                    <td><?= $buku["judul_buku"] ?></td>
-                                    <td><?= $buku["penulis"] ?></td>
-                                    <td><?= $buku["penerbit"] ?></td>
+                                    <td><img class="img-fluid rounded" src="resources/cover/<?= $buku["GAMBAR_BUKU"] ?>" alt=""></td>
+                                    <td><?= $buku["JUDUL_BUKU"] ?></td>
+                                    <td><?= $buku["PENULIS"] ?></td>
+                                    <td><?= $buku["PENERBIT"] ?></td>
                                     <td>
-                                       <p class="mb-0"><?= $buku["deskripsi_buku"] ?></p>
+                                       <p class="mb-0"><?= $buku["DESKRIPSI_BUKU"] ?></p>
                                     </td>
-                                    <td><?= $buku["tahun_terbit"] ?></td>
-                                    <td><a href="resources/ebook/<?= $buku["pdf_buku"] ?>"><i class="ri-file-fill text-secondary font-size-18"></i></a></td>
+                                    <td><?= $buku["TAHUN_TERBIT"] ?></td>
+                                    <td><a href="resources/ebook/<?= $buku["PDF_BUKU"] ?>"><i class="ri-file-fill text-secondary font-size-18"></i></a></td>
                                     <td>
                                        <p>
                                           <?php
                                           $cats = '';
-                                          $cat = explode(',', $buku['category_ids']);
+                                          $cat = explode(',', $buku['CATEGORY_IDS']);
                                           foreach ($cat as $key => $value) {
                                              if (!empty($cats)) {
                                                 $cats .= ", ";
@@ -154,15 +153,17 @@ checkRole($_SESSION);
                                     <td>
                                        <form action="" method="post">
                                           <div class="flex align-items-center list-user-action">
-                                             <input type="hidden" name="id_buku" value="<?= $buku["id_buku"] ?>">
-                                             <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" href="admin-add-book.php?id_buku=<?= $buku["id_buku"]; ?>"><i class="ri-pencil-line"></i></a>
-                                             <a class="bg-primary" data-toggle="tooltip" data-placement="top" name="delete" href="?book_id=<?= $buku["id_buku"] ?>"><i class="ri-delete-bin-line"></i></a>
+                                             <input type="hidden" name="id_buku" value="<?= $buku["ID_BUKU"] ?>">
+                                             <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" href="admin-add-book.php?id_buku=<?= $buku["ID_BUKU"]; ?>"><i class="ri-pencil-line"></i></a>
+                                             <a class="bg-primary" data-toggle="tooltip" data-placement="top" name="delete" href="?book_id=<?= $buku["ID_BUKU"] ?>"><i class="ri-delete-bin-line"></i></a>
                                           </div>
                                        </form>
                                     </td>
                                  </tr>
                               </tbody>
-                           <?php endwhile; ?>
+                           <?php
+                           }
+                           ?>
                         </table>
                      </div>
                   </div>
