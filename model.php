@@ -434,18 +434,18 @@ function isSessionStillAlive($session)
         $email = $session['email'];
 
         // Mengatur koneksi ke database Oracle
-        $conn = oci_connect('username', 'password', 'hostname/orcl');
+        global $koneksi;
 
         // Mengambil Informasi user dari database
         $query = "SELECT * FROM users WHERE id_user = :id AND email = :email";
-        $stmt = oci_parse($conn, $query);
+        $stmt = oci_parse($koneksi, $query);
         oci_bind_by_name($stmt, ':id', $id);
         oci_bind_by_name($stmt, ':email', $email);
         oci_execute($stmt);
 
         $result = oci_fetch_assoc($stmt);
 
-        if ($result !== false && $id == $result['ID_USER'] && $email == $result['EMAIL']) {
+        if ($result !== false && $id == $result['id_user'] && $email == $result['email']) {
             return true;
         }
     }
