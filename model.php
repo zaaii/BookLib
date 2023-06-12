@@ -647,10 +647,12 @@ function forgetPassword($data)
     if (oci_num_rows($result) === 1) {
         $id_user = $row["id_user"];
         $token = uniqid();
+        $rand = rand(1, 99);
         $expiration = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
-        $query = "INSERT INTO forgot_password VALUES ('', :id_user, :token, TO_DATE(:expiration, 'YYYY-MM-DD HH24:MI:SS'))";
+        $query = "INSERT INTO forgot_password VALUES (:rand, :id_user, :token, TO_DATE(:expiration, 'YYYY-MM-DD HH24:MI:SS'))";
         $stmt = oci_parse($koneksi, $query);
+        oci_bind_by_name($stmt, ":rand", $rand);
         oci_bind_by_name($stmt, ":id_user", $id_user);
         oci_bind_by_name($stmt, ":token", $token);
         oci_bind_by_name($stmt, ":expiration", $expiration);
@@ -678,7 +680,7 @@ function forgetPassword($data)
             $mailer->setFrom($smtpUsername, 'BookLib System');
             $mailer->addAddress($email);
             $mailer->Subject = 'Reset Password';
-            $mailer->Body = "Klik link berikut untuk reset password anda: http://localhost:8080/BookLib/reset-password.php?token=$token";
+            $mailer->Body = "Klik link berikut untuk reset password anda: http://129.158.212.115/BookLib/reset-password.php?token=$token";
 
             // Send email
             $mailer->send();
@@ -706,7 +708,7 @@ function newPassword($npass, $npass2)
     $row = oci_fetch_assoc($result);
 
     if (oci_num_rows($result) === 1) {
-        $id_user = $row["user_id"];
+        $id_user = $row["id_user"];
 
         $resultUser = oci_parse($koneksi, "SELECT * FROM users WHERE id_user = :id_user");
         oci_bind_by_name($resultUser, ":id_user", $id_user);
