@@ -556,14 +556,14 @@ function insertDataCategory($data)
 {
     // Digunakan untuk mengacu atau merujuk ke global variable
     global $koneksi;
-
+    $unique_id = rand(1, 99);
     // Mengambil data dari tiap elemen dalam form
     $category_name = htmlspecialchars($data["category_name"]);
     $category_description = htmlspecialchars($data["category_description"]);
     // Query insert data
     $query = "INSERT INTO categories 
     VALUES 
-    ('', '$category_name', '$category_description')
+    ('$unique_id', '$category_name', '$category_description')
     ";
     $stmt = oci_parse($koneksi, $query);
     oci_execute($stmt);
