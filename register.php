@@ -16,7 +16,7 @@ if (isset($_POST["submit"])) {
     } else {
         if (register($_POST) > 0) {
             $message = "Your account has been <strong>successfully created</strong>. Please login to continue.";
-            $alertType = "primary";
+            $alertType = "success";
             $alertIcon = "ri-check-line";
         } else {
             $message = "Your account <strong>failed to be created</strong>. Please try again.";
@@ -64,7 +64,7 @@ if (isset($_POST["submit"])) {
                                 <h3 class="mb-0 text-center text-white">Sign Up</h3>
                                 <p class="text-center text-white">Insert your information data</p>
                                 <?php if (isset($message)) : ?>
-                                    <div class="alert alert-<?= $alertType ?> mr-0 ml-0" role="alert">
+                                    <div class="alert text-white bg-<?= $alertType ?> mr-0 ml-0" role="alert">
                                         <div class="iq-alert-icon">
                                             <i class="<?= $alertIcon ?>"></i>
                                         </div>
