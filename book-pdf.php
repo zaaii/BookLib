@@ -12,11 +12,13 @@ if (!isset($_SESSION["login"])) {
 
 $user = getData("users");
 // Check if sesion user still exists
-if (isSessionStillAlive($_SESSION) == false) {
-	// jika session is already not exist in database delete existing session
-	$_SESSION = [];
-	header("Location:login.php");
-}
+if (!isSessionStillAlive($_SESSION)) {
+	// If the session does not exist in the database, delete the existing session and redirect to the login page
+	session_unset();
+	session_destroy();
+	header("Location: login.php");
+	exit();
+ }
 
 ?>
 
