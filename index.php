@@ -13,7 +13,7 @@ if (isset($_POST['id_user'], $_POST['id_buku'])) {
    $id_user = $_POST['id_user'];
    $id_buku = $_POST['id_buku'];
 
-
+   
    if (isFavorite($id_user, $id_buku)) {
       removeFavorite($id_user, $id_buku);
       http_response_code(200);
@@ -88,19 +88,19 @@ if (!isset($_SESSION["login"])) {
                                     <div class="iq-card-body p-0">
                                        <div class="d-flex align-items-center">
                                           <div class="col-6 p-0 position-relative image-overlap-shadow">
-                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="resources/cover/<?php echo $buku["GAMBAR_BUKU"]; ?>" alt="<?php echo $buku["JUDUL_BUKU"]; ?>"></a>
+                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="resources/cover/<?= $buku["GAMBAR_BUKU"] ?>" alt="<?= $buku["JUDUL_BUKU"] ?>"></a>
                                              <div class="view-book">
-                                                <input type="hidden" name="id_buku" value="<?php echo $buku["ID_BUKU"]; ?>">
-                                                <a href="book-page.php?id_buku=<?php echo $buku["ID_BUKU"]; ?>" class="btn btn-sm btn-white">View Book</a>
+                                                <input type="hidden" name="id_buku" value="<?= $buku["ID_BUKU"] ?>">
+                                                <a href="book-page.php?id_buku=<?= $buku["ID_BUKU"]; ?>" class="btn btn-sm btn-white">View Book</a>
                                              </div>
                                           </div>
                                           <div class="col-6">
                                              <div class="mb-2">
-                                                <h6 class="mb-1"><?php echo $buku["JUDUL_BUKU"]; ?></h6>
-                                                <p class="font-size-13 line-height mb-1"><?php echo $buku["PENULIS"]; ?></p>
+                                                <h6 class="mb-1"><?= $buku["JUDUL_BUKU"] ?></h6>
+                                                <p class="font-size-13 line-height mb-1"><?= $buku["PENULIS"] ?></p>
                                              </div>
                                              <div class="iq-product-action">
-                                                <a type="button" class="addFavorite" name="<?php echo $buku["ID_BUKU"]; ?>"><i class="ri-heart-line"></i></a>
+                                                <a type="button" class="addFavorite" name="<?= $buku["ID_BUKU"] ?>"><i class="ri-heart-line"></i></a>
                                              </div>
                                           </div>
                                        </div>
@@ -108,15 +108,14 @@ if (!isset($_SESSION["login"])) {
                                  </div>
                               </div>
                               <?php $i++; ?>
-                           <?php endforeach; ?>
+                           <?php endforeach ?>
                         </div>
                      <?php else : ?>
                         <div class="alert alert-danger" role="alert">
                            Data Buku Tidak Ditemukan!
                         </div>
-                     <?php endif; ?>
+                     <?php endif ?>
                   </div>
-
                </div>
             </div>
          </div>
@@ -249,5 +248,4 @@ if (!isset($_SESSION["login"])) {
       });
    </script>
 </body>
-
 </html>
