@@ -427,25 +427,30 @@ function deleteUser($id)
 // Fungsi Check apakah User yang adap ada sesion masih ada di database
 function isSessionStillAlive($session)
 {
-    global $koneksi;
+    // Check if the necessary session variables exist
+    if (isset($session['id_user']) && isset($session['email'])) {
+        // Mengambil Informasi Dari Session Aktif
+        $id = $session['id_user'];
+        $email = $session['email'];
 
-    // Mengambil Informasi Dari Session Aktif
-    $id = $session['id_user'];
-    $email = $session['email'];
+        // Mengatur koneksi ke database Oracle
+        $conn = oci_connect('username', 'password', 'hostname/orcl');
 
-    // Mengambil Informasi user dari database
-    $query = "SELECT * FROM users WHERE id_user = :id AND email = :email";
-    $stmt = oci_parse($koneksi, $query);
-    oci_bind_by_name($stmt, ":id", $id);
-    oci_bind_by_name($stmt, ":email", $email);
-    oci_execute($stmt);
-    $result = oci_fetch_assoc($stmt);
+        // Mengambil Informasi user dari database
+        $query = "SELECT * FROM users WHERE id_user = :id AND email = :email";
+        $stmt = oci_parse($conn, $query);
+        oci_bind_by_name($stmt, ':id', $id);
+        oci_bind_by_name($stmt, ':email', $email);
+        oci_execute($stmt);
 
-    if ($id == $result['id_user'] && $email == $result['email']) {
-        return true;
-    } else {
-        return false;
+        $result = oci_fetch_assoc($stmt);
+
+        if ($result !== false && $id == $result['ID_USER'] && $email == $result['EMAIL']) {
+            return true;
+        }
     }
+
+    return false;
 }
 
 

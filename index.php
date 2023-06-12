@@ -31,11 +31,11 @@ if (!isset($_SESSION["login"])) {
    exit;
 }
 
-// Check if sesion user still exists
 if (!isSessionStillAlive($_SESSION)) {
-   // jika session is already not exist in database delete existing session
-   $_SESSION = [];
-   header("Location:login.php");
+   // If the session does not exist in the database, delete the existing session and redirect to the login page
+   session_unset();
+   session_destroy();
+   header("Location: login.php");
    exit();
 }
 
