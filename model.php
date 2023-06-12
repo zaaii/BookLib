@@ -42,19 +42,34 @@ function insertDataBuku($data)
     // Upload gambar buku
     $gambar_buku_tmp = $_FILES["gambar_buku"]["tmp_name"];
     move_uploaded_file($gambar_buku_tmp, "resources/cover/" . $gambar_buku);
-    chmod('resources/cover/' . $gambar_buku, 0777);
+    chmod('resources/cover/' . $gambar_buku, 0644);
 
     // Upload PDF buku
     $pdf_buku_tmp = $_FILES["pdf_buku"]["tmp_name"];
     move_uploaded_file($pdf_buku_tmp, "resources/ebook/" . $pdf_buku);
-    chmod('resources/ebook/' . $pdf_buku, 0777);
+    chmod('resources/ebook/' . $pdf_buku, 0644);
 
-    // Query insert data
-    $query = "INSERT INTO buku 
-    VALUES 
-    ('', '$judul_buku', '$penulis', '$penerbit', '$tahun_terbit', '$gambar_buku', '$pdf_buku', '$deskripsi_buku', '$category_ids')
-    ";
+    $query = "INSERT INTO buku SET 
+            judul_buku = :judul_buku,
+            penulis = :penulis,
+            penerbit = :penerbit,
+            tahun_terbit = :tahun_terbit,
+            gambar_buku = :gambar_buku,
+            pdf_buku = :pdf_buku,
+            deskripsi_buku = :deskripsi_buku,
+            category_ids = :category_ids
+        WHERE id_buku = :id_buku";
     $stmt = oci_parse($koneksi, $query);
+    oci_bind_by_name($stmt, ':judul_buku', $judul_buku);
+    oci_bind_by_name($stmt, ':penulis', $penulis);
+    oci_bind_by_name($stmt, ':penerbit', $penerbit);
+    oci_bind_by_name($stmt, ':tahun_terbit', $tahun_terbit);
+    oci_bind_by_name($stmt, ':gambar_buku', $new_cover_name);
+    oci_bind_by_name($stmt, ':pdf_buku', $pdf_buku);
+    oci_bind_by_name($stmt, ':deskripsi_buku', $deskripsi_buku);
+    oci_bind_by_name($stmt, ':category_ids', $category_ids);
+    oci_bind_by_name($stmt, ':id_buku', $id_buku);
+    oci_execute($stmt);
     oci_execute($stmt);
 
     return oci_num_rows($stmt);
@@ -202,18 +217,18 @@ function cariDataBuku($keyword)
 function getFavorit($id_user)
 {
     global $koneksi;
-   // Prepare the statement for OCI
-   $stmt = oci_parse($koneksi, "SELECT * FROM favorit WHERE id_user = :id_user");
-   oci_bind_by_name($stmt, ":id_user", $id_user);
-   oci_execute($stmt);
+    // Prepare the statement for OCI
+    $stmt = oci_parse($koneksi, "SELECT * FROM favorit WHERE id_user = :id_user");
+    oci_bind_by_name($stmt, ":id_user", $id_user);
+    oci_execute($stmt);
 
-   $rows = [];
-   while ($row = oci_fetch_assoc($stmt)) {
-       $rows[] = $row;
-   }
-   oci_free_statement($stmt);
+    $rows = [];
+    while ($row = oci_fetch_assoc($stmt)) {
+        $rows[] = $row;
+    }
+    oci_free_statement($stmt);
 
-   return $rows;
+    return $rows;
 }
 
 function isFavorite($id_user, $id_buku)
