@@ -36,12 +36,12 @@ if ($sessionCount1HourAgo != 0) {
 if ($sessionCount1DayAgo != 0) {
    $percentageChange1Day = (($sessionCountNow - $sessionCount1DayAgo) / $sessionCount1DayAgo) * 100;
 } else {
-   $sessionCount1DayAgo = 0; // or any desired default value when the division is not possible
+   $percentageChange1Day = 0; // or any desired default value when the division is not possible
 }
 if ($sessionCount1WeekAgo != 0) {
    $percentageChange1Week = (($sessionCountNow - $sessionCount1WeekAgo) / $sessionCount1WeekAgo) * 100;
 } else {
-   $sessionCount1WeekAgo = 0; // or any desired default value when the division is not possible
+   $percentageChange1Week = 0; // or any desired default value when the division is not possible
 }
 
 // Check Role user
@@ -136,9 +136,9 @@ checkRole($_SESSION);
                            <p class="m-0 text-uppercase font-size-12">1 Hours Ago</p>
                            <div class="mb-1 text-black"><?= formatCount($sessionCount1HourAgo, $percentageChange1Hour) ?></div>
                            <p class="m-0 text-uppercase font-size-12">1 Day Ago</p>
-                           <div class="mb-1 text-black"><?php echo formatCount($sessionCount1DayAgo, $percentageChange1Day); ?></div>
+                           <div class="mb-1 text-black"><?= formatCount($sessionCount1DayAgo, $percentageChange1Day); ?></div>
                            <p class="m-0 text-uppercase font-size-12">1 Week Ago</p>
-                           <div class="text-black"><?php echo formatCount($sessionCount1WeekAgo, $percentageChange1Week); ?></div>
+                           <div class="text-black"><?= formatCount($sessionCount1WeekAgo, $percentageChange1Week); ?></div>
                         </div>
                      </div>
                      <div id="wave-chart-22"></div>
