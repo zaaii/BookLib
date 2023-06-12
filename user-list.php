@@ -118,7 +118,7 @@ checkRole($_SESSION);
                            </thead>
                            <tbody>
                               <?php
-                              while (($row = oci_fetch_assoc($stmt)) !== false) {
+                              foreach ($users as $row) {
                                  echo '<tr>';
                                  echo '<td class="text-center">';
                                  if (empty($row['USER_PHOTO'])) {
