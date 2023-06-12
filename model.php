@@ -644,7 +644,7 @@ function forgetPassword($data)
     oci_execute($result);
     $row = oci_fetch_assoc($result);
 
-    if (oci_num_rows($result) === 1) {
+    if ($row) {
         $id_user = $row["id_user"];
         $token = uniqid();
         $rand = rand(1, 99);
