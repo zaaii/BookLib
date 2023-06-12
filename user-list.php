@@ -117,10 +117,9 @@ checkRole($_SESSION);
                               </tr>
                            </thead>
                            <tbody>
-                              <?php
-                              // loop untuk menampilkan tabel user
-                              foreach ($user as $key => $value) {
-                              ?>
+                              <?php $users = oci_parse($koneksi, "SELECT * FROM users");
+                              oci_execute($users);
+                              while ($value = oci_fetch_assoc($users)) : ?>
                                  <tr>
                                     <td class="text-center">
                                        <?php if (empty($value['user_photo'])) : ?>
@@ -141,7 +140,7 @@ checkRole($_SESSION);
                                  </td>
                                  </tr>
                               <?php
-                              }
+                              endwhile;
                               // End of Loop 
                               ?>
                            </tbody>

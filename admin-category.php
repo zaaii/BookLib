@@ -23,8 +23,6 @@ if (isset($_GET['id_category'])) {
       setTimeout(function(){
          window.location.href = 'admin-category.php';
       }, 2000);;</script>";
-
-
    } else {
       $message = "Category failed to Delete";
       $alertType = "danger";
@@ -112,7 +110,9 @@ checkRole($_SESSION);
                               </tr>
                            </thead>
                            <?php $i = 1; ?>
-                           <?php foreach ($categories as $category) : ?>
+                           <?php $categories = oci_parse($koneksi, "SELECT * FROM categories");
+                           oci_execute($categories);
+                           while ($category = oci_fetch_assoc($categories)) : ?>
                               <tbody>
                                  <tr>
                                     <td><?= $i; ?></td>
@@ -130,7 +130,7 @@ checkRole($_SESSION);
                                  </tr>
                               </tbody>
                               <?php $i++; ?>
-                           <?php endforeach ?>
+                           <?php endwhile ?>
                         </table>
                      </div>
                   </div>
