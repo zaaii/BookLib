@@ -118,34 +118,28 @@ checkRole($_SESSION);
                            </thead>
                            <tbody>
                               <?php
-                              // loop untuk menampilkan tabel user
-                              foreach ($user as $key => $value) {
-                              ?>
-                                 <tr>
-                                    <td class="text-center">
-                                       <?php if (empty($value['user_photo'])) : ?>
-                                          <img class="rounded img-fluid avatar-40" src="resources/profile/default.jpg" alt="user">
-                                       <?php else : ?>
-                                          <img class="rounded img-fluid avatar-40" src="resources/profile/<?= $value['user_photo'] ?>" alt="profile">
-                                    </td>
-                                 <?php endif; ?>
-                                 <td><?php echo $value["full_name"]; ?></td>
-                                 <td><?php echo $value["email"]; ?></td>
-                                 <td><span class="badge iq-bg-primary"><?php echo $value["gender"]; ?></span></td>
-                                 <td><?php echo $value["birth_date"]; ?></td>
-                                 <td><?php echo $value["date_created"]; ?></td>
-                                 <td>
-                                    <div class="flex align-items-center list-user-action">
-                                       <a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="user-list.php?hapus=<?php echo $value["id_user"]; ?>"><i class="ri-delete-bin-line"></i></a>
-                                    </div>
-                                 </td>
-                                 </tr>
-                              <?php
-                              }
-                              // End of Loop 
-                              ?>
+                              while (($row = oci_fetch_assoc($stmt)) !== false) {
+                                 echo '<tr>';
+                                 echo '<td class="text-center">';
+                                 if (empty($row['USER_PHOTO'])) {
+                                    echo '<img class="rounded img-fluid avatar-40" src="resources/profile/default.jpg" alt="user">';
+                                 } else {
+                                    echo '<img class="rounded img-fluid avatar-40" src="resources/profile/' . $row['USER_PHOTO'] . '" alt="profile">';
+                                 }
+                                 echo '</td>';
+                                 echo '<td>' . $row['FULL_NAME'] . '</td>';
+                                 echo '<td>' . $row['EMAIL'] . '</td>';
+                                 echo '<td><span class="badge iq-bg-primary">' . $row['GENDER'] . '</span></td>';
+                                 echo '<td>' . $row['BIRTH_DATE'] . '</td>';
+                                 echo '<td>' . $row['DATE_CREATED'] . '</td>';
+                                 echo '<td>';
+                                 echo '<div class="flex align-items-center list-user-action">';
+                                 echo '<a class="iq-bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" href="user-list.php?hapus=' . $row['ID_USER'] . '"><i class="ri-delete-bin-line"></i></a>';
+                                 echo '</div>';
+                                 echo '</td>';
+                                 echo '</tr>';
+                              } ?>
                            </tbody>
-
                         </table>
                      </div>
                   </div>

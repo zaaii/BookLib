@@ -127,7 +127,6 @@ checkRole($_SESSION);
                               echo '</td>';
                               echo '</tr>';
                               echo '</tbody>';
-
                               $i++;
                            } ?>
                         </table>
