@@ -147,7 +147,7 @@ checkRole($_SESSION);
                               oci_execute($categories);
                               while ($row = oci_fetch_assoc($categories)) :
                               ?>
-                                 <option value="<?php echo $row['id_category'] ?>" <?php echo isset($category_ids) && !empty($category_ids) &&  in_array($row['id_category'], explode(',', $category_ids)) ? 'selected' : '' ?>><?php echo ucwords($row['category_name']) ?></option>
+                                 <option value="<?php echo $row['ID_CATEGORY'] ?>" <?php echo isset($category_ids) && !empty($category_ids) && in_array($row['ID_CATEGORY'], explode(',', $category_ids)) ? 'selected' : '' ?>><?php echo ucwords($row['CATEGORY_NAME']) ?></option>
                               <?php endwhile; ?>
                            </select>
                         </div>
@@ -222,7 +222,7 @@ checkRole($_SESSION);
                         oci_execute($categories);
                         while ($row = oci_fetch_assoc($categories)) :
                         ?>
-                           <option value="<?php echo $row['id_category'] ?>" <?php echo isset($category_ids) && !empty($category_ids) &&  in_array($row['id_category'], explode(',', $category_ids)) ? 'selected' : '' ?>><?php echo ucwords($row['category_name']) ?></option>
+                           <option value="<?php echo $row['ID_CATEGORY'] ?>" <?php echo isset($category_ids) && !empty($category_ids) && in_array($row['ID_CATEGORY'], explode(',', $category_ids)) ? 'selected' : '' ?>><?php echo ucwords($row['CATEGORY_NAME']) ?></option>
                         <?php endwhile; ?>
                      </select>
                   </div>
