@@ -110,27 +110,26 @@ checkRole($_SESSION);
                               </tr>
                            </thead>
                            <?php $i = 1; ?>
-                           <?php $categories = oci_parse($koneksi, "SELECT * FROM categories");
-                           oci_execute($categories);
-                           while ($category = oci_fetch_assoc($categories)) : ?>
-                              <tbody>
-                                 <tr>
-                                    <td><?= $i; ?></td>
-                                    <td><?= $category["category_name"] ?></td>
-                                    <td>
-                                       <p class="mb-0"><?= $category["category_description"] ?></p>
-                                    </td>
-                                    <td>
-                                       <div class="flex align-items-center list-user-action">
-                                          <input type="hidden" name="id_category" value="<?= $category["id_category"] ?>">
-                                          <a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" href="admin-add-category.php?id_category=<?= $category["id_category"]; ?>"><i class="ri-pencil-line"></i></a>
-                                          <a class="bg-primary" data-toggle="tooltip" data-placement="top" name="delete" href="?id_category=<?= $category["id_category"] ?>"><i class="ri-delete-bin-line"></i></a>
-                                       </div>
-                                    </td>
-                                 </tr>
-                              </tbody>
-                              <?php $i++; ?>
-                           <?php endwhile ?>
+                           <?php foreach ($categories as $category) {
+                              echo '<tbody>';
+                              echo '<tr>';
+                              echo '<td>' . $i . '</td>';
+                              echo '<td>' . $category["CATEGORY_NAME"] . '</td>';
+                              echo '<td>';
+                              echo '<p class="mb-0">' . $category["CATEGORY_DESCRIPTION"] . '</p>';
+                              echo '</td>';
+                              echo '<td>';
+                              echo '<div class="flex align-items-center list-user-action">';
+                              echo '<input type="hidden" name="id_category" value="' . $category["ID_CATEGORY"] . '">';
+                              echo '<a class="bg-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" href="admin-add-category.php?id_category=' . $category["ID_CATEGORY"] . '"><i class="ri-pencil-line"></i></a>';
+                              echo '<a class="bg-primary" data-toggle="tooltip" data-placement="top" name="delete" href="?id_category=' . $category["ID_CATEGORY"] . '"><i class="ri-delete-bin-line"></i></a>';
+                              echo '</div>';
+                              echo '</td>';
+                              echo '</tr>';
+                              echo '</tbody>';
+
+                              $i++;
+                           } ?>
                         </table>
                      </div>
                   </div>
