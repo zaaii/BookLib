@@ -33,8 +33,16 @@ if ($sessionCount1HourAgo != 0) {
 } else {
    $percentageChange1Hour = 0; // or any desired default value when the division is not possible
 }
-$percentageChange1Day = (($sessionCountNow - $sessionCount1DayAgo) / $sessionCount1DayAgo) * 100;
-$percentageChange1Week = (($sessionCountNow - $sessionCount1WeekAgo) / $sessionCount1WeekAgo) * 100;
+if ($sessionCount1DayAgo != 0) {
+   $percentageChange1Day = (($sessionCountNow - $sessionCount1DayAgo) / $sessionCount1DayAgo) * 100;
+} else {
+   $sessionCount1DayAgo = 0; // or any desired default value when the division is not possible
+}
+if ($sessionCount1WeekAgo != 0) {
+   $percentageChange1Week = (($sessionCountNow - $sessionCount1WeekAgo) / $sessionCount1WeekAgo) * 100;
+} else {
+   $sessionCount1WeekAgo = 0; // or any desired default value when the division is not possible
+}
 
 // Check Role user
 checkRole($_SESSION);
