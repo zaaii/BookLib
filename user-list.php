@@ -24,14 +24,6 @@ if (isset($_GET["hapus"])) {
    }
 }
 
-if (!isSessionStillAlive($_SESSION)) {
-   // If the session does not exist in the database, delete the existing session and redirect to the login page
-   session_unset();
-   session_destroy();
-   header("Location: login.php");
-   exit();
-}
-
 // Mengambil data user
 $user = getData("users");
 

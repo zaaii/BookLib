@@ -13,14 +13,6 @@ if (!isset($_SESSION["login"])) {
    exit;
 }
 
-if (!isSessionStillAlive($_SESSION)) {
-   // If the session does not exist in the database, delete the existing session and redirect to the login page
-   session_unset();
-   session_destroy();
-   header("Location: login.php");
-   exit();
-}
-
 $id_buku = !empty($_GET['id_buku']) ? $_GET['id_buku'] : '';
 //memeriksa apakah tombol submit sudah ditekan atau belum
 if (isset($_POST["submit"])) {
@@ -149,10 +141,11 @@ checkRole($_SESSION);
                         <div class="form-group">
                            <label>Category Book</label>
                            <select class="form-control" name="category_ids" id="category_ids" required>
-                           <option selected="" disabled="">Select your category book</option>
+                              <option selected="" disabled="">Select your category book</option>
                               <?php
-                              $categories = $koneksi->query("SELECT * FROM categories");
-                              while ($row = $categories->fetch_assoc()) :
+                              $categories = oci_parse($koneksi, "SELECT * FROM categories");
+                              oci_execute($categories);
+                              while ($row = oci_fetch_assoc($categories)) :
                               ?>
                                  <option value="<?php echo $row['id_category'] ?>" <?php echo isset($category_ids) && !empty($category_ids) &&  in_array($row['id_category'], explode(',', $category_ids)) ? 'selected' : '' ?>><?php echo ucwords($row['category_name']) ?></option>
                               <?php endwhile; ?>
@@ -221,17 +214,18 @@ checkRole($_SESSION);
                      <input type="text" name="deskripsi_buku" id="deskripsi_buku" class="form-control" required value="<?= $buku["deskripsi_buku"] ?>">
                   </div>
                   <div class="form-group">
-                           <label>Category Book</label>
-                           <select class="form-control" name="category_ids" id="category_ids" required>
-                           <option selected="" disabled="">Select your category book</option>
-                              <?php
-                              $categories = $koneksi->query("SELECT * FROM categories");
-                              while ($row = $categories->fetch_assoc()) :
-                              ?>
-                                 <option value="<?php echo $row['id_category'] ?>" <?php echo isset($category_ids) && !empty($category_ids) &&  in_array($row['id_category'], explode(',', $category_ids)) ? 'selected' : '' ?>><?php echo ucwords($row['category_name']) ?></option>
-                              <?php endwhile; ?>
-                           </select>
-                        </div>
+                     <label>Category Book</label>
+                     <select class="form-control" name="category_ids" id="category_ids" required>
+                        <option selected="" disabled="">Select your category book</option>
+                        <?php
+                        $categories = oci_parse($koneksi, "SELECT * FROM categories");
+                        oci_execute($categories);
+                        while ($row = oci_fetch_assoc($categories)) :
+                        ?>
+                           <option value="<?php echo $row['id_category'] ?>" <?php echo isset($category_ids) && !empty($category_ids) &&  in_array($row['id_category'], explode(',', $category_ids)) ? 'selected' : '' ?>><?php echo ucwords($row['category_name']) ?></option>
+                        <?php endwhile; ?>
+                     </select>
+                  </div>
                   <button type="submit" class="btn btn-primary" name="ubah">Change</button>
                   <a href="admin-books.php" class="btn btn-danger">Back</a>
                </form>

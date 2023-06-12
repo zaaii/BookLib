@@ -10,14 +10,6 @@ if (!isset($_SESSION["login"])) {
    exit;
 }
 
-if (!isSessionStillAlive($_SESSION)) {
-   // If the session does not exist in the database, delete the existing session and redirect to the login page
-   session_unset();
-   session_destroy();
-   header("Location: login.php");
-   exit();
-}
-
 $id_category = !empty($_GET['id_category']) ? $_GET['id_category'] : '';
 //memeriksa apakah tombol submit sudah ditekan atau belum
 if (isset($_POST["submit"])) {

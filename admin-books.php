@@ -21,14 +21,6 @@ if (isset($_GET['book_id'])) {
    }
 }
 
-if (!isSessionStillAlive($_SESSION)) {
-   // If the session does not exist in the database, delete the existing session and redirect to the login page
-   session_unset();
-   session_destroy();
-   header("Location: login.php");
-   exit();
-}
-
 $user = getData("users");
 // Mengambil data buku di database
 $bukus = getData("buku");
@@ -121,12 +113,14 @@ checkRole($_SESSION);
                            <?php
                            $i = 1;
                            $cname[0] = "Not Set";
-                           $categories = $koneksi->query("SELECT * FROM categories");
-                           foreach ($categories as $row) {
+                           $categories = oci_parse($koneksi, "SELECT * FROM categories");
+                           oci_execute($categories);
+                           while ($row = oci_fetch_assoc($categories)) {
                               $cname[$row['id_category']] = ucwords($row['category_name']);
                            }
-                           $bukus = $koneksi->query("SELECT * FROM buku");
-                           foreach ($bukus as $buku) :
+                           $bukus = oci_parse($koneksi, "SELECT * FROM buku");
+                           oci_execute($bukus);
+                           while ($buku = oci_fetch_assoc($bukus)) :
                            ?>
                               <tbody>
                                  <tr>
@@ -168,7 +162,7 @@ checkRole($_SESSION);
                                     </td>
                                  </tr>
                               </tbody>
-                           <?php endforeach ?>
+                           <?php endwhile; ?>
                         </table>
                      </div>
                   </div>

@@ -30,14 +30,6 @@ if (!isset($_SESSION["login"])) {
    header("Location: login.php");
    exit;
 }
-
-if (!isSessionStillAlive($_SESSION)) {
-   // If the session does not exist in the database, delete the existing session and redirect to the login page
-   session_unset();
-   session_destroy();
-   header("Location: login.php");
-   exit();
-}
 ?>
 <!doctype html>
 <html lang="en">

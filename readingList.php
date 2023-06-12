@@ -9,15 +9,6 @@ if (isset($_GET['keyword'])) {
    $bukus = getData("buku");
 }
 
-if (!isSessionStillAlive($_SESSION)) {
-   // If the session does not exist in the database, delete the existing session and redirect to the login page
-   session_unset();
-   session_destroy();
-   header("Location: login.php");
-   exit();
-}
-
-
 //cek apakah user sudah login
 if (!isset($_SESSION["login"])) {
    header("Location: login.php");

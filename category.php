@@ -24,15 +24,7 @@ if (isset($_POST['id_user'], $_POST['id_buku'])) {
 
 $user = getData("users");
 // Check if sesion user still exists
-if (!isSessionStillAlive($_SESSION)) {
-   // If the session does not exist in the database, delete the existing session and redirect to the login page
-   session_unset();
-   session_destroy();
-   header("Location: login.php");
-   exit();
-}
 
-// Mendapatkan daftar kategori
 // Mendapatkan daftar kategori
 $query_categories = "SELECT * FROM categories";
 $result_categories = oci_parse($koneksi, $query_categories);
