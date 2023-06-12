@@ -25,7 +25,7 @@ if (isset($_GET["hapus"])) {
 }
 
 // Mengambil data user
-$user = getData("users");
+$users = getData("users");
 
 // Check Role user
 checkRole($_SESSION);
