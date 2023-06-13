@@ -836,11 +836,14 @@ function logoutSession($sessionId)
 function getSessionCount($timeRange)
 {
     global $koneksi;
-    $query = "SELECT COUNT(*) as count FROM sessions WHERE login_time >= TO_DATE(:timeRange, 'YYYY-MM-DD HH24:MI:SS')";
+    $query = "SELECT COUNT(*) as COUNT FROM sessions WHERE login_time >= TO_DATE(:timeRange, 'YYYY-MM-DD HH24:MI:SS')";
     $stmt = oci_parse($koneksi, $query);
     oci_bind_by_name($stmt, ":timeRange", $timeRange);
     oci_execute($stmt);
-    $count = oci_fetch_assoc($stmt)['COUNT'];
+    $count = 0;
+    if ($row = oci_fetch_assoc($stmt)) {
+        $count = $row['COUNT'];
+    }
     return $count;
 }
 
