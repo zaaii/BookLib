@@ -486,7 +486,7 @@ function editProfil($data)
     $email = htmlspecialchars($data["email"]);
     $gender = isset($data["gender"]) ? $data["gender"] : "";
     $user_photo = isset($_FILES["user_photo"]["name"]) ? $_FILES["user_photo"]["name"] : "";
-    $birth_date = date('m-d-Y', strtotime(htmlspecialchars($data["birth_date"])));
+    $birth_date = date('d-m-Y', strtotime(htmlspecialchars($data["birth_date"])));
 
     if (!empty($user_photo)) {
         $target_dir = "resources/profile/"; // Directory where you want to store the uploaded photos
