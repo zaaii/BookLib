@@ -53,43 +53,39 @@ function insertDataBuku($data)
     exec($move_command);
     exec($chmod_command);
 
-    $gambar_buku_content = file_get_contents($gambar_buku);  // Read the image file content
-
-    // Assuming $pdf_buku is the path to the PDF file
-    $pdf_buku_content = file_get_contents($pdf_buku);  // Read the PDF file content
-    
-    $query = "INSERT INTO buku (judul_buku, penulis, penerbit, tahun_terbit, gambar_buku, pdf_buku, deskripsi_buku, category_ids)
-              VALUES (:judul_buku, :penulis, :penerbit, :tahun_terbit, EMPTY_BLOB(), EMPTY_BLOB(), :deskripsi_buku, :category_ids)
-              RETURNING gambar_buku, pdf_buku INTO :gambar_buku, :pdf_buku";
-    
+    $query = "INSERT INTO buku (id_buku, judul_buku, penulis, penerbit, tahun_terbit, gambar_buku, pdf_buku, deskripsi_buku, category_ids)
+    VALUES (:id_buku, :judul_buku, :penulis, :penerbit, :tahun_terbit, :gambar_buku, :pdf_buku, :deskripsi_buku, :category_ids)";
     $stmt = oci_parse($koneksi, $query);
     oci_bind_by_name($stmt, ':judul_buku', $judul_buku);
     oci_bind_by_name($stmt, ':penulis', $penulis);
     oci_bind_by_name($stmt, ':penerbit', $penerbit);
     oci_bind_by_name($stmt, ':tahun_terbit', $tahun_terbit);
+    oci_bind_by_name($stmt, ':gambar_buku', $new_cover_name);
+    oci_bind_by_name($stmt, ':pdf_buku', $pdf_buku);
     oci_bind_by_name($stmt, ':deskripsi_buku', $deskripsi_buku);
     oci_bind_by_name($stmt, ':category_ids', $category_ids);
-    oci_bind_by_name($stmt, ':gambar_buku', $gambar_buku_content, -1, OCI_B_BLOB);
-    oci_bind_by_name($stmt, ':pdf_buku', $pdf_buku_content, -1, OCI_B_BLOB);
-    
-    oci_execute($stmt, OCI_DEFAULT);
-    oci_commit($koneksi);  // Commit the transaction
-    
-    // Save the image content to the BLOB column
-    $gambar_buku_blob = oci_new_descriptor($koneksi, OCI_D_LOB);
-    oci_execute($stmt, OCI_DEFAULT);
-    oci_commit($koneksi);  // Commit the transaction
-    $gambar_buku_blob->save($gambar_buku_content);
-    $gambar_buku_blob->free();
-    
-    // Save the PDF content to the BLOB column
-    $pdf_buku_blob = oci_new_descriptor($koneksi, OCI_D_LOB);
-    oci_execute($stmt, OCI_DEFAULT);
-    oci_commit($koneksi);  // Commit the transaction
-    $pdf_buku_blob->save($pdf_buku_content);
-    $pdf_buku_blob->free();
-    
-    return oci_num_rows($stmt);
+    oci_bind_by_name($stmt, ':id_buku', $id_buku);
+    oci_execute($stmt);
+
+    // Get the LOB handles for the BLOB columns
+$lob_gambar_buku = oci_new_descriptor($koneksi, OCI_D_LOB);
+$lob_pdf_buku = oci_new_descriptor($koneksi, OCI_D_LOB);
+
+// Update the BLOB columns with the binary data
+$query = "SELECT gambar_buku, pdf_buku FROM buku WHERE id_buku = :id_buku FOR UPDATE";
+$stmt = oci_parse($koneksi, $query);
+oci_bind_by_name($stmt, ':id_buku', $id_buku);
+oci_execute($stmt);
+if ($row = oci_fetch_assoc($stmt)) {
+    $lob_gambar_buku->writeTemporary(file_get_contents($new_cover_name));
+    $lob_pdf_buku->writeTemporary(file_get_contents($pdf_buku));
+    $row['gambar_buku']->save($lob_gambar_buku);
+    $row['pdf_buku']->save($lob_pdf_buku);
+}
+$lob_gambar_buku->free();
+$lob_pdf_buku->free();
+
+return oci_num_rows($stmt);
 }
 
 //fungsi untuk mengedit data buku
