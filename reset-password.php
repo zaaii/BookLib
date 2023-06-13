@@ -2,9 +2,9 @@
 session_start();
 require("model.php");
 
-//check when url has token or token not valid
 if(!isset($_GET["token"]) || !checkToken($_GET["token"])) {
     header("Location: unauthorized.php");
+    exit;
 }
 
 if(isset($_POST["submit"])) {

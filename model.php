@@ -769,14 +769,15 @@ function checkToken($token)
 {
     global $koneksi;
 
+    $token = $_GET["token"];
     $result = oci_parse($koneksi, "SELECT * FROM forgot_password WHERE TOKEN = :token");
     oci_bind_by_name($result, ":token", $token);
     oci_execute($result);
     $row = oci_fetch_assoc($result);
 
     if (oci_num_rows($result) === 1) {
-        $expiration = $row["expiration"];
-        if (date('Y-m-d H:i:s') > $expiration) {
+        $expiration = $row["EXPIRATION"];
+        if (date('m-d-Y') > $expiration) {
             return false;
         }
         return true;
