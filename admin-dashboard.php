@@ -9,14 +9,19 @@ if (!isset($_SESSION["login"])) {
    exit;
 }
 
-$user = getData("users");
-$books = getData("buku");
+$result = oci_parse($koneksi, "SELECT * FROM books");
+oci_execute($result);
+$books = oci_fetch_all($result, $res);
+
+$results = oci_parse($koneksi, "SELECT * FROM users");
+oci_execute($results);
+$users = oci_fetch_all($results, $res);
 // Mengambil data buku di database
 $categories = getData("categories");
 
 //count data in database
-$countUser = count($user);
-$countBook = count($books);
+$countUser = oci_num_rows($results);
+$countBook = oci_num_rows($result);
 
 $now = date('Y-m-d H:i:s');
 $oneHourAgo = date('Y-m-d H:i:s', strtotime('-1 hour'));
