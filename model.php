@@ -70,7 +70,6 @@ function insertDataBuku($data)
     oci_bind_by_name($stmt, ':category_ids', $category_ids);
     oci_bind_by_name($stmt, ':gambar_buku', $gambar_buku_blob, -1, OCI_B_BLOB);
     oci_bind_by_name($stmt, ':pdf_buku', $pdf_buku_blob, -1, OCI_B_BLOB);
-
     oci_execute($stmt, OCI_DEFAULT);
 
     // Fetch the BLOB data
