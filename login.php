@@ -31,12 +31,6 @@ if (isset($_POST["submit"])) {
             $_SESSION["user_photo"] = $row["USER_PHOTO"];
             $_SESSION["role"] = $row["ROLE"];
             $_SESSION["created_at"] = $row["CREATED_AT"];
-
-            $sessionId = loginSession($_SESSION['id_user']);
-            // Store the user ID and session ID in the session
-            $_SESSION['session_id'] = $sessionId;
-            header("Location: index.php");
-            exit;
         } else {
             $message = "Email Atau Password Salah";
             $alertType = "danger";

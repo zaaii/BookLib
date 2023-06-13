@@ -786,73 +786,29 @@ function checkToken($token)
     }
 }
 
-function lastRegister()
-{
-    global $koneksi;
-    $query = "SELECT COUNT(*) as count FROM users";
-    $result = oci_parse($koneksi, $query);
-    oci_execute($result);
-    $lastRecord = oci_fetch_assoc($result)['count'];
-    return $lastRecord;
-}
-
-function loginSession($userId)
-{
+function getLastRegistered() {
     global $koneksi;
 
-    // Get the current login time
-    $loginTime = date('Y-m-d H:i:s');
-
-    // Insert the login session into the sessions table
-    $query = "INSERT INTO sessions (session_id, user_id, login_time) VALUES (SYS_GUID(), :userId, TO_DATE(:loginTime, 'YYYY-MM-DD HH24:MI:SS'))";
+    $query = "SELECT user_photo, email, date_created FROM users WHERE role = 'member' ORDER BY date_created DESC FETCH FIRST 5 ROWS ONLY";
     $stmt = oci_parse($koneksi, $query);
-    oci_bind_by_name($stmt, ":userId", $userId);
-    oci_bind_by_name($stmt, ":loginTime", $loginTime);
     oci_execute($stmt);
 
-    // Get the session ID of the inserted row
-    $sessionId = oci_fetch_assoc($stmt)['session_id'];
+    // Check if the query was successful
+    if ($stmt) {
+        $users = array();
 
-    // Return the session ID
-    return $sessionId;
-}
+        // Fetch the data as an associative array
+        while ($row = oci_fetch_assoc($stmt)) {
+            $users[] = $row;
+        }
 
+        // Free the statement
+        oci_free_statement($stmt);
 
-function logoutSession($sessionId)
-{
-    global $koneksi;
-
-    // Get the current logout time
-    $logoutTime = date('Y-m-d H:i:s');
-
-    // Update the logout time in the sessions table
-    $query = "UPDATE sessions SET logout_time = TO_DATE(:logoutTime, 'YYYY-MM-DD HH24:MI:SS') WHERE session_id = :sessionId";
-    $stmt = oci_parse($koneksi, $query);
-    oci_bind_by_name($stmt, ":logoutTime", $logoutTime);
-    oci_bind_by_name($stmt, ":sessionId", $sessionId);
-    oci_execute($stmt);
-}
-
-function getSessionCount($timeRange)
-{
-    global $koneksi;
-    $query = "SELECT COUNT(*) as COUNT FROM sessions WHERE login_time >= TO_DATE(:timeRange, 'YYYY-MM-DD HH24:MI:SS')";
-    $stmt = oci_parse($koneksi, $query);
-    oci_bind_by_name($stmt, ":timeRange", $timeRange);
-    oci_execute($stmt);
-    $count = 0;
-    if ($row = oci_fetch_assoc($stmt)) {
-        $count = $row['COUNT'];
+        return $users;
+    } else {
+        // Query failed, return false or handle the error accordingly
+        return false;
     }
-    return $count;
 }
 
-function formatCount($count, $percentage)
-{
-    $formattedCount = number_format($count);
-    $formattedPercentage = number_format($percentage, 2) . '%';
-    $arrowIcon = $percentage >= 0 ? 'ri-arrow-up-s-fill' : 'ri-arrow-down-s-fill';
-    $textClass = $percentage >= 0 ? 'text-success' : 'text-danger';
-
-    return "<div class='mb-1 text-black'>$formattedCount<span class='$textClass'><i class='$arrowIcon'></i>$formattedPercentage</span></div>";
-}
