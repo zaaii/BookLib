@@ -639,12 +639,12 @@ function forgetPassword($data)
     global $koneksi;
 
     $email = $data["email"];
-    $result = oci_parse($koneksi, "SELECT * FROM users WHERE email = :email");
+    $result = oci_parse($koneksi, "SELECT id_user FROM users WHERE email = :email");
     oci_bind_by_name($result, ":email", $email);
     oci_execute($result);
     $row = oci_fetch_assoc($result);
 
-    if ($row) {
+    if (oci_num_rows($result) === 1) {
         $id_user = $row["id_user"];
         $token = uniqid();
         $rand = rand(1, 99);
