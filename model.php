@@ -72,12 +72,6 @@ function insertDataBuku($data)
     oci_bind_by_name($stmt, ':pdf_buku', $pdf_buku_blob, -1, OCI_B_BLOB);
     oci_execute($stmt, OCI_DEFAULT);
 
-    // Fetch the BLOB data
-    oci_fetch($stmt);
-    $gambar_buku_blob->save($gambar_buku_destination);
-    oci_fetch($stmt);
-    $pdf_buku_blob->save($pdf_buku_destination);
-
     oci_commit($koneksi);  // Commit the transaction
 
     $gambar_buku_blob->free();
