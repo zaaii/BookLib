@@ -53,16 +53,8 @@ function insertDataBuku($data)
     exec($move_command);
     exec($chmod_command);
 
-    $query = "INSERT INTO buku SET 
-            judul_buku = :judul_buku,
-            penulis = :penulis,
-            penerbit = :penerbit,
-            tahun_terbit = :tahun_terbit,
-            gambar_buku = :gambar_buku,
-            pdf_buku = :pdf_buku,
-            deskripsi_buku = :deskripsi_buku,
-            category_ids = :category_ids
-        WHERE id_buku = :id_buku";
+    $query = "INSERT INTO buku (id_buku, judul_buku, penulis, penerbit, tahun_terbit, gambar_buku, pdf_buku, deskripsi_buku, category_ids)
+    VALUES (:id_buku, :judul_buku, :penulis, :penerbit, :tahun_terbit, :gambar_buku, :pdf_buku, :deskripsi_buku, :category_ids)";
     $stmt = oci_parse($koneksi, $query);
     oci_bind_by_name($stmt, ':judul_buku', $judul_buku);
     oci_bind_by_name($stmt, ':penulis', $penulis);
@@ -74,7 +66,6 @@ function insertDataBuku($data)
     oci_bind_by_name($stmt, ':category_ids', $category_ids);
     oci_bind_by_name($stmt, ':id_buku', $id_buku);
     oci_execute($stmt);
-
     return oci_num_rows($stmt);
 }
 
