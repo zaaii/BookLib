@@ -41,13 +41,17 @@ function insertDataBuku($data)
 
     // Upload gambar buku
     $gambar_buku_tmp = $_FILES["gambar_buku"]["tmp_name"];
-    move_uploaded_file($gambar_buku_tmp, "resources/cover/" . $gambar_buku);
-    chmod('resources/cover/' . $gambar_buku, 0644);
+    $gambar_buku_destination = "resources/cover/" . $gambar_buku;
 
     // Upload PDF buku
     $pdf_buku_tmp = $_FILES["pdf_buku"]["tmp_name"];
-    move_uploaded_file($pdf_buku_tmp, "resources/ebook/" . $pdf_buku);
-    chmod('resources/ebook/' . $pdf_buku, 0644);
+    $pdf_buku_destination = "resources/ebook/" . $pdf_buku;
+
+    $move_command = "sudo mv " . escapeshellarg($gambar_buku_tmp) . " " . escapeshellarg($gambar_buku_destination) . " && sudo mv " . escapeshellarg($pdf_buku_tmp) . " " . escapeshellarg($pdf_buku_destination);
+    $chmod_command = "sudo chmod 0644 " . escapeshellarg($gambar_buku_destination) . " && sudo chmod 0644 " . escapeshellarg($pdf_buku_destination);
+
+    exec($move_command);
+    exec($chmod_command);
 
     $query = "INSERT INTO buku SET 
             judul_buku = :judul_buku,
@@ -785,7 +789,8 @@ function checkToken($token)
     }
 }
 
-function getLastRegistered() {
+function getLastRegistered()
+{
     global $koneksi;
 
     $query = "SELECT user_photo, full_name, email, gender, date_created FROM users WHERE role = 'member' ORDER BY date_created DESC FETCH FIRST 5 ROWS ONLY";
@@ -810,4 +815,3 @@ function getLastRegistered() {
         return false;
     }
 }
-
