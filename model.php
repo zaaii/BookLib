@@ -61,30 +61,30 @@ function insertDataBuku($data)
     oci_bind_by_name($stmt, ':penulis', $penulis);
     oci_bind_by_name($stmt, ':penerbit', $penerbit);
     oci_bind_by_name($stmt, ':tahun_terbit', $tahun_terbit);
-    oci_bind_by_name($stmt, ':gambar_buku', $gambar_buku, -1, OCI_B_BLOB);
-    oci_bind_by_name($stmt, ':pdf_buku', $pdf_buku, -1, OCI_B_BLOB);
     oci_bind_by_name($stmt, ':deskripsi_buku', $deskripsi_buku);
     oci_bind_by_name($stmt, ':category_ids', $category_ids);
-    oci_bind_by_name($stmt, ':id_buku', $id_buku);
+    oci_bind_by_name($stmt, ':gambar_buku', $gambar_buku_blob, -1, OCI_B_BLOB);
+    oci_bind_by_name($stmt, ':pdf_buku', $pdf_buku_blob, -1, OCI_B_BLOB);
     oci_execute($stmt, OCI_DEFAULT);
 
     // Get the LOB handles for the BLOB columns
     $gambar_buku_blob = oci_new_descriptor($koneksi, OCI_D_LOB);
     $pdf_buku_blob = oci_new_descriptor($koneksi, OCI_D_LOB);
-    
+
     // Fetch the BLOB data
     oci_fetch($stmt);
-    $gambar_buku_blob->save($gambar_buku);
+    $gambar_buku_blob->save($gambar_buku_destination);
     oci_fetch($stmt);
-    $pdf_buku_blob->save($pdf_buku);
-    
+    $pdf_buku_blob->save($pdf_buku_destination);
+
     oci_commit($koneksi);  // Commit the transaction
-    
+
     $gambar_buku_blob->free();
     $pdf_buku_blob->free();
-    
+
     return oci_num_rows($stmt);
 }
+
 
 //fungsi untuk mengedit data buku
 function updateDataBuku($data)
