@@ -647,7 +647,7 @@ function forgetPassword($data)
     if (oci_num_rows($result) === 1) {
         $id_user = $row["ID_USER"];
         $token = uniqid();
-        $rand = rand(1, 99);
+        $rand = mt_rand(1, 99);
         $expiration = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
         $query = "INSERT INTO forgot_password (rand, id_user, token, expiration) VALUES (:rand, :id_user, :token, TO_DATE(:expiration, 'YYYY-MM-DD HH24:MI:SS'))";
