@@ -500,7 +500,7 @@ function editProfil($data)
                 email = :email,
                 gender = :gender,
                 user_photo = :user_photo,
-                birth_date = TO_DATE(:birth_date, 'dd-mm-yyyy')
+                birth_date = TO_DATE(:birth_date, 'YYYY-MM-DD')
             WHERE id_user = :id_user";
 
     $stmt = oci_parse($koneksi, $query);
