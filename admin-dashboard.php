@@ -11,7 +11,7 @@ if (!isset($_SESSION["login"])) {
 
 $newUsers = getLastRegistered();
 $users = getData("users");
-$books = getData("books");
+$books = getData("buku");
 
 $countBook = count($books);
 $countUser = count($users);
