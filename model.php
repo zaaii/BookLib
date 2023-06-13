@@ -60,12 +60,12 @@ function insertDataBuku($data)
     oci_bind_by_name($stmt, ':penulis', $penulis);
     oci_bind_by_name($stmt, ':penerbit', $penerbit);
     oci_bind_by_name($stmt, ':tahun_terbit', $tahun_terbit);
-    oci_bind_by_name($stmt, ':gambar_buku', $new_cover_name);
-    oci_bind_by_name($stmt, ':pdf_buku', $pdf_buku);
+    oci_bind_by_name($stmt, ':gambar_buku', $gambar_buku, -1, OCI_B_BLOB);
+    oci_bind_by_name($stmt, ':pdf_buku', $pdf_buku, -1, OCI_B_BLOB);
     oci_bind_by_name($stmt, ':deskripsi_buku', $deskripsi_buku);
     oci_bind_by_name($stmt, ':category_ids', $category_ids);
     oci_bind_by_name($stmt, ':id_buku', $id_buku);
-    oci_execute($stmt);
+    oci_execute($stmt, OCI_DEFAULT);
 
     // Get the LOB handles for the BLOB columns
 $lob_gambar_buku = oci_new_descriptor($koneksi, OCI_D_LOB);
@@ -77,7 +77,7 @@ $stmt = oci_parse($koneksi, $query);
 oci_bind_by_name($stmt, ':id_buku', $id_buku);
 oci_execute($stmt);
 if ($row = oci_fetch_assoc($stmt)) {
-    $lob_gambar_buku->writeTemporary(file_get_contents($new_cover_name));
+    $lob_gambar_buku->writeTemporary(file_get_contents($gambar_buku));
     $lob_pdf_buku->writeTemporary(file_get_contents($pdf_buku));
     $row['gambar_buku']->save($lob_gambar_buku);
     $row['pdf_buku']->save($lob_pdf_buku);
