@@ -113,7 +113,7 @@ checkRole($_SESSION);
                         <table class="table mb-0 table-borderless">
                            <thead>
                               <tr>
-                                 <th scope="col">Photo</th>
+                                 <th scope="col" class="text-center">Photo</th>
                                  <th scope="col">Full Name</th>
                                  <th scope="col">Email</th>
                                  <th scope="col">Gender</th>
