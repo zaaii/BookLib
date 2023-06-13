@@ -63,11 +63,6 @@ function insertDataBuku($data)
     $gambar_buku_blob = oci_new_descriptor($koneksi, OCI_D_LOB);
     $pdf_buku_blob = oci_new_descriptor($koneksi, OCI_D_LOB);
 
-    oci_fetch($stmt);
-    $gambar_buku_blob->save($gambar_buku_destination);
-    oci_fetch($stmt);
-    $pdf_buku_blob->save($pdf_buku_destination);
-
     oci_bind_by_name($stmt, ':id_buku', $id_buku);
     oci_bind_by_name($stmt, ':judul_buku', $judul_buku);
     oci_bind_by_name($stmt, ':penulis', $penulis);
@@ -79,7 +74,12 @@ function insertDataBuku($data)
     oci_bind_by_name($stmt, ':pdf_buku', $pdf_buku_blob, -1, OCI_B_BLOB);
     oci_execute($stmt, OCI_DEFAULT);
 
-    oci_commit($koneksi);  // Commit the transaction
+    oci_fetch($stmt);
+    $gambar_buku_blob->save($gambar_buku_destination);
+    oci_fetch($stmt);
+    $pdf_buku_blob->save($pdf_buku_destination);
+
+    oci_commit($koneksi);
 
     $gambar_buku_blob->free();
     $pdf_buku_blob->free();
