@@ -789,7 +789,7 @@ function checkToken($token)
 function getLastRegistered() {
     global $koneksi;
 
-    $query = "SELECT user_photo, email, date_created FROM users WHERE role = 'member' ORDER BY date_created DESC FETCH FIRST 5 ROWS ONLY";
+    $query = "SELECT user_photo, full_name, email, gender, date_created FROM users WHERE role = 'member' ORDER BY date_created DESC FETCH FIRST 5 ROWS ONLY";
     $stmt = oci_parse($koneksi, $query);
     oci_execute($stmt);
 

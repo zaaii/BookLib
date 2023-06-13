@@ -116,7 +116,7 @@ checkRole($_SESSION);
                               </tr>
                            </thead>
                            <tbody>
-                           <?php
+                              <?php
                               foreach ($newUsers as $row) {
                                  echo '<tr>';
                                  echo '<td class="text-center">';
@@ -144,31 +144,8 @@ checkRole($_SESSION);
       </div>
    </div>
    </div>
-   <?php
-   if (is_array($newUsers)) {
-									// Iterate over the user data and generate HTML code
-									foreach ($newUsers as $user) {
-										// Check if $user is an array and contains the expected keys
-										if (is_array($user) && isset($user['user_photo']) && isset($user['email']) && isset($user['date_created'])) {
-											echo '<div class="user-item">';
-											echo '<div class="avatar avatar-md mr-3">';
-											echo '<img class="img-fluid" src="src/assets/images/team/' . $user['user_photo'] . '" alt="">';
-											echo '</div>';
-											echo '<div class="user-name">';
-											echo '<h6><a href="#!">' . $user['email'] . '</a></h6>';
-											echo '<span>' . $user['date_created'] . '</span>';
-											echo '</div>';
-											echo '</div>';
-										} else {
-											echo '<p>Error: Invalid user data</p>';
-										}
-									}
-								} else {
-									echo '<p>Error: Failed to retrieve new registered users</p>';
-								}
-								?>
-							</div>
-						</div>
+   </div>
+   </div>
 
    <!-- Wrapper END -->
    <!-- Footer -->
