@@ -708,22 +708,22 @@ function newPassword($npass, $npass2)
     $row = oci_fetch_assoc($result);
 
     if (oci_num_rows($result) === 1) {
-        $id_user = $row["id_user"];
+        $id_user = $row["ID_USER"];
 
-        $resultUser = oci_parse($koneksi, "SELECT * FROM users WHERE id_user = :id_user");
+        $resultUser = oci_parse($koneksi, "SELECT * FROM users WHERE ID_USER = :id_user");
         oci_bind_by_name($resultUser, ":id_user", $id_user);
         oci_execute($resultUser);
         $rowUser = oci_fetch_assoc($resultUser);
-        $email = $rowUser["email"];
+        $email = $rowUser["EMAIL"];
         $npassHash = password_hash($npass, PASSWORD_DEFAULT);
 
-        $query = "UPDATE users SET password = :npassHash WHERE id_user = :id_user";
+        $query = "UPDATE users SET password = :npassHash WHERE ID_USER = :id_user";
         $stmt = oci_parse($koneksi, $query);
         oci_bind_by_name($stmt, ":npassHash", $npassHash);
         oci_bind_by_name($stmt, ":id_user", $id_user);
         oci_execute($stmt);
 
-        $query2 = "DELETE FROM forgot_password WHERE token = :token";
+        $query2 = "DELETE FROM forgot_password WHERE TOKEN = :token";
         $stmt2 = oci_parse($koneksi, $query2);
         oci_bind_by_name($stmt2, ":token", $token);
         oci_execute($stmt2);
