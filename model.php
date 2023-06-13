@@ -769,7 +769,6 @@ function checkToken($token)
 {
     global $koneksi;
 
-    $token = $_GET["token"];
     $result = oci_parse($koneksi, "SELECT * FROM forgot_password WHERE TOKEN = :token");
     oci_bind_by_name($result, ":token", $token);
     oci_execute($result);
