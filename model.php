@@ -48,11 +48,11 @@ function insertDataBuku($data)
     $pdf_buku_tmp = $_FILES["pdf_buku"]["tmp_name"];
     $pdf_buku_destination = "resources/ebook/" . $pdf_buku;
 
-    $move_command = "sudo mv " . escapeshellarg($gambar_buku_tmp) . " " . escapeshellarg($gambar_buku_destination) . " && sudo mv " . escapeshellarg($pdf_buku_tmp) . " " . escapeshellarg($pdf_buku_destination);
-    $chmod_command = "sudo chmod 0644 " . escapeshellarg($gambar_buku_destination) . " && sudo chmod 0644 " . escapeshellarg($pdf_buku_destination);
+    // $move_command = "sudo mv " . escapeshellarg($gambar_buku_tmp) . " " . escapeshellarg($gambar_buku_destination) . " && sudo mv " . escapeshellarg($pdf_buku_tmp) . " " . escapeshellarg($pdf_buku_destination);
+    // $chmod_command = "sudo chmod 0644 " . escapeshellarg($gambar_buku_destination) . " && sudo chmod 0644 " . escapeshellarg($pdf_buku_destination);
 
-    exec($move_command);
-    exec($chmod_command);
+    // exec($move_command);
+    // exec($chmod_command);
 
     $query = "INSERT INTO buku (id_buku, judul_buku, penulis, penerbit, tahun_terbit, gambar_buku, pdf_buku, deskripsi_buku, category_ids)
     VALUES (:id_buku, :judul_buku, :penulis, :penerbit, :tahun_terbit, EMPTY_BLOB(), EMPTY_BLOB(), :deskripsi_buku, :category_ids)
@@ -80,6 +80,16 @@ function insertDataBuku($data)
     $gambar_buku_blob->save($gambar_buku_destination);
     oci_fetch($stmt);
     $pdf_buku_blob->save($pdf_buku_destination);
+
+    // Upload PDF buku
+    $pdf_buku_tmp = $_FILES["pdf_buku"]["tmp_name"];
+    $pdf_buku_destination = "resources/ebook/" . $pdf_buku;
+
+    $move_command = "sudo mv " . escapeshellarg($gambar_buku_tmp) . " " . escapeshellarg($gambar_buku_destination) . " && sudo mv " . escapeshellarg($pdf_buku_tmp) . " " . escapeshellarg($pdf_buku_destination);
+    $chmod_command = "sudo chmod 0644 " . escapeshellarg($gambar_buku_destination) . " && sudo chmod 0644 " . escapeshellarg($pdf_buku_destination);
+
+    exec($move_command);
+    exec($chmod_command);
 
     oci_commit($koneksi);
 
