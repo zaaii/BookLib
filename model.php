@@ -647,12 +647,12 @@ function forgetPassword($data)
     if (oci_num_rows($result) === 1) {
         $id_user = $row["ID_USER"];
         $token = uniqid();
-        $rand = mt_rand(1, 99);
+        $id = mt_rand(1, 99);
         $expiration = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
-        $query = "INSERT INTO forgot_password (rand, id_user, token, expiration) VALUES (:rand, :id_user, :token, TO_DATE(:expiration, 'YYYY-MM-DD HH24:MI:SS'))";
+        $query = "INSERT INTO forgot_password (id, id_user, token, expiration) VALUES (:id, :id_user, :token, TO_DATE(:expiration, 'YYYY-MM-DD HH24:MI:SS'))";
         $stmt = oci_parse($koneksi, $query);
-        oci_bind_by_name($stmt, ":rand", $rand);
+        oci_bind_by_name($stmt, ":id", $rand);
         oci_bind_by_name($stmt, ":id_user", $id_user);
         oci_bind_by_name($stmt, ":token", $token);
         oci_bind_by_name($stmt, ":expiration", $expiration);
