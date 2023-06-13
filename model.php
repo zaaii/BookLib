@@ -41,13 +41,13 @@ function insertDataBuku($data)
 
     // Upload gambar buku
     $gambar_buku_tmp = $_FILES["gambar_buku"]["tmp_name"];
-    chmod('resources/cover/', 0644);
     move_uploaded_file($gambar_buku_tmp, "resources/cover/" . $gambar_buku);
+    chmod('resources/cover/' . $gambar_buku, 0644);
 
     // Upload PDF buku
     $pdf_buku_tmp = $_FILES["pdf_buku"]["tmp_name"];
-    chmod('resources/ebook/', 0644);
     move_uploaded_file($pdf_buku_tmp, "resources/ebook/" . $pdf_buku);
+    chmod('resources/ebook/' . $pdf_buku, 0644);
 
     $query = "INSERT INTO buku SET 
             judul_buku = :judul_buku,
