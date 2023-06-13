@@ -804,7 +804,7 @@ function loginSession($userId)
     $loginTime = date('Y-m-d H:i:s');
 
     // Insert the login session into the sessions table
-    $query = "INSERT INTO sessions (user_id, login_time) VALUES (:userId, TO_DATE(:loginTime, 'YYYY-MM-DD HH24:MI:SS'))";
+    $query = "INSERT INTO sessions (session_id, user_id, login_time) VALUES (SYS_GUID(), :userId, TO_DATE(:loginTime, 'YYYY-MM-DD HH24:MI:SS'))";
     $stmt = oci_parse($koneksi, $query);
     oci_bind_by_name($stmt, ":userId", $userId);
     oci_bind_by_name($stmt, ":loginTime", $loginTime);
