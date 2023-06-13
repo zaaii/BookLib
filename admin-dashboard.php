@@ -10,6 +10,11 @@ if (!isset($_SESSION["login"])) {
 }
 
 $newUsers = getLastRegistered();
+$users = getData("users");
+$books = getData("books");
+
+$countBook = count($books);
+$countUser = count($users);
 
 
 // Check Role user
@@ -128,7 +133,11 @@ checkRole($_SESSION);
                                  echo '</td>';
                                  echo '<td>' . $row['FULL_NAME'] . '</td>';
                                  echo '<td>' . $row['EMAIL'] . '</td>';
-                                 echo '<td><span class="badge iq-bg-primary">' . $row['GENDER'] . '</span></td>';
+                                 if (empty($row['GENDER'])) {
+                                    echo '<td><span class="badge iq-bg-danger">Not Set</span></td>';
+                                 } else {
+                                    echo '<td><span class="badge iq-bg-primary">' . $row['GENDER'] . '</span></td>';
+                                 }
                                  echo '<td>' . $row['DATE_CREATED'] . '</td>';
                                  echo '<td>';
                                  echo '</td>';
