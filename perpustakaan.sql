@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 14 Jun 2023 pada 16.50
+-- Waktu pembuatan: 14 Jun 2023 pada 17.20
 -- Versi server: 10.4.22-MariaDB
 -- Versi PHP: 8.1.2
 
@@ -168,12 +168,12 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `full_name`, `email`, `password`, `gender`, `birth_date`, `date_created`, `user_photo`, `role`) VALUES
-(0, 'admin perpus', 'admin@admin.com', '$2y$10$y4izo07EOU8ObKP7jAPXG../qFfe.f.iE4o0YxFYHgu2kLkXLrC.2', 'male', '2023-05-08', '0000-00-00', 'just for you.png', 'admin'),
+(0, 'admin perpus', 'admin@admin.com', '$2y$10$y4izo07EOU8ObKP7jAPXG../qFfe.f.iE4o0YxFYHgu2kLkXLrC.2', 'male', '2023-05-08', '2023-06-01', 'just for you.png', 'admin'),
 (2867, 'qwdqwdq', 'dqwdqw@wfwefww.com', '$2y$10$ON2Mc2wLOAY/GKeUc40UC.GK1QehJfeK6ydo10vHvaXbUW7qiA/OK', NULL, NULL, '2023-06-12', NULL, 'member'),
 (4230, 'awdaw', 'dawdawd@wewoefiw.cpm', '$2y$10$Q3f6fe4gh2cbpbGhTKHDK.AmtpomAjA06hE519GQ2D3fq4Is3wXl6', NULL, NULL, '2023-06-12', NULL, 'member'),
 (5568, 'member booklib', 'member@member.com', '$2y$10$HfU5fnb4qronuX9BSLBgE.gstaDZ.VL8HgYxvp2x.YwlRK/eeK5d.', NULL, NULL, '2023-06-04', NULL, 'member'),
-(64789, 'zens catz', 'akunpremku@gmail.com', '$2y$10$MNr0eli21wCf0fNQz9piF.4C2onl6/0KUNVM9UUPgQv23MtsK56lO', '', '0000-00-00', '0000-00-00', '', 'member'),
-(647893263, 'user', 'user@user.com', '$2y$10$zhiFdTJCCbSslP8NIy7FdudtURQEnykFTK61bVfg9QZqRXXcU76Z6', 'male', '2023-02-16', '0000-00-00', 'Untitled-2.png', 'member');
+(64789, 'zens catz', 'akunpremku@gmail.com', '$2y$10$MNr0eli21wCf0fNQz9piF.4C2onl6/0KUNVM9UUPgQv23MtsK56lO', NULL, '0000-00-00', '2023-06-12', NULL, 'member'),
+(647893263, 'user', 'user@user.com', '$2y$10$zhiFdTJCCbSslP8NIy7FdudtURQEnykFTK61bVfg9QZqRXXcU76Z6', 'male', '2023-02-16', '2023-06-13', 'Untitled-2.png', 'member');
 
 --
 -- Indexes for dumped tables
