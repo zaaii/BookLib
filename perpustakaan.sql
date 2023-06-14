@@ -158,7 +158,7 @@ CREATE TABLE `users` (
   `password` varchar(255) DEFAULT NULL,
   `gender` varchar(10) DEFAULT NULL,
   `birth_date` date DEFAULT NULL,
-  `date_created` date NOT NULL DEFAULT current_timestamp(),
+  `date_created` timestamp NOT NULL DEFAULT current_timestamp(),
   `user_photo` varchar(255) DEFAULT NULL,
   `role` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
