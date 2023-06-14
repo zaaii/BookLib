@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 05 Jun 2023 pada 14.32
+-- Waktu pembuatan: 14 Jun 2023 pada 16.50
 -- Versi server: 10.4.22-MariaDB
 -- Versi PHP: 8.1.2
 
@@ -136,7 +136,14 @@ INSERT INTO `sessions` (`session_id`, `user_id`, `login_time`, `logout_time`) VA
 (15, 64789, '2023-06-04 18:27:24', '2023-06-04 18:27:32'),
 (16, 0, '2023-06-04 18:28:41', '2023-06-05 05:19:48'),
 (17, 0, '2023-06-05 10:15:43', '2023-06-05 10:15:49'),
-(18, 0, '2023-06-05 14:04:04', NULL);
+(18, 0, '2023-06-05 14:04:04', NULL),
+(19, 0, '2023-06-07 06:22:06', NULL),
+(20, 0, '2023-06-08 14:51:57', '2023-06-08 14:58:53'),
+(21, 5568, '2023-06-08 14:58:59', '2023-06-08 14:59:17'),
+(22, 5568, '2023-06-08 14:59:21', NULL),
+(23, 0, '2023-06-11 15:29:01', NULL),
+(24, 0, '2023-06-12 09:58:53', NULL),
+(25, 0, '2023-06-12 11:49:46', '2023-06-12 18:23:48');
 
 -- --------------------------------------------------------
 
@@ -162,6 +169,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id_user`, `full_name`, `email`, `password`, `gender`, `birth_date`, `date_created`, `user_photo`, `role`) VALUES
 (0, 'admin perpus', 'admin@admin.com', '$2y$10$y4izo07EOU8ObKP7jAPXG../qFfe.f.iE4o0YxFYHgu2kLkXLrC.2', 'male', '2023-05-08', '0000-00-00', 'just for you.png', 'admin'),
+(2867, 'qwdqwdq', 'dqwdqw@wfwefww.com', '$2y$10$ON2Mc2wLOAY/GKeUc40UC.GK1QehJfeK6ydo10vHvaXbUW7qiA/OK', NULL, NULL, '2023-06-12', NULL, 'member'),
+(4230, 'awdaw', 'dawdawd@wewoefiw.cpm', '$2y$10$Q3f6fe4gh2cbpbGhTKHDK.AmtpomAjA06hE519GQ2D3fq4Is3wXl6', NULL, NULL, '2023-06-12', NULL, 'member'),
 (5568, 'member booklib', 'member@member.com', '$2y$10$HfU5fnb4qronuX9BSLBgE.gstaDZ.VL8HgYxvp2x.YwlRK/eeK5d.', NULL, NULL, '2023-06-04', NULL, 'member'),
 (64789, 'zens catz', 'akunpremku@gmail.com', '$2y$10$MNr0eli21wCf0fNQz9piF.4C2onl6/0KUNVM9UUPgQv23MtsK56lO', '', '0000-00-00', '0000-00-00', '', 'member'),
 (647893263, 'user', 'user@user.com', '$2y$10$zhiFdTJCCbSslP8NIy7FdudtURQEnykFTK61bVfg9QZqRXXcU76Z6', 'male', '2023-02-16', '0000-00-00', 'Untitled-2.png', 'member');
@@ -236,7 +245,7 @@ ALTER TABLE `forgot_password`
 -- AUTO_INCREMENT untuk tabel `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `session_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
