@@ -1,19 +1,10 @@
+
 <?php
-// put environment yang diperlukan buat server
-// Kalo buat windows bisa di comment aja
-// putenv("LD_LIBRARY_PATH=/usr/lib/oracle/19.10/client64/lib");
-// putenv("ORACLE_HOME=/usr/lib/oracle/19.10/client64");
-// putenv("PATH=$PATH:/usr/lib/oracle/19.10/client64/bin");
-// putenv("TNS_ADMIN=/usr/lib/oracle/19.10/client64/lib/network/admin");
+//Koneksi database prosedural mysqli
+$koneksi = mysqli_connect('10.0.0.17', 'booklib', 'Berbagiituindah123!', 'perpustakaan', 3306);
 
-$username = 'DBUSER';
-$password = 'Berbagiituindah1';
-
-$connectionString = "booklibdb1_high";
-
-$koneksi = oci_connect($username, $password, $connectionString, 'AL32UTF8');
-if (!$koneksi) {
-    $e = oci_error();
-    trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
+//Memeriksa koneksi
+if(!$koneksi){
+    echo 'Connection error: '. mysqli_connect_error();
 }
 ?>

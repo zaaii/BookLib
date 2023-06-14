@@ -25,7 +25,7 @@
                     <ul id="book" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                       <li><a href="category.php"><i class="ri-function-line"></i>Category Page</a></li>
                         <li><a href="readingList.php"><i class="ri-heart-line"></i>Reading List</a></li>
-                        <!-- <li><a href="recommendation.php"><i class="ri-pantone-line"></i>Recommendation Book</a></li> -->
+                        <li><a href="recommendation.php"><i class="ri-pantone-line"></i>Recommendation Book</a></li>
                     </ul>
                 </li>
                 <?php
