@@ -15,7 +15,7 @@ if (isset($_GET["hapus"])) {
    $result = deleteUser($id_user);
    if ($result === true) {
       $message = "<strong> User Successfully Removed !</strong>";
-      $alertType = "primary";
+      $alertType = "success";
       $alertIcon = "ri-check-line";
    } else {
       $message = "<strong> User failed to remove!</strong>";
