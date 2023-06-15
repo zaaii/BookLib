@@ -86,7 +86,7 @@ checkRole($_SESSION);
                      </div>
                   </div>
                   <?php if (isset($message)) : ?>
-                     <div class="alert alert-<?= $alertType ?> mr-0 ml-0" role="alert">
+                     <div class="alert alert-<?= $alertType ?> mr-3 ml-3" role="alert">
                         <div class="iq-alert-icon">
                            <i class="<?= $alertIcon ?>"></i>
                         </div>
