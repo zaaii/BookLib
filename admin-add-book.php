@@ -147,8 +147,8 @@ checkRole($_SESSION);
                         </div>
                         <div class="form-group">
                            <label>Category Book</label>
-                           <select class="form-control" name="category_ids[]" id="" required multiple="multiple">
-                           <option selected="" disabled="">Select your category book</option>
+                           <select class="custom-select custom-select-sm select2" name="category_ids[]" id="category_ids" required multiple="multiple">
+                           <option value=""></option>
                               <?php
                               $categories = $koneksi->query("SELECT * FROM categories");
                               while ($row = $categories->fetch_assoc()) :
