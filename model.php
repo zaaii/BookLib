@@ -64,7 +64,8 @@ function updateDataBuku($data)
     $penerbit = htmlspecialchars($data["penerbit"]);
     $tahun_terbit = htmlspecialchars($data["tahun_terbit"]);
     $deskripsi_buku = htmlspecialchars($data["deskripsi_buku"]);
-    $category_ids = htmlspecialchars($data["category_ids"]);
+    $category_ids = is_array($data["category_ids"]) ? implode(',', $data["category_ids"]) : '';
+
 
     // Cek apakah ada file gambar_buku yang diunggah
     if (isset($_FILES["gambar_buku"]["tmp_name"]) && !empty($_FILES["gambar_buku"]["tmp_name"])) {
@@ -104,6 +105,7 @@ function updateDataBuku($data)
 
     return mysqli_affected_rows($koneksi);
 }
+
 
 function deleteDataBuku($id_buku)
 {
