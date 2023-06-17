@@ -519,7 +519,7 @@ function forgetPassword($data)
         try {
             // SMTP configuration for Gmail
             $smtpHost = 'smtp.porkbun.com';
-            $smtpPort = 587;
+            $smtpPort = 465;
             $smtpUsername = 'admin@booklib.app'; // Your Gmail email address
             $smtpPassword = 'adminbooklib'; // Your Gmail password
 
