@@ -510,8 +510,9 @@ function forgetPassword($data)
     if (mysqli_num_rows($result) === 1) {
         $id_user = $row["id_user"];
         $token = uniqid();
+        $id = rand(1,999);
         $expiration = date('Y-m-d H:i:s', strtotime('+1 hour'));
-        $query = "INSERT INTO forgot_password VALUES ('', '$id_user', '$token', '$expiration')";
+        $query = "INSERT INTO forgot_password VALUES ('$id', '$id_user', '$token', '$expiration')";
         mysqli_query($koneksi, $query);
 
         $mailer = new PHPMailer(true);
