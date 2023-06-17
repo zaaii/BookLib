@@ -518,7 +518,7 @@ function forgetPassword($data)
             $mailer->Host = $smtpHost;
             $mailer->Port = $smtpPort;
             $mailer->SMTPAuth = true;
-            $mailer->SMTPSecure = 'tls';
+            $mailer->SMTPSecure = 'ssl';
             $mailer->Username = $smtpUsername;
             $mailer->Password = $smtpPassword;
 

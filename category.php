@@ -107,8 +107,8 @@ if (!empty($category_id)) {
       <div class="container-fluid">
          <div class="row">
             <div class="col-lg-12">
-               <div class="iq-card-transparent mb-0">
-                  <div class="d-block text-center">
+               <div class="iq-card-transparent mb-0 ">
+                  <div class="d-flex align-items-center">
                      <div class="w-100 iq-search-filter">
                         <ul class="list-inline p-0 m-0 row justify-content-center search-menu-options">
                            <li class="search-menu-opt">
@@ -144,31 +144,36 @@ if (!empty($category_id)) {
                         </div>
                      <?php endif; ?>
                   </div>
-                  <div class="iq-card-body favorites-contens">
+                  <div class="iq-card-body">
                      <?php if (!empty($buku)) : ?>
-                        <ul id="favorites-slider" class="list-inline p-0 mb-0 row">
-                           <?php $i = 1;
-                           foreach ($buku as $book) : ?>
-                              <li class="col-md-4">
-                                 <div class="d-flex align-items-center">
-                                    <div class="col-5 p-0 position-relative">
-                                       <a href="javascript:void();">
-                                          <img src="resources/cover/<?= $book["gambar_buku"] ?>" class="img-fluid rounded w-100" alt="<?= $book["judul_buku"] ?>">
-                                       </a>
-                                    </div>
-                                    <div class="col-7">
-                                       <h5 class="mb-2"><?= $book["judul_buku"] ?></h5>
-                                       <p class="mb-1">Author : <?= $book["penulis"] ?></p>
-                                       <div class="iq-product-action mb-2">
-                                          <a type="button" class="addFavorite" name="<?= $book["id_buku"] ?>"><i class="ri-heart-line"></i></a>
+                        <div class="row">
+                           <?php foreach ($buku as $book) : ?>
+                              <div class="col-sm-6 col-md-4 col-lg-3">
+                                 <div class="iq-card iq-card-block iq-card-stretch iq-card-height browse-bookcontent">
+                                    <div class="iq-card-body p-0">
+                                       <div class="d-flex align-items-center">
+                                          <div class="col-6 p-0 position-relative image-overlap-shadow">
+                                             <a href="javascript:void();"><img class="img-fluid rounded w-100" src="resources/cover/<?= $book["gambar_buku"] ?>" alt="<?= $book["judul_buku"] ?>"></a>
+                                             <div class="view-book">
+                                                <input type="hidden" name="id_buku" value="<?= $book["id_buku"] ?>">
+                                                <a href="book-page.php?id_buku=<?= $book["id_buku"]; ?>" class="btn btn-sm btn-white">View Book</a>
+                                             </div>
+                                          </div>
+                                          <div class="col-6">
+                                             <div class="mb-2">
+                                                <h6 class="mb-1"><?= $book["judul_buku"] ?></h6>
+                                                <p class="font-size-13 line-height mb-1"><?= $book["penulis"] ?></p>
+                                             </div>
+                                             <div class="iq-product-action">
+                                                <a type="button" class="addFavorite" name="<?= $book["id_buku"] ?>"><i class="ri-heart-line"></i></a>
+                                             </div>
+                                          </div>
                                        </div>
-                                       <a href="book-page.php?id_buku=<?= $book["id_buku"]; ?>" class="text-dark">Read Now<i class="ri-arrow-right-s-line"></i></a>
                                     </div>
                                  </div>
-                              </li>
-                           <?php $i++;
-                           endforeach; ?>
-                        </ul>
+                              </div>
+                           <?php endforeach ?>
+                        </div>
                      <?php else : ?>
                         <div class="alert alert-danger" role="alert">
                            Data Buku Tidak Ditemukan!
@@ -179,7 +184,6 @@ if (!empty($category_id)) {
             </div>
          </div>
       </div>
-   </div>
    </div>
    <!-- Wrapper END -->
    <!-- Footer -->
