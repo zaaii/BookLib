@@ -16,7 +16,6 @@
             </div>
             <div class="navbar-breadcrumb">
                 <h5 class="mb-0"><?php echo getPageName(); ?></h5>
-
             </div>
             <?php
             if (basename($_SERVER['PHP_SELF']) === 'index.php') {

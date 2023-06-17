@@ -147,8 +147,8 @@ checkRole($_SESSION);
                         </div>
                         <div class="form-group">
                            <label>Category Book</label>
-                           <select class="form-control" name="category_ids" id="category_ids" required>
-                           <option selected="" disabled="">Select your category book</option>
+                           <select class="custom-select custom-select-sm select2" name="category_ids[]" id="category_ids" required multiple="multiple">
+                           <option value=""></option>
                               <?php
                               $categories = $koneksi->query("SELECT * FROM categories");
                               while ($row = $categories->fetch_assoc()) :
@@ -221,8 +221,8 @@ checkRole($_SESSION);
                   </div>
                   <div class="form-group">
                            <label>Category Book</label>
-                           <select class="form-control" name="category_ids" id="category_ids" required>
-                           <option selected="" disabled="">Select your category book</option>
+                           <select class="custom-select custom-select-sm select2" name="category_ids[]" id="category_ids" required multiple="multiple">
+                           <option value=""></option>
                               <?php
                               $categories = $koneksi->query("SELECT * FROM categories");
                               while ($row = $categories->fetch_assoc()) :
@@ -306,3 +306,10 @@ checkRole($_SESSION);
 <!-- Mirrored from templates.iqonic.design/booksto/html/admin-add-book.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 30 Apr 2023 04:59:25 GMT -->
 
 </html>
+
+<script>
+	$('.select2').select2({
+		placeholder:"Please Select Here",
+		width:'100%'
+	})
+</script>

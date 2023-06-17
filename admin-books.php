@@ -116,7 +116,6 @@ checkRole($_SESSION);
                                  <th style="width: 15%;">Action</th>
                               </tr>
                            </thead>
-                           <?php $i = 1; ?>
                            <?php
                            $i = 1;
                            $cname[0] = "Not Set";
