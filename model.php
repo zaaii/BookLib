@@ -508,10 +508,10 @@ function forgetPassword($data)
 
         try {
             // SMTP configuration for Gmail
-            $smtpHost = 'smtp.gmail.com';
+            $smtpHost = 'smtp.porkbun.com';
             $smtpPort = 587;
-            $smtpUsername = 'systembooklib@gmail.com'; // Your Gmail email address
-            $smtpPassword = 'papnbsocmetxmpon'; // Your Gmail password
+            $smtpUsername = 'admin@booklib.app'; // Your Gmail email address
+            $smtpPassword = 'adminbooklib'; // Your Gmail password
 
             // Set up SMTP configuration
             $mailer->isSMTP();
@@ -526,7 +526,7 @@ function forgetPassword($data)
             $mailer->setFrom($smtpUsername, 'BookLib System');
             $mailer->addAddress($email);
             $mailer->Subject = 'Reset Password';
-            $mailer->Body = "Klik link berikut untuk reset password anda: http://localhost:8080/BookLib/reset-password.php?token=$token";
+            $mailer->Body = "Klik link berikut untuk reset password anda: https://booklib.app/reset-password.php?token=$token";
 
             // Send email
             $mailer->send();
