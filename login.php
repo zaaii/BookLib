@@ -31,6 +31,10 @@ if (isset($_POST["submit"])) {
             $sessionId = loginSession($_SESSION['id_user']);
             // Store the user ID and session ID in the session
             $_SESSION['session_id'] = $sessionId;
+
+            // Call the function to save the session to the database
+            saveSessionToDatabase($sessionId, serialize($_SESSION), $koneksi);
+
             header("Location: index.php");
             exit;
         } else {

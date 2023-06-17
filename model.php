@@ -685,3 +685,24 @@ function formatCount($count, $percentage)
 
     return "<div class='mb-1 text-black'>$formattedCount<span class='$textClass'><i class='$arrowIcon'></i>$formattedPercentage</span></div>";
 }
+
+function saveSessionToDatabase($sessionId, $sessionData, $koneksi) {
+    global $koneksi;
+    // Escape session data to prevent SQL injection
+    $escapedSessionData = mysqli_real_escape_string($koneksi, $sessionData);
+    
+    // Check if session already exists in the database
+    $query = "SELECT * FROM sessions WHERE session_id = '$sessionId'";
+    $result = mysqli_query($koneksi, $query);
+    
+    if (mysqli_num_rows($result) > 0) {
+        // Update existing session
+        $query = "UPDATE sessions SET session_data = '$escapedSessionData' WHERE session_id = '$sessionId'";
+    } else {
+        // Insert new session
+        $query = "INSERT INTO sessions (session_id, session_data) VALUES ('$sessionId', '$escapedSessionData')";
+    }
+    
+    // Execute the query
+    mysqli_query($koneksi, $query);
+}
