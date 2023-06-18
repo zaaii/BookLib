@@ -23,6 +23,7 @@ function insertDataBuku($data)
     global $koneksi;
 
     // Mengambil data dari tiap elemen dalam form
+    $id = rand(1,9999);
     $judul_buku = htmlspecialchars($data["judul_buku"]);
     $penulis = htmlspecialchars($data["penulis"]);
     $penerbit = htmlspecialchars($data["penerbit"]);
@@ -51,7 +52,7 @@ function insertDataBuku($data)
     // Query insert data
     $query = "INSERT INTO buku 
     VALUES 
-    ('', '$judul_buku', '$penulis', '$penerbit', '$tahun_terbit', '$gambar_buku', '$pdf_buku', '$deskripsi_buku', '$category_ids')
+    ('$id', '$judul_buku', '$penulis', '$penerbit', '$tahun_terbit', '$gambar_buku', '$pdf_buku', '$deskripsi_buku', '$category_ids')
     ";
     mysqli_query($koneksi, $query);
 
