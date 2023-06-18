@@ -191,8 +191,9 @@ function removeFavorite($id_user, $id_buku)
 function addFavorite($id_user, $id_buku)
 {
     global $koneksi;
+    $id = rand(1,999);
     // Perform the necessary database operations to add the book to favorites for the given user
-    $query = "INSERT INTO favorit VALUES ('', '$id_user', '$id_buku')";
+    $query = "INSERT INTO favorit VALUES ('$id', '$id_user', '$id_buku')";
     $result = mysqli_query($koneksi, $query);
 }
 
@@ -415,16 +416,6 @@ function changePassword($data)
 
     return mysqli_affected_rows($koneksi);
 }
-
-/* 
-    Fungsi Pencarian
-*/
-
-/*
-
-/*
-    Fungsi Auth
-*/
 
 /* 
     Fungsi Edit Profil
