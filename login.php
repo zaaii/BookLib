@@ -34,7 +34,8 @@ if (isset($_POST["submit"])) {
 
             // Call the function to save the session to the database
             saveSessionToDatabase($sessionId, serialize($_SESSION), $koneksi);
-
+            //save to cookie
+            setcookie("id_user", $row["id_user"], time() + 60);
             header("Location: index.php");
             exit;
         } else {
