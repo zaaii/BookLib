@@ -25,12 +25,12 @@ $categories = getData("categories");
 $countUser = count($user);
 $countBook = count($books);
 
-$now = date('Y-m-d H:i:s');
-$oneHourAgo = date('Y-m-d H:i:s', strtotime('-1 hour'));
-$oneDayAgo = date('Y-m-d H:i:s', strtotime('-1 day'));
-$oneWeekAgo = date('Y-m-d H:i:s', strtotime('-1 week'));
+$now = date('Y-m-d h:i');
+$oneHourAgo = date('Y-m-d h:i', strtotime('-1 hour'));
+$oneDayAgo = date('Y-m-d h:i', strtotime('-1 day'));
+$oneWeekAgo = date('Y-m-d h:i', strtotime('-1 week'));
 
-$sessionCountNow = getSessionCount($oneHourAgo);
+$sessionCountNow = getSessionCount($now);
 $sessionCount1HourAgo = getSessionCount($oneHourAgo);
 $sessionCount1DayAgo = getSessionCount($oneDayAgo);
 $sessionCount1WeekAgo = getSessionCount($oneWeekAgo);
