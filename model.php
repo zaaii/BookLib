@@ -35,7 +35,7 @@ function insertDataBuku($data)
     if (isset($_FILES["gambar_buku"]["tmp_name"]) && !empty($_FILES["gambar_buku"]["tmp_name"])) {
         $gambar_buku = $_FILES["gambar_buku"]["name"];
         $gambar_buku_tmp = $_FILES["gambar_buku"]["tmp_name"];
-        move_uploaded_file($gambar_buku_tmp, "resources/cover/" . $gambar_buku);
+        move_uploaded_file($gambar_buku_tmp, "/var/www/html/BookLib/resources/cover/" . $gambar_buku);
     } else {
         $gambar_buku = '';
     }
@@ -44,7 +44,7 @@ function insertDataBuku($data)
     if (isset($_FILES["pdf_buku"]["tmp_name"]) && !empty($_FILES["pdf_buku"]["tmp_name"])) {
         $pdf_buku = $_FILES["pdf_buku"]["name"];
         $pdf_buku_tmp = $_FILES["pdf_buku"]["tmp_name"];
-        move_uploaded_file($pdf_buku_tmp, "resources/ebook/" . $pdf_buku);
+        move_uploaded_file($pdf_buku_tmp, "/var/www/html/BookLib/resources/ebook/" . $pdf_buku);
     } else {
         $pdf_buku = '';
     }
@@ -80,7 +80,7 @@ function updateDataBuku($data)
     if (isset($_FILES["gambar_buku"]["tmp_name"]) && !empty($_FILES["gambar_buku"]["tmp_name"])) {
         $gambar_buku = $_FILES["gambar_buku"]["name"];
         $gambar_buku_tmp = $_FILES["gambar_buku"]["tmp_name"];
-        move_uploaded_file($gambar_buku_tmp, "resources/cover/" . $gambar_buku);
+        move_uploaded_file($gambar_buku_tmp, "/var/www/html/BookLib/resources/cover/" . $gambar_buku);
     } else {
         // Jika tidak ada perubahan, tetap gunakan gambar_buku sebelumnya
         $bukuSebelumnya = getData("buku WHERE id_buku = $id_buku")[0];
@@ -91,7 +91,7 @@ function updateDataBuku($data)
     if (isset($_FILES["pdf_buku"]["tmp_name"]) && !empty($_FILES["pdf_buku"]["tmp_name"])) {
         $pdf_buku = $_FILES["pdf_buku"]["name"];
         $pdf_buku_tmp = $_FILES["pdf_buku"]["tmp_name"];
-        move_uploaded_file($pdf_buku_tmp, "resources/ebook/" . $pdf_buku);
+        move_uploaded_file($pdf_buku_tmp, "/var/www/html/BookLib/resources/ebook/" . $pdf_buku);
     } else {
         // Jika tidak ada perubahan, tetap gunakan pdf_buku sebelumnya
         $bukuSebelumnya = getData("buku WHERE id_buku = $id_buku")[0];
@@ -123,10 +123,10 @@ function deleteDataBuku($id_buku)
     //delete cover book from folder
     $bukuSebelumnya = getData("buku WHERE id_buku = $id_buku")[0];
     $gambar_buku = $bukuSebelumnya["gambar_buku"];
-    unlink("resources/cover/" . $gambar_buku);
+    unlink("/var/www/html/BookLib/resources/cover/" . $gambar_buku);
     //delete pdf book from folder
     $pdf_buku = $bukuSebelumnya["pdf_buku"];
-    unlink("resources/ebook/" . $pdf_buku);
+    unlink("/var/www/html/BookLib/resources/ebook/" . $pdf_buku);
     mysqli_query($koneksi, "DELETE FROM buku WHERE id_buku = $id_buku");
     return mysqli_affected_rows($koneksi);
 }
