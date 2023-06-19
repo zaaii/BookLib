@@ -316,17 +316,17 @@ function deleteUser($id)
         $foto = $resultz['user_photo'];
 
         // Check if the photo exists before unlinking
-        if (!empty($foto) && file_exists("resources/profile/$foto")) {
-            if (is_dir("resources/profile/$foto")) {
+        if (!empty($foto) && file_exists("/var/www/html/BookLib/resources/profile/$foto")) {
+            if (is_dir("/var/www/html/BookLib/resources/profile/$foto")) {
                 // Remove the directory and its contents
-                $files = glob("resources/profile/$foto/*");
+                $files = glob("/var/www/html/BookLib/resources/profile/$foto/*");
                 foreach ($files as $file) {
                     unlink($file);
                 }
-                rmdir("resources/profile/$foto");
+                rmdir("/var/www/html/BookLib/resources/profile/$foto");
             } else {
                 // Unlink the file
-                unlink("resources/profile/$foto");
+                unlink("/var/www/html/BookLib/resources/profile/$foto");
             }
         }
     }
@@ -373,7 +373,7 @@ function editProfil($data)
     $birth_date = htmlspecialchars($data["birth_date"]);
 
     if (!empty($user_photo)) {
-        $target_dir = "resources/profile/"; // Directory where you want to store the uploaded photos
+        $target_dir = "/var/www/html/BookLib/resources/profile/"; // Directory where you want to store the uploaded photos
         $target_file = $target_dir . basename($_FILES["user_photo"]["name"]);
         move_uploaded_file($_FILES["user_photo"]["tmp_name"], $target_file);
     }
