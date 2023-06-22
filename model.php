@@ -446,7 +446,7 @@ function insertDataCategory($data)
     $category_name = htmlspecialchars($data["category_name"]);
     $category_description = htmlspecialchars($data["category_description"]);
 
-    $id_category = uniqid(1, 99);
+    $id_category = rand(1, 999);
     // Query insert data
     $query = "INSERT INTO categories 
     VALUES 
